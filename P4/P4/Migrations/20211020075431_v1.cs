@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace P4.Migrations
 {
-    public partial class Initial : Migration
+    public partial class v1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -20,11 +20,11 @@ namespace P4.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.UserId);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Photo",
+                name: "Photos",
                 columns: table => new
                 {
                     PhotoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -40,17 +40,17 @@ namespace P4.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Photo", x => x.PhotoId);
+                    table.PrimaryKey("PK_Photos", x => x.PhotoId);
                     table.ForeignKey(
-                        name: "FK_Photo_User_UserId",
+                        name: "FK_Photos_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PhotoComment",
+                name: "PhotoComments",
                 columns: table => new
                 {
                     PhotoCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -60,23 +60,23 @@ namespace P4.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PhotoComment", x => x.PhotoCommentId);
+                    table.PrimaryKey("PK_PhotoComments", x => x.PhotoCommentId);
                     table.ForeignKey(
-                        name: "FK_PhotoComment_Photo_PhotoId",
+                        name: "FK_PhotoComments_Photos_PhotoId",
                         column: x => x.PhotoId,
-                        principalTable: "Photo",
+                        principalTable: "Photos",
                         principalColumn: "PhotoId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PhotoComment_User_UserId",
+                        name: "FK_PhotoComments_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PhotoReview",
+                name: "PhotoReviews",
                 columns: table => new
                 {
                     PhotoReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -86,60 +86,60 @@ namespace P4.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PhotoReview", x => x.PhotoReviewId);
+                    table.PrimaryKey("PK_PhotoReviews", x => x.PhotoReviewId);
                     table.ForeignKey(
-                        name: "FK_PhotoReview_Photo_PhotoId",
+                        name: "FK_PhotoReviews_Photos_PhotoId",
                         column: x => x.PhotoId,
-                        principalTable: "Photo",
+                        principalTable: "Photos",
                         principalColumn: "PhotoId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PhotoReview_User_UserId",
+                        name: "FK_PhotoReviews_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Photo_UserId",
-                table: "Photo",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PhotoComment_PhotoId",
-                table: "PhotoComment",
+                name: "IX_PhotoComments_PhotoId",
+                table: "PhotoComments",
                 column: "PhotoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhotoComment_UserId",
-                table: "PhotoComment",
+                name: "IX_PhotoComments_UserId",
+                table: "PhotoComments",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhotoReview_PhotoId",
-                table: "PhotoReview",
+                name: "IX_PhotoReviews_PhotoId",
+                table: "PhotoReviews",
                 column: "PhotoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhotoReview_UserId",
-                table: "PhotoReview",
+                name: "IX_PhotoReviews_UserId",
+                table: "PhotoReviews",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Photos_UserId",
+                table: "Photos",
                 column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PhotoComment");
+                name: "PhotoComments");
 
             migrationBuilder.DropTable(
-                name: "PhotoReview");
+                name: "PhotoReviews");
 
             migrationBuilder.DropTable(
-                name: "Photo");
+                name: "Photos");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

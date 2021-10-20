@@ -10,7 +10,7 @@ namespace P4.Models
 {
     public class User
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid UserId { get; set; }
         public string Email { get; set; }
         public string HashedPassword { get; set; }

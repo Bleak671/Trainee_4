@@ -9,7 +9,7 @@ namespace P4.Models
 {
     public class PhotoReview
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid PhotoReviewId { get; set; }
         
         public Photo Photo { get; set; }

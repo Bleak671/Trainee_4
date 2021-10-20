@@ -10,8 +10,8 @@ using P4.Models;
 namespace P4.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20211019160054_Initial")]
-    partial class Initial
+    [Migration("20211020075431_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,7 +58,7 @@ namespace P4.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Photo");
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("P4.Models.PhotoComment", b =>
@@ -82,7 +82,7 @@ namespace P4.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PhotoComment");
+                    b.ToTable("PhotoComments");
                 });
 
             modelBuilder.Entity("P4.Models.PhotoReview", b =>
@@ -106,7 +106,7 @@ namespace P4.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PhotoReview");
+                    b.ToTable("PhotoReviews");
                 });
 
             modelBuilder.Entity("P4.Models.User", b =>
@@ -132,7 +132,7 @@ namespace P4.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("P4.Models.Photo", b =>
