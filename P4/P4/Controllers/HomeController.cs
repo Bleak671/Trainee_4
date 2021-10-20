@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,9 +14,11 @@ namespace P4.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private AppDBContext db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, AppDBContext context)
         {
+            db = context;
             _logger = logger;
         }
 
