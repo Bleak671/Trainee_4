@@ -25,9 +25,7 @@ namespace P4
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("LocalDatabase");
-            // добавляем контекст MobileContext в качестве сервиса в приложение
             services.AddDbContext<AppDBContext>(options =>
                 options.UseSqlServer(connection));
             services.AddControllersWithViews();

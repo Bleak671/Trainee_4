@@ -18,8 +18,8 @@ namespace P4.Models
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
-            Database.EnsureDeleted();   // удаляем бд со старой схемой
-            Database.EnsureCreated();   // создаем бд с новой схемой
+            Database.EnsureDeleted();  
+            Database.EnsureCreated();   
         }
     }
 }
