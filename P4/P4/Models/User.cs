@@ -10,7 +10,7 @@ namespace P4.Models
 {
     public class User
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public Guid UserId { get; set; }
         public string Email { get; set; }
         public string HashedPassword { get; set; }
@@ -18,8 +18,8 @@ namespace P4.Models
         public bool isAdmin { get; set; }
         public bool isBanned { get; set; }
 
-        public List<Photo> Photos{ get; set; }
-        public List<PhotoComment> UserComment { get; set; }
-        public List<PhotoReview> UserReview { get; set; }
+        public List<Photo> UserPhotos{ get; set; }
+        public List<PhotoComment> UserComments { get; set; }
+        public List<PhotoReview> UserReviews { get; set; }
     }
 }

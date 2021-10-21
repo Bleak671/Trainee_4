@@ -10,8 +10,8 @@ using P4.Models;
 namespace P4.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20211020075431_v1")]
-    partial class v1
+    [Migration("20211021101033_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,7 +42,7 @@ namespace P4.Migrations
                     b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Views")
@@ -67,13 +67,13 @@ namespace P4.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PhotoId")
+                    b.Property<Guid>("PhotoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("PhotoCommentId");
@@ -91,10 +91,10 @@ namespace P4.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PhotoId")
+                    b.Property<Guid>("PhotoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("isPositive")
@@ -138,8 +138,10 @@ namespace P4.Migrations
             modelBuilder.Entity("P4.Models.Photo", b =>
                 {
                     b.HasOne("P4.Models.User", "User")
-                        .WithMany("Photos")
-                        .HasForeignKey("UserId");
+                        .WithMany("UserPhotos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -148,11 +150,15 @@ namespace P4.Migrations
                 {
                     b.HasOne("P4.Models.Photo", "Photo")
                         .WithMany("PhotoComments")
-                        .HasForeignKey("PhotoId");
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("P4.Models.User", "User")
-                        .WithMany("UserComment")
-                        .HasForeignKey("UserId");
+                        .WithMany("UserComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Photo");
 
@@ -163,11 +169,15 @@ namespace P4.Migrations
                 {
                     b.HasOne("P4.Models.Photo", "Photo")
                         .WithMany("PhotoReviews")
-                        .HasForeignKey("PhotoId");
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("P4.Models.User", "User")
-                        .WithMany("UserReview")
-                        .HasForeignKey("UserId");
+                        .WithMany("UserReviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Photo");
 
@@ -183,11 +193,11 @@ namespace P4.Migrations
 
             modelBuilder.Entity("P4.Models.User", b =>
                 {
-                    b.Navigation("Photos");
+                    b.Navigation("UserComments");
 
-                    b.Navigation("UserComment");
+                    b.Navigation("UserPhotos");
 
-                    b.Navigation("UserReview");
+                    b.Navigation("UserReviews");
                 });
 #pragma warning restore 612, 618
         }

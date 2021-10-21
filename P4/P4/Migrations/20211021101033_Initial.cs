@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace P4.Migrations
 {
-    public partial class v1 : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,7 +29,7 @@ namespace P4.Migrations
                 {
                     PhotoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Hash = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -46,7 +46,7 @@ namespace P4.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,8 +54,8 @@ namespace P4.Migrations
                 columns: table => new
                 {
                     PhotoCommentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PhotoId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PhotoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -66,13 +66,12 @@ namespace P4.Migrations
                         column: x => x.PhotoId,
                         principalTable: "Photos",
                         principalColumn: "PhotoId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PhotoComments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -80,8 +79,8 @@ namespace P4.Migrations
                 columns: table => new
                 {
                     PhotoReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PhotoId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PhotoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     isPositive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -92,13 +91,12 @@ namespace P4.Migrations
                         column: x => x.PhotoId,
                         principalTable: "Photos",
                         principalColumn: "PhotoId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PhotoReviews_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateIndex(

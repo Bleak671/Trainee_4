@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using P4.DAL;
 using P4.Models;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,12 @@ namespace P4.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private AppDBContext db;
+        private UserRepository db;
 
         public HomeController(ILogger<HomeController> logger, AppDBContext context)
         {
-            db = context;
+            db = new UserRepository(context);
+            db.Create(new User { });
             _logger = logger;
         }
 

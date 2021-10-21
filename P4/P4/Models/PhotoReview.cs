@@ -9,11 +9,13 @@ namespace P4.Models
 {
     public class PhotoReview
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public Guid PhotoReviewId { get; set; }
         
+        public Guid PhotoId { get; set; }
         public Photo Photo { get; set; }
 
+        public Guid UserId { get; set; }
         public User User { get; set; }
 
         public bool isPositive { get; set; }

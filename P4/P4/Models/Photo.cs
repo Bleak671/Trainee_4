@@ -9,10 +9,11 @@ namespace P4.Models
 {
     public class Photo
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public Guid PhotoId { get; set; }
         public string Link { get; set; }
 
+        public Guid UserId { get; set; }
         public User User { get; set; }
 
         public string Name { get; set; }
