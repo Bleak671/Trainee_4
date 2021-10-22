@@ -19,8 +19,17 @@ namespace P4.DAL
 
         public void Create(User user)
         {
-            db.Users.Add(user);
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
+            {
+                db.Users.Add(user);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
             {
                 throw new Exception("Can't Add");
             }
@@ -38,8 +47,17 @@ namespace P4.DAL
 
         public void Update(User user)
         {
-            db.Users.Update(user);
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
+            {
+                db.Users.Update(user);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
             {
                 throw new Exception("Can't Update");
             }
@@ -47,10 +65,18 @@ namespace P4.DAL
 
         public void Delete(Guid id)
         {
-            User result = db.Users.FirstOrDefault(p => p.UserId == id);
-            db.Users.Remove(result);
-            db.SaveChanges();
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
+            {
+                User usr = db.Users.FirstOrDefault(p => p.UserId == id);
+                db.Users.Remove(usr);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
             {
                 throw new Exception("Can't Delete");
             }

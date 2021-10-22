@@ -1,10 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace P4.Models
 {
@@ -13,7 +9,9 @@ namespace P4.Models
         [Key]
         public Guid UserId { get; set; }
         public string Email { get; set; }
+        [Required]
         public string HashedPassword { get; set; }
+        [Required]
         public string Login { get; set; }
         public bool isAdmin { get; set; }
         public bool isBanned { get; set; }

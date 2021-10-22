@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace P4.Models
 {
@@ -11,12 +8,15 @@ namespace P4.Models
     {
         [Key]
         public Guid PhotoId { get; set; }
+        [Required]
         public string Link { get; set; }
 
+        [Required]
         public Guid UserId { get; set; }
         public User User { get; set; }
 
         public string Name { get; set; }
+        [Required]
         public DateTime UploadDate { get; set; }
         public string Hash { get; set; }
         public DateTime TrashDate { get; set; }

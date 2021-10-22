@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace P4.DAL
 {
@@ -16,10 +15,19 @@ namespace P4.DAL
 
         public void Create(Photo photo)
         {
-            db.Photos.Add(photo);
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("CreateError");
+                db.Photos.Add(photo);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Add");
             }
         }
 
@@ -35,23 +43,42 @@ namespace P4.DAL
 
         public void Update(Photo photo)
         {
-            db.Photos.Update(photo);
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("UpdateError");
+                db.Photos.Update(photo);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Update");
             }
         }
 
+
         public void Delete(Guid id)
         {
-            Photo result = db.Photos.FirstOrDefault(p => p.PhotoId == id);
-            db.Photos.Remove(result);
-            db.SaveChanges();
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("UpdateError");
+                Photo pht = db.Photos.FirstOrDefault(p => p.PhotoId == id);
+                db.Photos.Remove(pht);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Delete");
             }
         }
+    
 
         public void Dispose()
         {

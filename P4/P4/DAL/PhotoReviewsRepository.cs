@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace P4.DAL
 {
@@ -16,10 +15,19 @@ namespace P4.DAL
 
         public void Create(PhotoReview photoRev)
         {
-            db.PhotoReviews.Add(photoRev);
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("CreateError");
+                db.PhotoReviews.Add(photoRev);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Add");
             }
         }
 
@@ -35,21 +43,38 @@ namespace P4.DAL
 
         public void Update(PhotoReview photoRev)
         {
-            db.PhotoReviews.Update(photoRev);
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("UpdateError");
+                db.PhotoReviews.Update(photoRev);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Update");
             }
         }
 
         public void Delete(Guid id)
         {
-            PhotoReview result = db.PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
-            db.PhotoReviews.Remove(result);
-            db.SaveChanges();
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("UpdateError");
+                PhotoReview pht = db.PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
+                db.PhotoReviews.Remove(pht);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Delete");
             }
         }
 

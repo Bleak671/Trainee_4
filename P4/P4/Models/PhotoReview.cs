@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace P4.Models
 {
@@ -11,10 +7,12 @@ namespace P4.Models
     {
         [Key]
         public Guid PhotoReviewId { get; set; }
-        
+
+        [Required]
         public Guid PhotoId { get; set; }
         public Photo Photo { get; set; }
 
+        [Required]
         public Guid UserId { get; set; }
         public User User { get; set; }
 

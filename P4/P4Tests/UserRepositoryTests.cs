@@ -14,42 +14,72 @@ namespace P4Tests
         public void Setup()
         {
             var options = new DbContextOptionsBuilder<AppDBContext>()
-            .UseInMemoryDatabase(databaseName: "Test")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
             _context = new AppDBContext(options);
         }
 
-        [TestCase(null,null,null,null)]
         [TestCase("31231234-1234-1242-1242-123412341234", "asd", "qwe", "tre")]
-        public void TestAddUser(Guid uId, string email, string hPass, string login)
+        public void UserRepository_Create_ShouldNotThrow(string id, string email, string hPass, string login)
         {
             using (UserRepository db = new UserRepository(_context))
             {
-                User user = new User { UserId = uId, Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login };
-                Assert.DoesNotThrow(() => db.Create(user));
+                Assert.DoesNotThrow(() => db.Create(new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login }));
+
+            }
+        }
+
+        [TestCase("31231234-1234-1242-1242-123412341234", null, null, null)]
+        public void UserRepository_Create_ShouldThrow(string id, string email, string hPass, string login)
+        {
+            using (UserRepository db = new UserRepository(_context))
+            {
+                db.Create(new User { UserId = Guid.Parse(id), Email = "", HashedPassword = "", isAdmin = false, isBanned = false, Login = "" });
+                Assert.Throws(typeof(Exception), () => db.Create(new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login }));
+            }
+        }
+
+        [TestCase("31231234-1234-1242-1242-123412341235", "as", "qe", "tr")]
+        public void UserRepository_Update_ShouldNotThrow(string id, string email, string hPass, string login)
+        {
+            using (UserRepository db = new UserRepository(_context))
+            {
+                User user = new User { UserId = Guid.Parse(id), Email = "", HashedPassword = "", isAdmin = false, isBanned = false, Login = "" };
+                db.Create(user);
+                user.Login = "qweqweqsadd";
+                Assert.DoesNotThrow(() => db.Update(user));
+            }
+
+        }
+
+        [TestCase("31231234-1234-1242-1242-123412341234", "as", "qe", "tr")]
+        public void UserRepository_Update_ShouldThrow(string id, string email, string hPass, string login)
+        {
+            using (UserRepository db = new UserRepository(_context))
+            {
+                Assert.Throws(typeof(Exception), () => db.Update(new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login }));
+            }
+
+        }
+
+        [TestCase("31231234-1234-1242-1242-123412341235")]
+        public void UserRepository_Delete_ShouldNotThrow(string id)
+        {
+            using (UserRepository db = new UserRepository(_context))
+            {
+                User user = new User { UserId = Guid.Parse(id), Email = "", HashedPassword = "", isAdmin = false, isBanned = false, Login = "" };
+                db.Create(user);
+                Assert.DoesNotThrow(() => db.Delete(user.UserId));
             }
         }
 
         [TestCase(null)]
-        [TestCase("31231234-1234-1242-1242-123412341234")]
-        public void TestDeleteUser(Guid uId)
+        public void UserRepository_Delete_ShouldThrow(Guid id)
         {
             using (UserRepository db = new UserRepository(_context))
             {
-                Assert.DoesNotThrow(() => db.Delete(uId));
+                Assert.Throws(typeof(Exception), () => db.Delete(id));
             }
-        }
-
-        [TestCase(null, null, null, null)]
-        [TestCase("31231234-1234-1242-1242-123412341234", "asd", "qwe", "tre")]
-        public void TestUpdateUser(Guid uId, string email, string hPass, string login)
-        {
-            using (UserRepository db = new UserRepository(_context))
-            {
-                User user = new User { UserId = uId, Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login };
-                Assert.DoesNotThrow(() => db.Update(user));
-            }
-            
         }
     }
 }

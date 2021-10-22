@@ -1,11 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
-using System.IO;
-using Microsoft.Extensions.Configuration;
 
 namespace P4.Models
 {
@@ -38,6 +31,7 @@ namespace P4.Models
             modelBuilder.Entity<Photo>().Property(x => x.PhotoId).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<PhotoComment>().Property(x => x.PhotoCommentId).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<PhotoReview>().Property(x => x.PhotoReviewId).HasDefaultValueSql("NEWID()");
+            modelBuilder.Entity<Photo>().Property(x => x.UploadDate).HasDefaultValueSql("getdate()");
         }
     }
 }

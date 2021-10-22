@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace P4.DAL
 {
@@ -16,10 +15,19 @@ namespace P4.DAL
 
         public void Create(PhotoComment photoCom)
         {
-            db.PhotoComments.Add(photoCom);
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("CreateError");
+                db.PhotoComments.Add(photoCom);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Add");
             }
         }
 
@@ -35,21 +43,38 @@ namespace P4.DAL
 
         public void Update(PhotoComment photoCom)
         {
-            db.PhotoComments.Update(photoCom);
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("UpdateError");
+                db.PhotoComments.Update(photoCom);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Update");
             }
         }
 
         public void Delete(Guid id)
         {
-            PhotoComment result = db.PhotoComments.FirstOrDefault(p => p.PhotoCommentId == id);
-            db.PhotoComments.Remove(result);
-            db.SaveChanges();
-            if (db.SaveChanges() != 1)
+            int result = 1;
+            try
             {
-                Console.WriteLine("UpdateError");
+                PhotoComment pht = db.PhotoComments.FirstOrDefault(p => p.PhotoCommentId == id);
+                db.PhotoComments.Remove(pht);
+                result = db.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("DB Error");
+            }
+            if (result != 1)
+            {
+                throw new Exception("Can't Delete");
             }
         }
 
