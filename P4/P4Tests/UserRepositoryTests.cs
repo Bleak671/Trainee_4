@@ -25,10 +25,9 @@ namespace P4Tests
         {
             using (UserRepository db = new UserRepository(_context))
             {
-                
-                db.Create(new User { UserId = uId, Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login });
+                User user = new User { UserId = uId, Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login };
+                Assert.DoesNotThrow(() => db.Create(user));
             }
-            Assert.Pass();
         }
 
         [TestCase(null)]
@@ -37,10 +36,8 @@ namespace P4Tests
         {
             using (UserRepository db = new UserRepository(_context))
             {
-
-                db.Delete(uId);
+                Assert.DoesNotThrow(() => db.Delete(uId));
             }
-            Assert.Pass();
         }
 
         [TestCase(null, null, null, null)]
@@ -49,10 +46,10 @@ namespace P4Tests
         {
             using (UserRepository db = new UserRepository(_context))
             {
-
-                db.Update(new User { UserId = uId, Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login });
+                User user = new User { UserId = uId, Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login };
+                Assert.DoesNotThrow(() => db.Update(user));
             }
-            Assert.Pass();
+            
         }
     }
 }
