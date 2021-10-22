@@ -17,10 +17,8 @@ namespace P4.Controllers
         private readonly ILogger<HomeController> _logger;
         private UserRepository db;
 
-        public HomeController(ILogger<HomeController> logger, AppDBContext context)
+        public HomeController(ILogger<HomeController> logger)
         {
-            db = new UserRepository(context);
-            db.Create(new User { });
             _logger = logger;
         }
 

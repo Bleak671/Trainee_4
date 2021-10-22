@@ -58,7 +58,6 @@ namespace P4.DAL
 
         public void Dispose()
         {
-            db.SaveChanges();
             db.Dispose();
         }
     }

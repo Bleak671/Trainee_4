@@ -6,23 +6,51 @@ using System;
 
 namespace P4Tests
 {
+    [TestFixture]
     public class UserRepositoryTests
     {
         AppDBContext _context;
         [SetUp]
         public void Setup()
         {
-            var optionsBuilder = new DbContextOptionsBuilder<AppDBContext>();
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=P4;Trusted_Connection=True;");
-            _context = new AppDBContext(optionsBuilder.Options);
+            var options = new DbContextOptionsBuilder<AppDBContext>()
+            .UseInMemoryDatabase(databaseName: "Test")
+            .Options;
+            _context = new AppDBContext(options);
         }
 
-        [Test]
-        public void Test1(Guid uId, string email, string hPass, string login)
+        [TestCase(null,null,null,null)]
+        [TestCase("31231234-1234-1242-1242-123412341234", "asd", "qwe", "tre")]
+        public void TestAddUser(Guid uId, string email, string hPass, string login)
         {
             using (UserRepository db = new UserRepository(_context))
             {
+                
                 db.Create(new User { UserId = uId, Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login });
+            }
+            Assert.Pass();
+        }
+
+        [TestCase(null)]
+        [TestCase("31231234-1234-1242-1242-123412341234")]
+        public void TestDeleteUser(Guid uId)
+        {
+            using (UserRepository db = new UserRepository(_context))
+            {
+
+                db.Delete(uId);
+            }
+            Assert.Pass();
+        }
+
+        [TestCase(null, null, null, null)]
+        [TestCase("31231234-1234-1242-1242-123412341234", "asd", "qwe", "tre")]
+        public void TestUpdateUser(Guid uId, string email, string hPass, string login)
+        {
+            using (UserRepository db = new UserRepository(_context))
+            {
+
+                db.Update(new User { UserId = uId, Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login });
             }
             Assert.Pass();
         }

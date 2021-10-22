@@ -9,7 +9,7 @@ namespace P4.Models
 {
     public class Photo
     {
-        [Required]
+        [Key]
         public Guid PhotoId { get; set; }
         public string Link { get; set; }
 

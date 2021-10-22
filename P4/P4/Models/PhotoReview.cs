@@ -9,7 +9,7 @@ namespace P4.Models
 {
     public class PhotoReview
     {
-        [Required]
+        [Key]
         public Guid PhotoReviewId { get; set; }
         
         public Guid PhotoId { get; set; }
