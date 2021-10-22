@@ -76,12 +76,12 @@ namespace P4Tests
             }
         }
 
-        [TestCase(null)]
-        public void PhotoRepository_Delete_ShouldThrow(Guid id)
+        [TestCase("11111111-1111-1111-1111-111111111111")]
+        public void PhotoRepository_Delete_ShouldThrow(string id)
         {
             using (PhotoRepository db = new PhotoRepository(_context))
             {
-                Assert.Throws(typeof(Exception), () => db.Delete(id));
+                Assert.Throws(typeof(Exception), () => db.Delete(Guid.Parse(id)));
             }
         }
     }
