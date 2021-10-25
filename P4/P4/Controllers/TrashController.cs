@@ -7,26 +7,25 @@ using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
-    public class HomeController : Controller
+    public class TrashController : Controller
     {
-        // GET: HomeController
-        [HttpGet("Home")]
+        // GET: TrashController
+        [HttpGet("Trash/")]
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: HomeController/Details/5
-        [HttpGet("Home/GetPhotos/{id}")]
+        // GET: TrashController/Details/5
+        [HttpGet("Trash/Details/{id}")]
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // POST: HomeController/CreateReview
-        [HttpPost("Home/CreateReview")]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateReview(IFormCollection collection)
+        // POST: TrashController/Edit/5
+        [HttpPost("Trash/Edit/{id}")]
+        public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -38,10 +37,9 @@ namespace P4.Controllers
             }
         }
 
-        // POST: HomeController/CreateComment
-        [HttpPost("Home/CreateComment")]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateComment(IFormCollection collection)
+        // POST: TrashController/Delete/5
+        [HttpPost("Trash/Delete/{id}")]
+        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
