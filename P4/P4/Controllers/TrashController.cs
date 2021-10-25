@@ -7,24 +7,26 @@ using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class TrashController : Controller
     {
         // GET: TrashController
-        [HttpGet("Trash/")]
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: TrashController/Details/5
-        [HttpGet("Trash/Details/{id}")]
+        [HttpGet("{id}")]
         public ActionResult Details(int id)
         {
             return View();
         }
 
         // POST: TrashController/Edit/5
-        [HttpPost("Trash/Edit/{id}")]
+        [HttpPost("{id}")]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
@@ -38,7 +40,7 @@ namespace P4.Controllers
         }
 
         // POST: TrashController/Delete/5
-        [HttpPost("Trash/Delete/{id}")]
+        [HttpPost("Delete/{id}")]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try

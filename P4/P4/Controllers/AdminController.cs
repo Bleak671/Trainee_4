@@ -7,32 +7,34 @@ using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class AdminController : Controller
     {
-        // GET: AdminController
-        [HttpGet("Admin/")]
+        // GET: Admin
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
-        [HttpGet("Admin/GetUser/{id}")]
-        // GET: AdminController/GetUser/5
+        [HttpGet("GetUser/{id}")]
+        // GET: Admin/GetUser/5
         public ActionResult GetUser(int id)
         {
             return View();
         }
 
-        [HttpGet("Admin/GetPhoto/{id}")]
-        // GET: AdminController/GetPhoto/5
+        [HttpGet("GetPhoto/{id}")]
+        // GET: Admin/GetPhoto/5
         public ActionResult GetPhoto(int id)
         {
             return View();
         }
 
 
-        // POST: AdminController/EditUser/5
-        [HttpPost("Admin/EditUser/{id}")]
+        // POST: Admin/EditUser/5
+        [HttpPost("EditUser/{id}")]
         public ActionResult EditUser(int id)
         {
             try
@@ -45,8 +47,8 @@ namespace P4.Controllers
             }
         }
 
-        // POST: AdminController/EditPhoto/5
-        [HttpPost("Admin/EditPhoto/{id}")]
+        // POST: Admin/EditPhoto/5
+        [HttpPost("EditPhoto/{id}")]
         public ActionResult EditPhoto(int id)
         {
             try
@@ -59,8 +61,8 @@ namespace P4.Controllers
             }
         }
 
-        // POST: AdminController/BanUser/5
-        [HttpPost("Admin/BanUser/{id}")]
+        // POST: Admin/BanUser/5
+        [HttpPost("BanUser/{id}")]
         public ActionResult BanUser(int id, IFormCollection collection)
         {
             try
@@ -73,8 +75,8 @@ namespace P4.Controllers
             }
         }
 
-        // POST: AdminController/BanPhoto/5
-        [HttpPost("Admin/BanPhoto/{id}")]
+        // POST: Admin/BanPhoto/5
+        [HttpPost("BanPhoto/{id}")]
         [ValidateAntiForgeryToken]
         public ActionResult BanPhoto(int id)
         {
@@ -88,8 +90,8 @@ namespace P4.Controllers
             }
         }
 
-        // POST: AdminController/DeleteUser/5
-        [HttpPost("Admin/DeleteUser/{id}")]
+        // POST: Admin/DeleteUser/5
+        [HttpPost("DeleteUser/{id}")]
         public ActionResult DeleteUser(int id)
         {
             try
@@ -102,8 +104,8 @@ namespace P4.Controllers
             }
         }
 
-        // POST: AdminController/DeletePhoto/5
-        [HttpPost("Admin/DeletePhoto/{id}")]
+        // POST: Admin/DeletePhoto/5
+        [HttpPost("DeletePhoto/{id}")]
         public ActionResult DeletePhoto(int id)
         {
             try

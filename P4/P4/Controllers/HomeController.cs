@@ -7,25 +7,26 @@ using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class HomeController : Controller
     {
         // GET: HomeController
-        [HttpGet("Home")]
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: HomeController/Details/5
-        [HttpGet("Home/GetPhotos/{id}")]
+        [HttpGet("{id}")]
         public ActionResult Details(int id)
         {
             return View();
         }
 
         // POST: HomeController/CreateReview
-        [HttpPost("Home/CreateReview")]
-        [ValidateAntiForgeryToken]
+        [HttpPost("CreateReview")]
         public ActionResult CreateReview(IFormCollection collection)
         {
             try
@@ -39,8 +40,7 @@ namespace P4.Controllers
         }
 
         // POST: HomeController/CreateComment
-        [HttpPost("Home/CreateComment")]
-        [ValidateAntiForgeryToken]
+        [HttpPost("CreateComment")]
         public ActionResult CreateComment(IFormCollection collection)
         {
             try

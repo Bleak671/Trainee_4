@@ -7,24 +7,26 @@ using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class AuthorizationController : Controller
     {
         // GET: AuthController
-        [HttpGet("Authorization/")]
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: AuthController/Details/5
-        [HttpGet("Authorization/Details/{id}")]
+        [HttpGet("{id}")]
         public ActionResult Details(int id)
         {
             return View();
         }
 
         // POST: AuthController/Create
-        [HttpPost("Authorization/Create")]
+        [HttpPost]
         public ActionResult Create(IFormCollection collection)
         {
             try

@@ -7,23 +7,26 @@ using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class AuthorAccountController : Controller
     {
-        // GET: AuthorAccountController
-        [HttpGet("AuthorAccount/")]
+        // GET: AuthorAccount
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
-        // POST: AuthorAccountController/Edit/5
-        [HttpPost("AuthorAccount/Edit/{id}")]
+        // POST: AuthorAccount/Edit/5
+        [HttpPost("{id}")]
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // GET: AuthorAccountController/Delete/5
+        // GET: AuthorAccount/Delete/5
+        [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
             return View();

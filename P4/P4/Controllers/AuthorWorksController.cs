@@ -7,24 +7,26 @@ using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class AuthorWorksController : Controller
     {
         // GET: AuthorWorksController
-        [HttpGet("AuthorWorks/")]
+        [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: AuthorWorksController/Details/5
-        [HttpGet("AuthorWorks/Details/{id}")]
+        [HttpGet("{id}")]
         public ActionResult Details(int id)
         {
             return View();
         }
 
         // POST: AuthorWorksController/Create
-        [HttpPost("AuthorWorks/Create")]
+        [HttpPost]
         public ActionResult Create(IFormCollection collection)
         {
             try
@@ -38,22 +40,8 @@ namespace P4.Controllers
         }
 
         // POST: AuthorWorksController/Edit/5
-        [HttpPost("AuthorWorks/Edit/{id}")]
+        [HttpPost("{id}")]
         public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: AuthorWorksController/Delete/5
-        [HttpPost("AuthorWorks/Delete/{id}")]
-        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
