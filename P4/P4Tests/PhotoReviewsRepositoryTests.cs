@@ -25,7 +25,7 @@ namespace P4Tests
         [TestCase("31231234-1234-1242-1242-123412341234", "11111111-1111-1111-1111-111111111111", "11111111-1111-1111-1111-111111111111")]
         public void PhotoReviewsRepository_Create_ShouldNotThrow(string id, string pId, string uId)
         {
-            using (PhotoReviewsRepository db = new PhotoReviewsRepository(_context))
+            using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
             {
                 Assert.DoesNotThrow(() => db.Create(new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) }));
             }
@@ -34,7 +34,7 @@ namespace P4Tests
         [TestCase("31231234-1234-1242-1242-123412341234", "11111111-1111-1111-1111-111111111111", "11111111-1111-1111-1111-111111111111")]
         public void PhotoReviewsRepository_Create_ShouldThrow(string id, string pId, string uId)
         {
-            using (PhotoReviewsRepository db = new PhotoReviewsRepository(_context))
+            using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
             {
                 PhotoReview photo = new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) };
                 db.Create(photo);
@@ -45,7 +45,7 @@ namespace P4Tests
         [TestCase("31231234-1234-1242-1242-123412341234", "11111111-1111-1111-1111-111111111111", "11111111-1111-1111-1111-111111111111")]
         public void PhotoReviewsRepository_Update_ShouldNotThrow(string id, string pId, string uId)
         {
-            using (PhotoReviewsRepository db = new PhotoReviewsRepository(_context))
+            using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
             {
                 PhotoReview photo = new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) };
                 db.Create(photo);
@@ -57,7 +57,7 @@ namespace P4Tests
         [TestCase("31231234-1234-1242-1242-123412341234", "11111111-1111-1111-1111-111111111111", "11111111-1111-1111-1111-111111111111")]
         public void PhotoReviewsRepository_Update_ShouldThrow(string id, string pId, string uId)
         {
-            using (PhotoReviewsRepository db = new PhotoReviewsRepository(_context))
+            using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
             {
                 Assert.Throws(typeof(Exception), () => db.Update(new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) }));
             }
@@ -67,7 +67,7 @@ namespace P4Tests
         [TestCase("31231234-1234-1242-1242-123412341235")]
         public void PhotoReviewsRepository_Delete_ShouldNotThrow(string id)
         {
-            using (PhotoReviewsRepository db = new PhotoReviewsRepository(_context))
+            using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
             {
                 PhotoReview photo = new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse("11111111-1111-1111-1111-111111111111"), UserId = Guid.Parse("11111111-1111-1111-1111-111111111111") };
                 db.Create(photo);
@@ -78,7 +78,7 @@ namespace P4Tests
         [TestCase("11111111-1111-1111-1111-111111111111")]
         public void PhotoReviewsRepository_Delete_ShouldThrow(string id)
         {
-            using (PhotoReviewsRepository db = new PhotoReviewsRepository(_context))
+            using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
             {
                 Assert.Throws(typeof(Exception), () => db.Delete(Guid.Parse(id)));
             }

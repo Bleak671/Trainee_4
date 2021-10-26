@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using P4.BLL;
+using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,48 +11,45 @@ namespace P4.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthorWorksController : Controller
+    public class AuthorWorksController : ControllerBase
     {
+        private UserBLL _userDB;
+        private PhotoBLL _photoDB;
+        private PhotoCommentBLL _photoCommentDB;
+        private PhotoReviewBLL _photoReviewDB;
+        public AuthorWorksController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
+        {
+            _userDB = userDB;
+            _photoDB = photoDB;
+            _photoCommentDB = photoCommentDB;
+            _photoReviewDB = photoReviewDB;
+        }
         // GET: AuthorWorksController
         [HttpGet]
-        public ActionResult Index()
+        public IEnumerable<Photo> Get()
         {
-            return View();
+            return _photoDB.GetAllPhotos();
         }
 
         // GET: AuthorWorksController/Details/5
         [HttpGet("{id}")]
-        public ActionResult Details(int id)
+        public Photo Get(string id)
         {
-            return View();
+            return _photoDB.GetPhoto(id);
         }
 
         // POST: AuthorWorksController/Create
         [HttpPost]
-        public ActionResult Create(IFormCollection collection)
+        public void Post([FromBody] string value)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _photoDB.CreatePhoto(value);
         }
 
-        // POST: AuthorWorksController/Edit/5
-        [HttpPost("{id}")]
-        public ActionResult Edit(int id, IFormCollection collection)
+        // PUT: AuthorWorksController/Edit
+        [HttpPut]
+        public void Put([FromBody] string value)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _photoDB.UpdatePhoto(value);
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using P4.BLL;
 using P4.DAL;
 using P4.Models;
 using System;
@@ -30,7 +31,14 @@ namespace P4
             string connection = Configuration.GetConnectionString("LocalDatabase");
             services.AddDbContext<AppDBContext>(options =>
                 options.UseSqlServer(connection));
+
+            services.AddTransient<UserBLL>();
+            services.AddTransient<PhotoBLL>();
+            services.AddTransient<PhotoCommentBLL>();
+            services.AddTransient<PhotoReviewBLL>();
+
             services.AddControllersWithViews();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });

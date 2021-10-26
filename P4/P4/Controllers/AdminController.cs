@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using P4.BLL;
+using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,113 +11,67 @@ namespace P4.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AdminController : Controller
+    public class AdminController : ControllerBase
     {
+        private UserBLL _userDB;
+        private PhotoBLL _photoDB;
+        private PhotoCommentBLL _photoCommentDB;
+        private PhotoReviewBLL _photoReviewDB;
+        public AdminController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
+        {
+            _userDB = userDB;
+            _photoDB = photoDB;
+            _photoCommentDB = photoCommentDB;
+            _photoReviewDB = photoReviewDB;
+        }
         // GET: Admin
         [HttpGet]
-        public ActionResult Index()
+        public IEnumerable<User> Get()
         {
-            return View();
+            return _userDB.GetUsers();
         }
 
         [HttpGet("GetUser/{id}")]
         // GET: Admin/GetUser/5
-        public ActionResult GetUser(int id)
+        public User GetUser(string id)
         {
-            return View();
+            return _userDB.GetUser(id);
         }
 
         [HttpGet("GetPhoto/{id}")]
         // GET: Admin/GetPhoto/5
-        public ActionResult GetPhoto(int id)
+        public Photo GetPhoto(string id)
         {
-            return View();
+            return _photoDB.GetPhoto(id);
         }
 
 
-        // POST: Admin/EditUser/5
-        [HttpPost("EditUser/{id}")]
-        public ActionResult EditUser(int id)
+        // PUT: Admin/EditUser
+        [HttpPut("EditUser")]
+        public void PutUser([FromBody] string value)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _userDB.UpdateUser(value);
         }
 
-        // POST: Admin/EditPhoto/5
-        [HttpPost("EditPhoto/{id}")]
-        public ActionResult EditPhoto(int id)
+        // PUT: Admin/EditPhoto
+        [HttpPut("EditPhoto")]
+        public void PutPhoto([FromBody] string value)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _photoDB.UpdatePhoto(value);
         }
 
-        // POST: Admin/BanUser/5
-        [HttpPost("BanUser/{id}")]
-        public ActionResult BanUser(int id, IFormCollection collection)
+        // DELETE: Admin/DeleteUser/5
+        [HttpDelete("DeleteUser/{id}")]
+        public void DeleteUser(string id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _userDB.DeleteUser(id);
         }
 
-        // POST: Admin/BanPhoto/5
-        [HttpPost("BanPhoto/{id}")]
-        [ValidateAntiForgeryToken]
-        public ActionResult BanPhoto(int id)
+        // DELETE: Admin/DeletePhoto/5
+        [HttpDelete("DeletePhoto/{id}")]
+        public void DeletePhoto(string id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: Admin/DeleteUser/5
-        [HttpPost("DeleteUser/{id}")]
-        public ActionResult DeleteUser(int id)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: Admin/DeletePhoto/5
-        [HttpPost("DeletePhoto/{id}")]
-        public ActionResult DeletePhoto(int id)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _photoDB.DeletePhoto(id);
         }
     }
 }

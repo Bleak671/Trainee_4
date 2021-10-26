@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using P4.BLL;
+using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +11,31 @@ namespace P4.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthorizationController : Controller
+    public class AuthorizationController : ControllerBase
     {
-        // GET: AuthController
-        [HttpGet]
-        public ActionResult Index()
+        private UserBLL _userDB;
+        private PhotoBLL _photoDB;
+        private PhotoCommentBLL _photoCommentDB;
+        private PhotoReviewBLL _photoReviewDB;
+        public AuthorizationController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
         {
-            return View();
+            _userDB = userDB;
+            _photoDB = photoDB;
+            _photoCommentDB = photoCommentDB;
+            _photoReviewDB = photoReviewDB;
         }
-
         // GET: AuthController/Details/5
         [HttpGet("{id}")]
-        public ActionResult Details(int id)
+        public User Get(string id)
         {
-            return View();
+            return _userDB.GetUser(id);
         }
 
         // POST: AuthController/Create
         [HttpPost]
-        public ActionResult Create(IFormCollection collection)
+        public void Post([FromBody] string value)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _userDB.CreateUser(value);
         }
     }
 }

@@ -5,20 +5,20 @@ using System.Linq;
 
 namespace P4.DAL
 {
-    public class PhotoReviewsRepository : IRepository<PhotoReview>, IDisposable
+    public class PhotoCommentRepository : IRepository<PhotoComment>, IDisposable
     {
         private AppDBContext db;
-        public PhotoReviewsRepository(AppDBContext context)
+        public PhotoCommentRepository(AppDBContext context)
         {
             db = context;
         }
 
-        public void Create(PhotoReview photoRev)
+        public void Create(PhotoComment photoCom)
         {
             int result = 1;
             try
             {
-                db.PhotoReviews.Add(photoRev);
+                db.PhotoComments.Add(photoCom);
                 result = db.SaveChanges();
             }
             catch
@@ -31,22 +31,22 @@ namespace P4.DAL
             }
         }
 
-        public List<PhotoReview> GetAll()
+        public List<PhotoComment> GetAll()
         {
-            return db.PhotoReviews.ToList<PhotoReview>();
+            return db.PhotoComments.ToList<PhotoComment>();
         }
 
-        public PhotoReview GetOne(Guid id)
+        public PhotoComment GetOne(Guid id)
         {
-            return db.PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
+            return db.PhotoComments.FirstOrDefault(p => p.PhotoCommentId == id);
         }
 
-        public void Update(PhotoReview photoRev)
+        public void Update(PhotoComment photoCom)
         {
             int result = 1;
             try
             {
-                db.PhotoReviews.Update(photoRev);
+                db.PhotoComments.Update(photoCom);
                 result = db.SaveChanges();
             }
             catch
@@ -64,8 +64,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
-                PhotoReview pht = db.PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
-                db.PhotoReviews.Remove(pht);
+                PhotoComment pht = db.PhotoComments.FirstOrDefault(p => p.PhotoCommentId == id);
+                db.PhotoComments.Remove(pht);
                 result = db.SaveChanges();
             }
             catch
