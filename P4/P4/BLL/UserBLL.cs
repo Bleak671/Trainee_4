@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace P4.BLL
 {
-    public class UserBLL
+    public class UserBLL : IDisposable
     {
         UserRepository db;
 
@@ -20,7 +20,7 @@ namespace P4.BLL
 
         public void CreateUser(string value)
         {
-            User res = (User)JsonConvert.DeserializeObject(value);
+            User res = JsonConvert.DeserializeObject<User>(value);
             db.Create(res);
         }
 
@@ -36,13 +36,18 @@ namespace P4.BLL
 
         public void UpdateUser(string value)
         {
-            User res = (User)JsonConvert.DeserializeObject(value);
+            User res = JsonConvert.DeserializeObject<User>(value);
             db.Update(res);
         }
 
         public void DeleteUser(string id)
         {
             db.Delete(Guid.Parse(id));
+        }
+
+        public void Dispose()
+        {
+            db.Dispose();
         }
     }
 }

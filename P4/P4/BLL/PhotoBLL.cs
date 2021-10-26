@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace P4.BLL
 {
-    public class PhotoBLL
+    public class PhotoBLL : IDisposable
     {
         PhotoRepository db;
         public PhotoBLL(AppDBContext context)
@@ -18,7 +18,7 @@ namespace P4.BLL
 
         public void CreatePhoto(string value)
         {
-            Photo res = (Photo)JsonConvert.DeserializeObject(value);
+            Photo res = JsonConvert.DeserializeObject<Photo>(value);
             db.Create(res);
         }
 
@@ -82,13 +82,18 @@ namespace P4.BLL
 
         public void UpdatePhoto(string value)
         {
-            Photo res = (Photo)JsonConvert.DeserializeObject(value);
+            Photo res = JsonConvert.DeserializeObject<Photo>(value);
             db.Update(res);
         }
 
         public void DeletePhoto(string id)
         {
             db.Delete(Guid.Parse(id));
+        }
+
+        public void Dispose()
+        {
+            db.Dispose();
         }
     }
 }
