@@ -12,46 +12,45 @@ namespace P4.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HomeController : ControllerBase
+    public class AuthorWorksController : ControllerBase
     {
         private UserBLL _userBll;
         private PhotoBLL _photoBll;
         private PhotoCommentBLL _photoCommentBll;
         private PhotoReviewBLL _photoReviewBll;
-        public HomeController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
+        public AuthorWorksController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
         {
             _userBll = userDB;
             _photoBll = photoDB;
             _photoCommentBll = photoCommentDB;
             _photoReviewBll = photoReviewDB;
         }
-        // GET: HomeController
+        // GET: AuthorWorksController
         [HttpGet]
         public IEnumerable<Photo> Get()
         {
-
             return _photoBll.GetAllPhotos();
         }
 
-        // GET: HomeController/Details/5
+        // GET: AuthorWorksController/Details/5
         [HttpGet("{id}")]
         public Photo Get(string id)
         {
             return _photoBll.GetPhoto(Guid.Parse(id));
         }
 
-        // POST: HomeController/CreateReview
-        [HttpPost("CreateReview")]
-        public void PostReview([FromBody] string value)
+        // POST: AuthorWorksController/Create
+        [HttpPost]
+        public void Post([FromBody] string value)
         {
-            _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value));
+            _photoBll.CreatePhoto(JsonConvert.DeserializeObject<Photo>(value));
         }
 
-        // POST: HomeController/CreateComment
-        [HttpPost("CreateComment")]
-        public void PostComment([FromBody] string value)
+        // PUT: AuthorWorksController/Edit
+        [HttpPut]
+        public void Put([FromBody] string value)
         {
-            _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value));
+            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value));
         }
     }
 }

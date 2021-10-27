@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace P4.DAL
 {
-    interface IRepository<T> where T : class
+    public interface IRepository<T> : IDisposable where T : class
     {
         List<T> GetAll();
         T GetOne(Guid id);

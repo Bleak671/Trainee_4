@@ -12,46 +12,45 @@ namespace P4.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class HomeController : ControllerBase
+    public class TrashController : ControllerBase
     {
         private UserBLL _userBll;
         private PhotoBLL _photoBll;
         private PhotoCommentBLL _photoCommentBll;
         private PhotoReviewBLL _photoReviewBll;
-        public HomeController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
+        public TrashController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
         {
             _userBll = userDB;
             _photoBll = photoDB;
             _photoCommentBll = photoCommentDB;
             _photoReviewBll = photoReviewDB;
         }
-        // GET: HomeController
+        // GET: TrashController
         [HttpGet]
         public IEnumerable<Photo> Get()
         {
-
             return _photoBll.GetAllPhotos();
         }
 
-        // GET: HomeController/Details/5
+        // GET: TrashController/Details/5
         [HttpGet("{id}")]
-        public Photo Get(string id)
+        public Photo Details(string id)
         {
             return _photoBll.GetPhoto(Guid.Parse(id));
         }
 
-        // POST: HomeController/CreateReview
-        [HttpPost("CreateReview")]
-        public void PostReview([FromBody] string value)
+        // PUT: TrashController/Edit/5
+        [HttpPut]
+        public void Put([FromBody] string value)
         {
-            _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value));
+            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value));
         }
 
-        // POST: HomeController/CreateComment
-        [HttpPost("CreateComment")]
-        public void PostComment([FromBody] string value)
+        // DELETE: TrashController/Delete/5
+        [HttpDelete("Delete/{id}")]
+        public void Delete(string id)
         {
-            _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value));
+            _photoBll.DeletePhoto(Guid.Parse(id));
         }
     }
 }

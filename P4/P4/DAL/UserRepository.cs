@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace P4.DAL
 {
-    public class UserRepository : IRepository<User>, IDisposable
+    public class UserRepository : IRepository<User>
     {
         private AppDBContext db;
         public UserRepository(AppDBContext context)
@@ -37,6 +37,8 @@ namespace P4.DAL
 
         public List<User> GetAll()
         {
+            db.Users.Add(new User{ UserId = Guid.Parse("12341234-1234-1234-1234-123412341234"), Email = "", HashedPassword = "", isAdmin = false, isBanned = false, Login = "" });
+            db.SaveChanges();
             return db.Users.ToList<User>();
         }
 
