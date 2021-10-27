@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using P4.BLL;
+using P4.JWT;
 using P4.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace P4.Controllers
@@ -25,11 +29,15 @@ namespace P4.Controllers
             _photoCommentBll = photoCommentDB;
             _photoReviewBll = photoReviewDB;
         }
-        // GET: AuthController/Details/5
-        [HttpGet("{id}")]
-        public User Get(string id)
+        // GET: AuthController/asd
+        [HttpGet("{username}")]
+        public String Get(string username, [FromBody] string password)
         {
-            return _userBll.GetUser(Guid.Parse(id));
+            var token = _userBll.GetJWT(username, password);
+            if (token != null)
+                return JsonConvert.SerializeObject(token);
+            else
+                return null;
         }
 
         // POST: AuthController/Create
