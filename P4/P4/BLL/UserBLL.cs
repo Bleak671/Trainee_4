@@ -11,9 +11,9 @@ namespace P4.BLL
 {
     public class UserBLL : IDisposable
     {
-        private UserRepository _userRepos;
+        private IRepository<User> _userRepos;
 
-        public UserBLL(UserRepository userRepos)
+        public UserBLL(IRepository<User> userRepos)
         {
             _userRepos = userRepos;
         }

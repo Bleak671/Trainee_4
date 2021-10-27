@@ -10,8 +10,8 @@ namespace P4.BLL
 {
     public class PhotoBLL : IDisposable
     {
-        private PhotoRepository _photoRepos;
-        public PhotoBLL(PhotoRepository photoRepos)
+        private IRepository<Photo> _photoRepos;
+        public PhotoBLL(IRepository<Photo> photoRepos)
         {
             _photoRepos = photoRepos;
         }

@@ -10,8 +10,8 @@ namespace P4.BLL
 {
     public class PhotoCommentBLL : IDisposable
     {
-        private PhotoCommentRepository _photoCommentRepos;
-        public PhotoCommentBLL(PhotoCommentRepository photoCommentRepos)
+        private IRepository<PhotoComment> _photoCommentRepos;
+        public PhotoCommentBLL(IRepository<PhotoComment> photoCommentRepos)
         {
             _photoCommentRepos = photoCommentRepos;
         }

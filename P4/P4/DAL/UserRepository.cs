@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace P4.DAL
 {
-    public class UserRepository : IRepository<User>, IDisposable
+    public class UserRepository : IRepository<User>
     {
         private AppDBContext db;
         public UserRepository(AppDBContext context)
