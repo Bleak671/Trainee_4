@@ -33,7 +33,7 @@ namespace P4.Tests
             {
                 Photo photo = new Photo { PhotoId = Guid.Parse(id), Link = link, UserId = Guid.Parse(uId) };
 
-                Assert.DoesNotThrow(() => db.CreatePhoto(JsonConvert.SerializeObject(photo)));
+                Assert.DoesNotThrow(() => db.CreatePhoto(photo));
             }
         }
 
@@ -42,7 +42,7 @@ namespace P4.Tests
         {
             using (PhotoBLL db = new PhotoBLL(_context))
             {
-                Assert.DoesNotThrow(() => db.GetPhoto(id));
+                Assert.DoesNotThrow(() => db.GetPhoto(Guid.Parse(id)));
             }
         }
 
@@ -51,7 +51,7 @@ namespace P4.Tests
         {
             using (PhotoBLL db = new PhotoBLL(_context))
             {
-                Assert.DoesNotThrow(() => db.DeletePhoto(id));
+                Assert.DoesNotThrow(() => db.DeletePhoto(Guid.Parse(id)));
             }
         }
     }

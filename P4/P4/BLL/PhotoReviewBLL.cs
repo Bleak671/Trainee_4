@@ -10,54 +10,44 @@ namespace P4.BLL
 {
     public class PhotoReviewBLL : IDisposable
     {
-        PhotoReviewRepository db;
-        public PhotoReviewBLL(AppDBContext context)
+        private PhotoReviewRepository _photoReviewRepos;
+        public PhotoReviewBLL(PhotoReviewRepository photoReviewRepos)
         {
-            db = new PhotoReviewRepository(context);
+            _photoReviewRepos = photoReviewRepos;
         }
 
-        public void CreatePhotoReview(string value)
+        public void CreatePhotoReview(PhotoReview photoReview)
         {
-            PhotoReview res = JsonConvert.DeserializeObject<PhotoReview>(value);
-            db.Create(res);
+            _photoReviewRepos.Create(photoReview);
         }
 
-        public IEnumerable<PhotoReview> GetUsersReviews(string id)
+        public List<PhotoReview> GetUsersReviews(Guid id)
         {
-            IEnumerable<PhotoReview> allComments = db.GetAll();
-            IEnumerable<PhotoReview> res = from c in allComments
-                                            where c.UserId.ToString() == id
-                                            select c;
-            return res;
+            return _photoReviewRepos.GetAll().Where(p => p.UserId.ToString() == id.ToString()).ToList();
         }
-        public IEnumerable<PhotoReview> GetPhotosReviews(string id)
+        public List<PhotoReview> GetPhotosReviews(Guid id)
         {
-            IEnumerable<PhotoReview> allComments = db.GetAll();
-            IEnumerable<PhotoReview> res = from c in allComments
-                                            where c.PhotoId.ToString() == id
-                                            select c;
-            return res;
+            return _photoReviewRepos.GetAll().Where(p => p.PhotoId.ToString() == id.ToString()).ToList();
         }
 
-        public PhotoReview GetReview(string id)
+        public PhotoReview GetReview(Guid id)
         {
-            return db.GetOne(Guid.Parse(id));
+            return _photoReviewRepos.GetOne(id);
         }
 
-        public void UpdateReview(string value)
+        public void UpdateReview(PhotoReview photoReview)
         {
-            PhotoReview res = JsonConvert.DeserializeObject<PhotoReview>(value);
-            db.Update(res);
+            _photoReviewRepos.Update(photoReview);
         }
 
-        public void DeleteReview(string id)
+        public void DeleteReview(Guid id)
         {
-            db.Delete(Guid.Parse(id));
+            _photoReviewRepos.Delete(id);
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            _photoReviewRepos.Dispose();
         }
     }
 }

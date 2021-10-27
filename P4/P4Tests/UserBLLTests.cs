@@ -33,7 +33,7 @@ namespace P4.Tests
             {
                 User u = new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login };
                 
-                Assert.DoesNotThrow(() => db.CreateUser(JsonConvert.SerializeObject(u)));
+                Assert.DoesNotThrow(() => db.CreateUser(u));
             }
         }
 
@@ -42,7 +42,7 @@ namespace P4.Tests
         {
             using (UserBLL db = new UserBLL(_context))
             {
-                Assert.DoesNotThrow(() => db.GetUser(id));
+                Assert.DoesNotThrow(() => db.GetUser(Guid.Parse(id)));
             }
         }
 
@@ -51,7 +51,7 @@ namespace P4.Tests
         {
             using (UserBLL db = new UserBLL(_context))
             {
-                Assert.DoesNotThrow(() => db.DeleteUser(id));
+                Assert.DoesNotThrow(() => db.DeleteUser(Guid.Parse(id)));
             }
         }
     }

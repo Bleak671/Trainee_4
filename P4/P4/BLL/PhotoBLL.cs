@@ -10,90 +10,65 @@ namespace P4.BLL
 {
     public class PhotoBLL : IDisposable
     {
-        PhotoRepository db;
-        public PhotoBLL(AppDBContext context)
+        private PhotoRepository _photoRepos;
+        public PhotoBLL(PhotoRepository photoRepos)
         {
-            db = new PhotoRepository(context);
+            _photoRepos = photoRepos;
         }
 
-        public void CreatePhoto(string value)
+        public void CreatePhoto(Photo photo)
         {
-            Photo res = JsonConvert.DeserializeObject<Photo>(value);
-            db.Create(res);
+            _photoRepos.Create(photo);
         }
 
-        public IEnumerable<Photo> GetAllPhotos()
+        public List<Photo> GetAllPhotos()
         {
-            return db.GetAll();
+            return _photoRepos.GetAll();
         }
 
-        public IEnumerable<Photo> GetPublishedPhotos()
+        public List<Photo> GetPublishedPhotos()
         {
-            IEnumerable<Photo> allPhotos = db.GetAll();
-            IEnumerable<Photo> res = from p in allPhotos
-                              where p.isPublished == true
-                              orderby p.UploadDate
-                              select p;
-            return res;
+            return _photoRepos.GetAll().Where(p=>p.isPublished == true).OrderBy(p=>p.UploadDate).ToList();
         }
 
-        public IEnumerable<Photo> GetPublishedNotTrashPhotos()
+        public List<Photo> GetPublishedNotTrashPhotos()
         {
-            IEnumerable<Photo> allPhotos = db.GetAll();
-            IEnumerable<Photo> res = from p in allPhotos
-                                     where p.isPublished == true
-                                     where p.isTrash == false
-                                     orderby p.UploadDate
-                                     select p;
-            return res;
+            return _photoRepos.GetAll().Where(p => p.isPublished == true).Where(p => p.isTrash == false).OrderBy(p => p.UploadDate).ToList();
         }
 
-        public IEnumerable<Photo> GetTrashPhotos()
+        public List<Photo> GetTrashPhotos()
         {
-            IEnumerable<Photo> allPhotos = db.GetAll();
-            IEnumerable<Photo> res = from p in allPhotos
-                                     where p.isTrash == true
-                                     select p;
-            return res;
+            return _photoRepos.GetAll().Where(p => p.isTrash == true).OrderBy(p => p.UploadDate).ToList();
         }
 
-        public IEnumerable<Photo> GetNotTrashPhotos()
+        public List<Photo> GetNotTrashPhotos()
         {
-            IEnumerable<Photo> allPhotos = db.GetAll();
-            IEnumerable<Photo> res = from p in allPhotos
-                                     where p.isTrash == false
-                                     select p;
-            return res;
+            return _photoRepos.GetAll().Where(p => p.isTrash == false).OrderBy(p => p.UploadDate).ToList();
         }
 
-        public IEnumerable<Photo> GetUsersPhotos(string id)
+        public List<Photo> GetUsersPhotos(Guid id)
         {
-            IEnumerable<Photo> allPhotos = db.GetAll();
-            IEnumerable<Photo> res = from p in allPhotos
-                                     where p.UserId.ToString() == id
-                                     select p;
-            return res;
+            return _photoRepos.GetAll().Where(p => p.UserId.ToString() == id.ToString()).OrderBy(p => p.UploadDate).ToList();
         }
 
-        public Photo GetPhoto(string id)
+        public Photo GetPhoto(Guid id)
         {
-            return db.GetOne(Guid.Parse(id));
+            return _photoRepos.GetOne(id);
         }
 
-        public void UpdatePhoto(string value)
+        public void UpdatePhoto(Photo photo)
         {
-            Photo res = JsonConvert.DeserializeObject<Photo>(value);
-            db.Update(res);
+            _photoRepos.Update(photo);
         }
 
-        public void DeletePhoto(string id)
+        public void DeletePhoto(Guid id)
         {
-            db.Delete(Guid.Parse(id));
+            _photoRepos.Delete(id);
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            _photoRepos.Dispose();
         }
     }
 }

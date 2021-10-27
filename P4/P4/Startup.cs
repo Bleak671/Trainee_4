@@ -32,10 +32,15 @@ namespace P4
             services.AddDbContext<AppDBContext>(options =>
                 options.UseSqlServer(connection));
 
-            services.AddTransient<UserBLL>();
-            services.AddTransient<PhotoBLL>();
-            services.AddTransient<PhotoCommentBLL>();
-            services.AddTransient<PhotoReviewBLL>();
+            services.AddScoped<UserBLL>();
+            services.AddScoped<PhotoBLL>();
+            services.AddScoped<PhotoCommentBLL>();
+            services.AddScoped<PhotoReviewBLL>();
+
+            services.AddScoped<UserRepository>();
+            services.AddScoped<PhotoRepository>();
+            services.AddScoped<PhotoCommentRepository>();
+            services.AddScoped<PhotoReviewRepository>();
 
             services.AddControllersWithViews();
 

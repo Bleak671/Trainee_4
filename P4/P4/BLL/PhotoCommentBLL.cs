@@ -10,59 +10,49 @@ namespace P4.BLL
 {
     public class PhotoCommentBLL : IDisposable
     {
-        PhotoCommentRepository db;
-        public PhotoCommentBLL(AppDBContext context)
+        private PhotoCommentRepository _photoCommentRepos;
+        public PhotoCommentBLL(PhotoCommentRepository photoCommentRepos)
         {
-            db = new PhotoCommentRepository(context);
+            _photoCommentRepos = photoCommentRepos;
         }
 
-        public void CreatePhotoComment(string value)
+        public void CreatePhotoComment(PhotoComment photoCom)
         {
-            PhotoComment res = JsonConvert.DeserializeObject<PhotoComment>(value);
-            db.Create(res);
+            _photoCommentRepos.Create(photoCom);
         }
 
-        public IEnumerable<PhotoComment> GetAllComments()
+        public List<PhotoComment> GetAllComments()
         {
-            return db.GetAll();
+            return _photoCommentRepos.GetAll();
         }
 
-        public IEnumerable<PhotoComment> GetUsersComments(string id)
+        public List<PhotoComment> GetUsersComments(Guid id)
         {
-            IEnumerable<PhotoComment> allComments = db.GetAll();
-            IEnumerable<PhotoComment> res = from c in allComments
-                                     where c.UserId.ToString() == id
-                                     select c;
-            return res;
+            return _photoCommentRepos.GetAll().Where(p => p.UserId.ToString() == id.ToString()).ToList();
         }
-        public IEnumerable<PhotoComment> GetPhotosComments(string id)
+        public List<PhotoComment> GetPhotosComments(Guid id)
         {
-            IEnumerable<PhotoComment> allComments = db.GetAll();
-            IEnumerable<PhotoComment> res = from c in allComments
-                                            where c.PhotoId.ToString() == id
-                                            select c;
-            return res;
+            return _photoCommentRepos.GetAll().Where(p => p.PhotoId.ToString() == id.ToString()).ToList();
         }
 
-        public PhotoComment GetComment(string id)
+        public PhotoComment GetComment(Guid id)
         {
-            return db.GetOne(Guid.Parse(id));
+            return _photoCommentRepos.GetOne(id);
         }
 
-        public void UpdateComment(string value)
+        public void UpdateComment(PhotoComment photoComment)
         {
-            PhotoComment res = JsonConvert.DeserializeObject<PhotoComment>(value);
-            db.Update(res);
+            _photoCommentRepos.Update(photoComment);
         }
 
-        public void DeleteComment(string id)
+        public void DeleteComment(Guid id)
         {
-            db.Delete(Guid.Parse(id));
+            _photoCommentRepos.Delete(id);
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            _photoCommentRepos.Dispose();
         }
     }
 }

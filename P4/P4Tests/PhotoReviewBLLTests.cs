@@ -35,7 +35,7 @@ namespace P4.Tests
             {
                 PhotoReview photo = new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) };
 
-                Assert.DoesNotThrow(() => db.CreatePhotoReview(JsonConvert.SerializeObject(photo)));
+                Assert.DoesNotThrow(() => db.CreatePhotoReview(photo));
             }
         }
 
@@ -44,7 +44,7 @@ namespace P4.Tests
         {
             using (PhotoReviewBLL db = new PhotoReviewBLL(_context))
             {
-                Assert.DoesNotThrow(() => db.GetReview(id));
+                Assert.DoesNotThrow(() => db.GetReview(Guid.Parse(id)));
             }
         }
 
@@ -53,7 +53,7 @@ namespace P4.Tests
         {
             using (PhotoReviewBLL db = new PhotoReviewBLL(_context))
             {
-                Assert.DoesNotThrow(() => db.DeleteReview(id));
+                Assert.DoesNotThrow(() => db.DeleteReview(Guid.Parse(id)));
             }
         }
     }

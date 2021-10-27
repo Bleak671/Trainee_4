@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using P4.BLL;
 using P4.Models;
 using System;
@@ -13,29 +14,29 @@ namespace P4.Controllers
     [Route("api/[controller]")]
     public class AuthorizationController : ControllerBase
     {
-        private UserBLL _userDB;
-        private PhotoBLL _photoDB;
-        private PhotoCommentBLL _photoCommentDB;
-        private PhotoReviewBLL _photoReviewDB;
+        private UserBLL _userBll;
+        private PhotoBLL _photoBll;
+        private PhotoCommentBLL _photoCommentBll;
+        private PhotoReviewBLL _photoReviewBll;
         public AuthorizationController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
         {
-            _userDB = userDB;
-            _photoDB = photoDB;
-            _photoCommentDB = photoCommentDB;
-            _photoReviewDB = photoReviewDB;
+            _userBll = userDB;
+            _photoBll = photoDB;
+            _photoCommentBll = photoCommentDB;
+            _photoReviewBll = photoReviewDB;
         }
         // GET: AuthController/Details/5
         [HttpGet("{id}")]
         public User Get(string id)
         {
-            return _userDB.GetUser(id);
+            return _userBll.GetUser(Guid.Parse(id));
         }
 
         // POST: AuthController/Create
         [HttpPost]
         public void Post([FromBody] string value)
         {
-            _userDB.CreateUser(value);
+            _userBll.CreateUser(JsonConvert.DeserializeObject<User>(value));
         }
     }
 }

@@ -11,43 +11,41 @@ namespace P4.BLL
 {
     public class UserBLL : IDisposable
     {
-        UserRepository db;
+        private UserRepository _userRepos;
 
-        public UserBLL(AppDBContext context)
+        public UserBLL(UserRepository userRepos)
         {
-            db = new UserRepository(context);
+            _userRepos = userRepos;
         }
 
-        public void CreateUser(string value)
+        public void CreateUser(User user)
         {
-            User res = JsonConvert.DeserializeObject<User>(value);
-            db.Create(res);
+            _userRepos.Create(user);
         }
 
-        public IEnumerable<User> GetUsers()
+        public List<User> GetUsers()
         {
-            return db.GetAll();
+            return _userRepos.GetAll();
         }
 
-        public User GetUser(string id)
+        public User GetUser(Guid id)
         {
-            return db.GetOne(Guid.Parse(id));
+            return _userRepos.GetOne(id);
         }
 
-        public void UpdateUser(string value)
+        public void UpdateUser(User user)
         {
-            User res = JsonConvert.DeserializeObject<User>(value);
-            db.Update(res);
+            _userRepos.Update(user);
         }
 
-        public void DeleteUser(string id)
+        public void DeleteUser(Guid id)
         {
-            db.Delete(Guid.Parse(id));
+            _userRepos.Delete(id);
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            _userRepos.Dispose();
         }
     }
 }

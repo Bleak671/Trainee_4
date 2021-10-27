@@ -35,7 +35,7 @@ namespace P4.Tests
             {
                 PhotoComment photo = new PhotoComment { PhotoCommentId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) };
 
-                Assert.DoesNotThrow(() => db.CreatePhotoComment(JsonConvert.SerializeObject(photo)));
+                Assert.DoesNotThrow(() => db.CreatePhotoComment(photo));
             }
         }
 
@@ -44,7 +44,7 @@ namespace P4.Tests
         {
             using (PhotoCommentBLL db = new PhotoCommentBLL(_context))
             {
-                Assert.DoesNotThrow(() => db.GetComment(id));
+                Assert.DoesNotThrow(() => db.GetComment(Guid.Parse(id)));
             }
         }
 
@@ -53,7 +53,7 @@ namespace P4.Tests
         {
             using (PhotoCommentBLL db = new PhotoCommentBLL(_context))
             {
-                Assert.DoesNotThrow(() => db.DeleteComment(id));
+                Assert.DoesNotThrow(() => db.DeleteComment(Guid.Parse(id)));
             }
         }
     }
