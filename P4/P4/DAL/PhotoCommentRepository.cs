@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace P4.DAL
 {
-    public class PhotoCommentRepository : IRepository<PhotoComment>, IDisposable
+    public class PhotoCommentRepository : IRepository<PhotoComment>
     {
         private AppDBContext db;
         public PhotoCommentRepository(AppDBContext context)

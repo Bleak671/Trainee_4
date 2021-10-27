@@ -37,10 +37,10 @@ namespace P4
             services.AddScoped<PhotoCommentBLL>();
             services.AddScoped<PhotoReviewBLL>();
 
-            services.AddScoped<UserRepository>();
-            services.AddScoped<PhotoRepository>();
-            services.AddScoped<PhotoCommentRepository>();
-            services.AddScoped<PhotoReviewRepository>();
+            services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IRepository<Photo>, PhotoRepository>();
+            services.AddScoped<IRepository<PhotoComment>, PhotoCommentRepository>();
+            services.AddScoped<IRepository<PhotoReview>, PhotoReviewRepository>();
 
             services.AddControllersWithViews();
 

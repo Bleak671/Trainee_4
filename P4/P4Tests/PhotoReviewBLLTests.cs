@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using NUnit.Framework;
 using P4.BLL;
+using P4.DAL;
 using P4.Models;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,15 @@ namespace P4.Tests
     [TestFixture]
     class PhotoReviewBLLTests
     {
-        AppDBContext _context;
+        PhotoReviewRepository _context;
         [SetUp]
         public void Setup()
         {
             var options = new DbContextOptionsBuilder<AppDBContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
-            _context = new AppDBContext(options);
-            _context.Users.Add(new User { UserId = Guid.Parse("11111111-1111-1111-1111-111111111111"), Email = "", HashedPassword = "", isAdmin = false, isBanned = false, Login = "" });
-            _context.Photos.Add(new Photo { PhotoId = Guid.Parse("11111111-1111-1111-1111-111111111111"), Link = "", UserId = Guid.Parse("11111111-1111-1111-1111-111111111111") });
-            _context.PhotoReviews.Add(new PhotoReview { PhotoReviewId = Guid.Parse("31231234-1234-1242-1242-123412341234"), PhotoId = Guid.Parse("11111111-1111-1111-1111-111111111111"), UserId = Guid.Parse("11111111-1111-1111-1111-111111111111") });
-            _context.SaveChanges();
+            _context = new PhotoReviewRepository(new AppDBContext(options));
+            _context.Create(new PhotoReview { PhotoReviewId = Guid.Parse("31231234-1234-1242-1242-123412341234"), PhotoId = Guid.Parse("11111111-1111-1111-1111-111111111111"), UserId = Guid.Parse("11111111-1111-1111-1111-111111111111") });
         }
 
         [TestCase("31231234-1234-1242-1242-123412341235", "11111111-1111-1111-1111-111111111111", "11111111-1111-1111-1111-111111111111")]
