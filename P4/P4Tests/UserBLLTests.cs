@@ -4,6 +4,7 @@ using NUnit.Framework;
 using P4.BLL;
 using P4.DAL;
 using P4.Models;
+using P4.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +59,7 @@ namespace P4.Tests
         [TestCase("zxc", "qwe")]
         public void UserBLL_GetToken_ShouldNotThrow(string email, string password)
         {
-            using (UserBLL db = new UserBLL(_context))
+            using (AuthUtility db = new AuthUtility(_context))
             {
                 object result = db.GetJWT(email, password);
                 Assert.NotNull(result);

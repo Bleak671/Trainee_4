@@ -5,10 +5,13 @@ using Newtonsoft.Json;
 using P4.BLL;
 using P4.JWT;
 using P4.Models;
+using P4.Utility;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -22,22 +25,24 @@ namespace P4.Controllers
         private PhotoBLL _photoBll;
         private PhotoCommentBLL _photoCommentBll;
         private PhotoReviewBLL _photoReviewBll;
-        public AuthorizationController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
+        private AuthUtility _authUtility;
+        public AuthorizationController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB, AuthUtility authUtility)
         {
             _userBll = userDB;
             _photoBll = photoDB;
             _photoCommentBll = photoCommentDB;
             _photoReviewBll = photoReviewDB;
+            _authUtility = authUtility;
         }
-        // GET: AuthController/asd
-        [HttpGet("{username}")]
-        public String Get(string username, [FromBody] string password)
+        // POST: AuthController/asd
+        [HttpPost("{username}")]
+        public IActionResult Get(string username, [FromBody] string password)
         {
-            var token = _userBll.GetJWT(username, password);
+            var token = _authUtility.GetJWT(username, password);
             if (token != null)
-                return JsonConvert.SerializeObject(token);
+                return Ok(JsonConvert.SerializeObject(token));
             else
-                return null;
+                return BadRequest();
         }
 
         // POST: AuthController/Create

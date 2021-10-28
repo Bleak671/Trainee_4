@@ -12,6 +12,7 @@ using P4.BLL;
 using P4.DAL;
 using P4.JWT;
 using P4.Models;
+using P4.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace P4
             string connection = Configuration.GetConnectionString("LocalDatabase");
             services.AddDbContext<AppDBContext>(options =>
                 options.UseSqlServer(connection));
+
+            services.AddScoped<AuthUtility>();
 
             services.AddScoped<UserBLL>();
             services.AddScoped<PhotoBLL>();
