@@ -4,6 +4,7 @@ using NUnit.Framework;
 using P4.BLL;
 using P4.DAL;
 using P4.Models;
+using P4.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace P4.Tests
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
             _context = new UserRepository(new AppDBContext(options));
-            _context.Create(new User { UserId = Guid.Parse("31231234-1234-1242-1242-123412341234"), Email = "", HashedPassword = "", isAdmin = false, isBanned = false, Login = "" });
+            _context.Create(new User { UserId = Guid.Parse("31231234-1234-1242-1242-123412341234"), Email = "zxc", HashedPassword = "qwe", isAdmin = false, isBanned = false, Login = "asd" });  
         }
 
         [TestCase("31231234-1234-1242-1242-123412341235", "asd", "qwe", "tre")]
@@ -52,6 +53,16 @@ namespace P4.Tests
             using (UserBLL db = new UserBLL(_context))
             {
                 Assert.DoesNotThrow(() => db.DeleteUser(Guid.Parse(id)));
+            }
+        }
+
+        [TestCase("zxc", "qwe")]
+        public void UserBLL_GetToken_ShouldNotThrow(string email, string password)
+        {
+            using (AuthUtility db = new AuthUtility(_context))
+            {
+                object result = db.GetJWT(email, password);
+                Assert.NotNull(result);
             }
         }
     }
