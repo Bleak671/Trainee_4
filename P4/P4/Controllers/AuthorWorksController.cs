@@ -27,16 +27,16 @@ namespace P4.Controllers
         }
         // GET: AuthorWorksController
         [HttpGet]
-        public IEnumerable<Photo> Get()
+        public string Get()
         {
-            return _photoBll.GetAllPhotos();
+            return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
         }
 
         // GET: AuthorWorksController/Details/5
         [HttpGet("{id}")]
-        public Photo Get(string id)
+        public string Get(string id)
         {
-            return _photoBll.GetPhoto(Guid.Parse(id));
+            return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
         }
 
         // POST: AuthorWorksController/Create

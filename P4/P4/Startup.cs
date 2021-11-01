@@ -1,6 +1,9 @@
+using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +16,7 @@ using P4.DAL;
 using P4.JWT;
 using P4.Models;
 using P4.Utility;
+using React.AspNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +77,11 @@ namespace P4
                         };
                     });
 
+            services.AddMemoryCache();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddReact();
+            services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
+
             services.AddControllersWithViews();
 
             services.AddSwaggerGen(c =>
@@ -101,6 +110,10 @@ namespace P4
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseDeveloperExceptionPage();
+
+            app.UseReact(config => { });
 
             app.UseEndpoints(endpoints =>
             {

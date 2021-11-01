@@ -27,16 +27,16 @@ namespace P4.Controllers
         }
         // GET: Admin
         [HttpGet]
-        public IEnumerable<User> Get()
+        public string Get()
         {
-            return _userBll.GetUsers();
+            return JsonConvert.SerializeObject(_userBll.GetUsers());
         }
 
         [HttpGet("GetUser/{id}")]
         // GET: Admin/GetUser/5
-        public User GetUser(string id)
+        public string GetUser(string id)
         {
-            return _userBll.GetUser(Guid.Parse(id));
+            return JsonConvert.SerializeObject(_userBll.GetUser(Guid.Parse(id)));
         }
 
         [HttpGet("GetPhoto/{id}")]

@@ -27,9 +27,9 @@ namespace P4.Controllers
         }
         // GET: AuthorAccount
         [HttpGet("{id}")]
-        public User Get(string id)
+        public string Get(string id)
         {
-            return _userBll.GetUser(Guid.Parse(id));
+            return JsonConvert.SerializeObject(_userBll.GetUser(Guid.Parse(id)));
         }
 
         // PUT: AuthorAccount/Edit
