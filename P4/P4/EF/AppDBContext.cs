@@ -11,8 +11,6 @@ namespace P4.Models
 
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
-            Database.EnsureDeleted();  
-            Database.EnsureCreated();   
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

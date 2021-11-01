@@ -27,16 +27,16 @@ namespace P4.Controllers
         }
         // GET: TrashController
         [HttpGet]
-        public IEnumerable<Photo> Get()
+        public string Get()
         {
-            return _photoBll.GetAllPhotos();
+            return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
         }
 
         // GET: TrashController/Details/5
         [HttpGet("{id}")]
-        public Photo Details(string id)
+        public string Details(string id)
         {
-            return _photoBll.GetPhoto(Guid.Parse(id));
+            return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
         }
 
         // PUT: TrashController/Edit/5

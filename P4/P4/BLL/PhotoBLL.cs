@@ -23,6 +23,7 @@ namespace P4.BLL
 
         public List<Photo> GetAllPhotos()
         {
+            
             return _photoRepos.GetAll();
         }
 

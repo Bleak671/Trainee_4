@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,6 +14,7 @@ namespace P4.Models
 
         [Required]
         public Guid UserId { get; set; }
+        [JsonIgnore]
         public User User { get; set; }
 
         public string Name { get; set; }
@@ -24,7 +26,9 @@ namespace P4.Models
         public bool isPublished { get; set; }
         public bool isTrash { get; set; }
 
+        [JsonIgnore]
         public List<PhotoComment> PhotoComments { get; set; }
+        [JsonIgnore]
         public List<PhotoReview> PhotoReviews { get; set; }
     }
 }
