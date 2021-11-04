@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
@@ -32,9 +33,9 @@ namespace P4.Controllers
             return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
         }
 
-        // GET: HomeController/Details/5
+        // GET: api/Home/5
         [HttpGet("{id}")]
-        public string Get(string id)
+        public string Get([FromRoute] string id)
         {
             return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
         }
