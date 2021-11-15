@@ -22,6 +22,10 @@ namespace P4.DAL
             int result = 1;
             try
             {
+                if (user.UserId.ToString() == Guid.Empty.ToString())
+                    user.UserId = Guid.NewGuid();
+                if (user.Login == null)
+                    user.Login = "";
                 db.Users.Add(user);
                 result = db.SaveChanges();
             }
@@ -37,8 +41,6 @@ namespace P4.DAL
 
         public List<User> GetAll()
         {
-            db.Users.Add(new User{ UserId = Guid.Parse("12341234-1234-1234-1234-123412341234"), Email = "", HashedPassword = "", isAdmin = false, isBanned = false, Login = "" });
-            db.SaveChanges();
             return db.Users.ToList<User>();
         }
 

@@ -18,6 +18,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
+                if (photoCom.UserId.ToString() == Guid.Empty.ToString())
+                    photoCom.UserId = Guid.NewGuid();
                 db.PhotoComments.Add(photoCom);
                 result = db.SaveChanges();
             }

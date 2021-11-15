@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace P4.Controllers
 {
@@ -30,7 +32,7 @@ namespace P4.Controllers
         [HttpGet]
         public string Get()
         {
-            return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
+            return JsonConvert.SerializeObject(_photoBll.GetPublishedNotTrashPhotos());
         }
 
         // GET: api/Home/5
@@ -40,18 +42,20 @@ namespace P4.Controllers
             return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
         }
 
+        [Authorize]
         // POST: HomeController/CreateReview
         [HttpPost("CreateReview")]
-        public void PostReview([FromBody] string value)
+        public void PostReview([FromBody] JsonElement value)
         {
-            _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value));
+            _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value.ToString()));
         }
 
+        [Authorize]
         // POST: HomeController/CreateComment
         [HttpPost("CreateComment")]
-        public void PostComment([FromBody] string value)
+        public void PostComment([FromBody] JsonElement value)
         {
-            _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value));
+            _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value.ToString()));
         }
     }
 }

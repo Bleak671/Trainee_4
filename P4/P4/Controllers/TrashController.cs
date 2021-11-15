@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
@@ -6,10 +8,12 @@ using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TrashController : ControllerBase
@@ -26,29 +30,22 @@ namespace P4.Controllers
             _photoReviewBll = photoReviewDB;
         }
         // GET: TrashController
-        [HttpGet]
-        public string Get()
-        {
-            return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
-        }
-
-        // GET: TrashController/Details/5
         [HttpGet("{id}")]
-        public string Details(string id)
+        public string Get([FromRoute] string id)
         {
-            return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
+            return JsonConvert.SerializeObject(_photoBll.GetUsersTrashPhotos(Guid.Parse(id)));
         }
 
         // PUT: TrashController/Edit/5
         [HttpPut]
-        public void Put([FromBody] string value)
+        public void Put([FromBody] JsonElement value)
         {
-            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value));
+            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
         }
 
         // DELETE: TrashController/Delete/5
         [HttpDelete("Delete/{id}")]
-        public void Delete(string id)
+        public void Delete([FromRoute] string id)
         {
             _photoBll.DeletePhoto(Guid.Parse(id));
         }

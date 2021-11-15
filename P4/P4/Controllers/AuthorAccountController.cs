@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
@@ -6,10 +8,12 @@ using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AuthorAccountController : ControllerBase
@@ -27,21 +31,21 @@ namespace P4.Controllers
         }
         // GET: AuthorAccount
         [HttpGet("{id}")]
-        public string Get(string id)
+        public string Get([FromRoute] string id)
         {
             return JsonConvert.SerializeObject(_userBll.GetUser(Guid.Parse(id)));
         }
 
         // PUT: AuthorAccount/Edit
         [HttpPut]
-        public void Put([FromBody] string value)
+        public void Put([FromBody] JsonElement value)
         {
-            _userBll.UpdateUser(JsonConvert.DeserializeObject<User>(value));
+            _userBll.UpdateUser(JsonConvert.DeserializeObject<User>(value.ToString()));
         }
 
         // Delete: AuthorAccount/Delete/5
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public void Delete([FromRoute] string id)
         {
             _userBll.DeleteUser(Guid.Parse(id));
         }

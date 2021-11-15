@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
@@ -6,10 +8,12 @@ using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [Authorize(Roles = "True")]
     [ApiController]
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
@@ -27,7 +31,7 @@ namespace P4.Controllers
         }
         // GET: Admin
         [HttpGet]
-        public string Get()
+        public string Get() 
         {
             return JsonConvert.SerializeObject(_userBll.GetUsers());
         }
@@ -49,16 +53,16 @@ namespace P4.Controllers
 
         // PUT: Admin/EditUser
         [HttpPut("EditUser")]
-        public void PutUser([FromBody] string value)
+        public void PutUser([FromBody] JsonElement value)
         {
-            _userBll.UpdateUser(JsonConvert.DeserializeObject<User>(value));
+            _userBll.UpdateUser(JsonConvert.DeserializeObject<User>(value.ToString()));
         }
 
         // PUT: Admin/EditPhoto
         [HttpPut("EditPhoto")]
-        public void PutPhoto([FromBody] string value)
+        public void PutPhoto([FromBody] JsonElement value)
         {
-            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value));
+            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
         }
 
         // DELETE: Admin/DeleteUser/5

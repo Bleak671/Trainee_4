@@ -12,7 +12,6 @@ namespace P4.Models
         public string Email { get; set; }
         [Required]
         public string HashedPassword { get; set; }
-        [Required]
         public string Login { get; set; }
         public bool isAdmin { get; set; }
         public bool isBanned { get; set; }

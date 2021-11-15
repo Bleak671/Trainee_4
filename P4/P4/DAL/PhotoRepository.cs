@@ -18,6 +18,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
+                if (photo.UserId.ToString() == Guid.Empty.ToString())
+                    photo.UserId = Guid.NewGuid();
                 db.Photos.Add(photo);
                 result = db.SaveChanges();
             }
@@ -34,7 +36,12 @@ namespace P4.DAL
 
         public List<Photo> GetAll()
         {
-            return db.Photos.ToList<Photo>();
+            var pList = db.Photos.ToList();
+            foreach (Photo p in pList)
+            {
+                p.User = db.Users.Find(p.UserId);
+            }
+            return pList;
         }
 
         public Photo GetOne(Guid id)

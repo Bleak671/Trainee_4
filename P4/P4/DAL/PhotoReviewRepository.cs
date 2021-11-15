@@ -18,6 +18,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
+                if (photoRev.UserId.ToString() == Guid.Empty.ToString())
+                    photoRev.UserId = Guid.NewGuid();
                 db.PhotoReviews.Add(photoRev);
                 result = db.SaveChanges();
             }

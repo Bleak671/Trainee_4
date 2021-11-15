@@ -34,7 +34,7 @@ namespace P4.BLL
 
         public List<Photo> GetPublishedNotTrashPhotos()
         {
-            return _photoRepos.GetAll().Where(p => p.isPublished == true).Where(p => p.isTrash == false).OrderBy(p => p.UploadDate).ToList();
+            return _photoRepos.GetAll().Where(p => p.isPublished == true).Where(p => p.isTrash == false).Where(p => p.User.isBanned == false).OrderBy(p => p.UploadDate).ToList();
         }
 
         public List<Photo> GetTrashPhotos()
@@ -50,6 +50,11 @@ namespace P4.BLL
         public List<Photo> GetUsersPhotos(Guid id)
         {
             return _photoRepos.GetAll().Where(p => p.UserId.ToString() == id.ToString()).OrderBy(p => p.UploadDate).ToList();
+        }
+
+        public List<Photo> GetUsersTrashPhotos(Guid id)
+        {
+            return _photoRepos.GetAll().Where(p => p.UserId.ToString() == id.ToString()).Where(p => p.isTrash == true).OrderBy(p => p.UploadDate).ToList();
         }
 
         public Photo GetPhoto(Guid id)

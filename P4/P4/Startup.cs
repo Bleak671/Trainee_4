@@ -1,4 +1,4 @@
-using JavaScriptEngineSwitcher.ChakraCore;
+    using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -39,7 +39,7 @@ namespace P4
         {
             string connection = Configuration.GetConnectionString("LocalDatabase");
             services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlServer(connection));
+                options.UseSqlServer(connection, sqlServerOptions => sqlServerOptions.CommandTimeout(180)));
 
             services.AddScoped<AuthUtility>();
 
