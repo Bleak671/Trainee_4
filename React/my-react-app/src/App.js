@@ -103,7 +103,7 @@ function App() {
           <Route path="/authorWorks/:PhotoId" render={(props)=><AuthorWork {...props}/>}>
           </Route>
 
-          <Route path="/edit/:Link" render={(props)=><Drawer {...props}/>}>
+          <Route path="/edit/:PhotoId" render={(props)=><Drawer {...props}/>}>
           </Route>
 
           <Route path="/authorWorks">

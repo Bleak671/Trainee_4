@@ -36,6 +36,20 @@ namespace P4.Controllers
             return JsonConvert.SerializeObject(_photoBll.GetUsersTrashPhotos(Guid.Parse(id)));
         }
 
+        [HttpPost]
+        public IActionResult Post([FromBody] JsonElement value)
+        {
+            try
+            {
+                _photoBll.CreatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         // PUT: TrashController/Edit/5
         [HttpPut]
         public void Put([FromBody] JsonElement value)

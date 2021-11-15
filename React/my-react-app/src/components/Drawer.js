@@ -1,10 +1,12 @@
 import { useEffect } from "react"
 import { loadData } from "../Utils/businessLogic";
 import { saveAs } from 'file-saver';
+import { watermark } from 'dynamic-watermark';
 
 export function Drawer(props) {
     let canvas, c, canvasAux, cAux, selection, image, originalImg;
 
+    const id = props.match.params.PhotoId.toString();
     image = sessionStorage.getItem("link");
 
     //load once
@@ -408,8 +410,18 @@ export function Drawer(props) {
 
     //saving photo
     function saveToPNG(){
+        var tempCtx=canvas.getContext('2d');
+        tempCtx.crossOrigin = "anonymous";
+        tempCtx.font="8px verdana";
+        var textWidth=tempCtx.measureText(id).width;
+        tempCtx.globalAlpha=.50;
+        tempCtx.fillStyle='white';
+        tempCtx.fillText(id,canvas.width-textWidth-10,canvas.height-20);
+        tempCtx.fillStyle='black';
+        tempCtx.fillText(id,canvas.width-textWidth-10+2,canvas.height-20+2);
         canvas.toBlob(function(blob) {
             saveAs(blob, "output.png");
         }, "image/png");
+        draw(originalImg);
     }     
 }

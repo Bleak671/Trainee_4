@@ -18,6 +18,12 @@ namespace P4.BLL
 
         public void CreatePhoto(Photo photo)
         {
+            List<Photo> list = _photoRepos.GetAll();
+            foreach (Photo p in list)
+            {
+                if (p.Hash == photo.Hash)
+                    throw new Exception("Hash exists");
+            }
             _photoRepos.Create(photo);
         }
 
