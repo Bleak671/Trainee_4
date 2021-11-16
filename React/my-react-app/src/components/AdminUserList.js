@@ -8,7 +8,8 @@ import {
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setState } from '../redux/AdminUserListReducer';
-import { shiftChar, loadData } from '../Utils/businessLogic';
+import { shiftChar } from '../Utils/shiftChar';
+import { loadData } from '../Utils/loadData';
 
 export function AdminUserList() {  
   //const
@@ -31,7 +32,7 @@ export function AdminUserList() {
         <table className="table">
           <thead>
             <tr>
-              <th scope="col">Id</th>
+              <th scope="col">Email</th>
               <th scope="col">Name</th>
               <th scope="col"></th>
             </tr>
@@ -39,7 +40,7 @@ export function AdminUserList() {
           <tbody>
           {loading.value.data.map(item => (
             <tr scope="row">
-              <td>{item.UserId}</td>
+              <td>{item.Email}</td>
               <td>{item.Login}</td>
               <td><Link to={"user/" + item.UserId}>to User</Link></td>
             </tr>

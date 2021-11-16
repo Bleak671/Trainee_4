@@ -38,7 +38,7 @@ namespace P4Tests
             {
                 Photo photo = new Photo { PhotoId = Guid.Parse(id), Link = link, UserId = uId };
                 db.Create(photo);
-                Assert.Throws(typeof(Exception), () => db.Create(photo));
+                Assert.Throws(typeof(ArgumentException), () => db.Create(photo));
             }
         }
 

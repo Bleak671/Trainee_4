@@ -59,7 +59,7 @@ namespace P4.DAL
             }
             catch
             {
-                throw new Exception("DB Error");
+                throw;
             }
             if (result != 1)
             {

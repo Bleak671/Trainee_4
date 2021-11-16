@@ -51,13 +51,20 @@ namespace P4.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] JsonElement value)
         {
-            var user = JsonConvert.DeserializeObject<User>(System.Text.Json.JsonSerializer.Serialize(value));
-            _userBll.CreateUser(user);
-            var token = _authUtility.GetJWT(user.Email, user.HashedPassword);
-            if (token != null)
-                return Ok(JsonConvert.SerializeObject(token));
-            else
+            try
+            {
+                var user = JsonConvert.DeserializeObject<User>(System.Text.Json.JsonSerializer.Serialize(value));
+                _userBll.CreateUser(user);
+                var token = _authUtility.GetJWT(user.Email, user.HashedPassword);
+                if (token != null)
+                    return Ok(JsonConvert.SerializeObject(token));
+                else
+                    return BadRequest();
+            }
+            catch
+            {
                 return BadRequest();
+            }            
         }
     }
 }

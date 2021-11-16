@@ -1,5 +1,4 @@
-import { useEffect } from "react"
-import { loadData } from "../Utils/businessLogic";
+import { useEffect } from "react";
 import { saveAs } from 'file-saver';
 import { watermark } from 'dynamic-watermark';
 

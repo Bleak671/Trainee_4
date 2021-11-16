@@ -8,8 +8,9 @@ import {
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setState } from '../redux/TrashListReducer';
-import { shiftChar, loadData } from '../Utils/businessLogic';
-import { sortByDate, sortByName } from '../Utils/businessLogic';
+import { shiftChar } from '../Utils/shiftChar';
+import { sortByDate, sortByName } from '../Utils/sort';
+import { loadData } from '../Utils/loadData';
 
 
 export function TrashList() {  

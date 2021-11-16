@@ -7,6 +7,9 @@ import AdminUserListReducer from './AdminUserListReducer';
 import AdminUserReducer from './AdminUserReducer';
 import AuthorAccountReducer from './AuthorAccountReducer';
 import AuthorWorksReducer from './AuthorWorksReducer';
+import AuthInfoReducer from './AuthInfoReducer';
+import AddPhotoInfoReducer from './AddPhotoInfoReducer';
+import FindReducer from './FindReducer';
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +20,9 @@ export const store = configureStore({
     AdminUserList: AdminUserListReducer,
     AdminUser: AdminUserReducer,
     AuthorAccount: AuthorAccountReducer,
-    AuthorWorks: AuthorWorksReducer
+    AuthorWorks: AuthorWorksReducer,
+    AuthInfo : AuthInfoReducer,
+    Find : FindReducer,
+    AddPhotoInfo : AddPhotoInfoReducer
   },
 });

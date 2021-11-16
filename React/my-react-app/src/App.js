@@ -11,6 +11,7 @@ import {
 import {Photo} from './components/Photo.js'
 import {PhotoList} from './components/PhotoList.js'
 import {Authorization} from './components/Authorization.js'
+import {Registration} from './components/Registration.js'
 import {AuthorWork} from './components/AuthorWork.js'
 import {AuthorWorks} from './components/AuthorWorks.js'
 import {AuthorWorkAdd} from './components/AuthorWorkAdd.js'
@@ -34,8 +35,12 @@ function App() {
     },
     {
       route: '/auth',
-      name: 'Authorize',
+      name: 'Sign in',
     },
+    {
+      route: '/reg',
+      name: 'Sign up',
+    }
   ]
 
   const token = sessionStorage.getItem("accessToken");
@@ -54,16 +59,17 @@ function App() {
       name: 'Admin page',
     })
 
-    var i = GENRES.findIndex(({ name }) => name === 'Authorize');
+    var i = GENRES.findIndex(({ name }) => name === 'Sign in');
     GENRES[i] = {
       route: '/authorWorks',
       name: 'Author Works'
     }
 
-    GENRES.push({
+    i = GENRES.findIndex(({ name }) => name === 'Sign up');
+    GENRES[i] = {
       route: '/authorAccount',
       name: 'Account'
-    })
+    }
 
     GENRES.push({
       route: '/exit',
@@ -132,6 +138,10 @@ function App() {
 
           <Route path="/auth">
             <Authorization/>
+          </Route>
+
+          <Route path="/reg">
+            <Registration/>
           </Route>
 
           <Route path="/">

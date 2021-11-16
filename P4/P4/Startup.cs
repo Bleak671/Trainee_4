@@ -39,19 +39,19 @@ namespace P4
         {
             string connection = Configuration.GetConnectionString("LocalDatabase");
             services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlServer(connection, sqlServerOptions => sqlServerOptions.CommandTimeout(180)));
+                options.UseSqlServer(connection, sqlServerOptions => sqlServerOptions.CommandTimeout(180)), ServiceLifetime.Singleton);
 
-            services.AddScoped<AuthUtility>();
+            services.AddSingleton<AuthUtility>();
 
-            services.AddScoped<UserBLL>();
-            services.AddScoped<PhotoBLL>();
-            services.AddScoped<PhotoCommentBLL>();
-            services.AddScoped<PhotoReviewBLL>();
+            services.AddSingleton<UserBLL>();
+            services.AddSingleton<PhotoBLL>();
+            services.AddSingleton<PhotoCommentBLL>();
+            services.AddSingleton<PhotoReviewBLL>();
 
-            services.AddScoped<IRepository<User>, UserRepository>();
-            services.AddScoped<IRepository<Photo>, PhotoRepository>();
-            services.AddScoped<IRepository<PhotoComment>, PhotoCommentRepository>();
-            services.AddScoped<IRepository<PhotoReview>, PhotoReviewRepository>();
+            services.AddSingleton<IRepository<User>, UserRepository>();
+            services.AddSingleton<IRepository<Photo>, PhotoRepository>();
+            services.AddSingleton<IRepository<PhotoComment>, PhotoCommentRepository>();
+            services.AddSingleton<IRepository<PhotoReview>, PhotoReviewRepository>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
