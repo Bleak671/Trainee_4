@@ -8,87 +8,31 @@ import {
   Link,
   useParams
 } from "react-router-dom";
-import {Photo} from './components/Photo.js'
-import {PhotoList} from './components/PhotoList.js'
-import {Authorization} from './components/Authorization.js'
-import {Registration} from './components/Registration.js'
-import {AuthorWork} from './components/AuthorWork.js'
-import {AuthorWorks} from './components/AuthorWorks.js'
-import {AuthorWorkAdd} from './components/AuthorWorkAdd.js'
-import {AuthorAccount} from './components/AuthorAccount.js'
-import {Exit} from './components/Exit.js'
-import {TrashList} from './components/TrashList.js'
-import {TrashPhoto} from './components/TrashPhoto.js'
-import {AdminPhotoList} from './components/AdminPhotoList.js'
-import {AdminUserList} from './components/AdminUserList.js'
-import {AdminPhoto} from './components/AdminPhoto.js'
-import {AdminUser} from './components/AdminUser.js'
-import {Drawer} from './components/Drawer.js'
+import {Photo} from './components/Photo/Photo.js'
+import {PhotoList} from './components/Photo/List.js'
+import {Authorization} from './components/Auth/Authorization.js'
+import {Registration} from './components/Auth/Registration.js'
+import {AuthorWork} from './components/Author/Work.js'
+import {AuthorWorks} from './components/Author/List.js'
+import {AuthorWorkAdd} from './components/Author/WorkAdd.js'
+import {AuthorAccount} from './components/Author/Account.js'
+import {Exit} from './components/Auth/Exit.js'
+import {TrashList} from './components/Trash/List.js'
+import {TrashPhoto} from './components/Trash/Photo.js'
+import {AdminPhotoList} from './components/Admin/Photo/List.js'
+import {AdminUserList} from './components/Admin/User/List.js'
+import {AdminPhoto} from './components/Admin/Photo/Photo.js'
+import {AdminUser} from './components/Admin/User/User.js'
+import {Drawer} from './components/Drawer/Drawer.js'
+import {Nav} from './components/Nav/Nav';
 import {NotificationContainer} from 'react-notifications';
 import "react-notifications/lib/notifications.css"
 
 function App() {
-  const GENRES = [
-    {
-      route: '/',
-      name: 'Home',
-    },
-    {
-      route: '/auth',
-      name: 'Sign in',
-    },
-    {
-      route: '/reg',
-      name: 'Sign up',
-    }
-  ]
-
-  const token = sessionStorage.getItem("accessToken");
-  const isAdmin = sessionStorage.getItem("isAdmin");
-
-  if (token != null)
-  {
-    GENRES.push({
-      route: '/trash',
-      name: 'Trash bin',
-    })
-
-    if (isAdmin === 'True')
-    GENRES.push({
-      route: '/admin/photo',
-      name: 'Admin page',
-    })
-
-    var i = GENRES.findIndex(({ name }) => name === 'Sign in');
-    GENRES[i] = {
-      route: '/authorWorks',
-      name: 'Author Works'
-    }
-
-    i = GENRES.findIndex(({ name }) => name === 'Sign up');
-    GENRES[i] = {
-      route: '/authorAccount',
-      name: 'Account'
-    }
-
-    GENRES.push({
-      route: '/exit',
-      name: 'Log out'
-    })
-  }
-  
   return (
     <Router>
       <div className="container">
-        <nav className="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-          <ul className="navbar-nav flex-grow-1 container navbar-collapse collapse d-sm-inline-flex justify-content-around">
-            {GENRES.map(genre => (
-              <li>
-                <Link to={genre.route} className="nav-link text-dark">{genre.name}</Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <Nav/>
 
         <Switch>
           <Route path="/home/:PhotoId" render={(props)=><Photo {...props}/>}>

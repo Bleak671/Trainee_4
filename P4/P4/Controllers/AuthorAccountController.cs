@@ -31,7 +31,7 @@ namespace P4.Controllers
         }
         // GET: AuthorAccount
         [HttpGet("{id}")]
-        public string Get([FromRoute] string id)
+        public string Get(string id)
         {
             return JsonConvert.SerializeObject(_userBll.GetUser(Guid.Parse(id)));
         }

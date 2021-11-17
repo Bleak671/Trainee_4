@@ -37,6 +37,17 @@ namespace P4.Tests
             }
         }
 
+        [TestCase("31231234-1234-1242-1242-123412341235", "asd.com", "ascfdawdeqwda", "11111111-1111-1111-1111-111111111111")]
+        public void PhotoBLL_CreateSameHash_ShouldThrow(string id, string link, string hash, string uId)
+        {
+            using (PhotoBLL db = new PhotoBLL(_context))
+            {
+                Photo photo = new Photo { PhotoId = Guid.Parse(id), Link = link, Hash = hash, UserId = Guid.Parse(uId) };
+
+                Assert.Throws(typeof(Exception), () => db.CreatePhoto(photo));
+            }
+        }
+
         [TestCase("31231234-1234-1242-1242-123412341234")]
         public void PhotoBLL_Read_ShouldNotThrow(string id)
         {

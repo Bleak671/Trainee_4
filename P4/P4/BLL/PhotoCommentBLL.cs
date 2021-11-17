@@ -28,11 +28,15 @@ namespace P4.BLL
 
         public List<PhotoComment> GetUsersComments(Guid id)
         {
-            return _photoCommentRepos.GetAll().Where(p => p.UserId.ToString() == id.ToString()).ToList();
+            return _photoCommentRepos.GetAll()
+                .Where(p => p.UserId.ToString() == id.ToString())
+                .ToList();
         }
         public List<PhotoComment> GetPhotosComments(Guid id)
         {
-            return _photoCommentRepos.GetAll().Where(p => p.PhotoId.ToString() == id.ToString()).ToList();
+            return _photoCommentRepos.GetAll()
+                .Where(p => p.PhotoId.ToString() == id.ToString())
+                .ToList();
         }
 
         public PhotoComment GetComment(Guid id)

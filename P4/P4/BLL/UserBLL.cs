@@ -25,11 +25,8 @@ namespace P4.BLL
         public void CreateUser(User user)
         {
             List<User> list = _userRepos.GetAll();
-            foreach (User u in list)
-            {
-                if (u.Email == user.Email)
-                    throw new Exception("Email exists");
-            }
+            if (list.Any(x => x.Email == user.Email))
+                throw new Exception("Email exists");
             _userRepos.Create(user);
         }
 
@@ -46,11 +43,8 @@ namespace P4.BLL
         public void UpdateUser(User user)
         {
             List<User> list = _userRepos.GetAll();
-            foreach (User u in list)
-            {
-                if (u.Login == user.Login)
-                    throw new Exception("Nickname exists");
-            }
+            if (list.Any(x => x.Login == user.Login))
+                throw new Exception("Nickname exists");
             _userRepos.Update(user);
         }
 

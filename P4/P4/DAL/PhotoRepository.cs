@@ -54,7 +54,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
-                db.Photos.Update(photo);
+                var old = db.Photos.FirstOrDefault(i => i.PhotoId == photo.PhotoId);
+                db.Entry(old).CurrentValues.SetValues(photo);
                 result = db.SaveChanges();
             }
             catch

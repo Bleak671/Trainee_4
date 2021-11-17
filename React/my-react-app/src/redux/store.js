@@ -1,15 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
-import PhotoListReducer from './PhotoListReducer';
-import PhotoReducer from './PhotoReducer';
-import TrashListReducer from './TrashListReducer';
-import AdminPhotoListReducer from './AdminPhotoListReducer';
-import AdminUserListReducer from './AdminUserListReducer';
-import AdminUserReducer from './AdminUserReducer';
-import AuthorAccountReducer from './AuthorAccountReducer';
-import AuthorWorksReducer from './AuthorWorksReducer';
-import AuthInfoReducer from './AuthInfoReducer';
-import AddPhotoInfoReducer from './AddPhotoInfoReducer';
-import FindReducer from './FindReducer';
+import PhotoListReducer from './Photo/ListReducer';
+import PhotoReducer from './NoPageBind/Reducer';
+import TrashListReducer from './Trash/ListReducer';
+import AdminPhotoListReducer from './Admin/PhotoListReducer';
+import AdminUserListReducer from './Admin/UserListReducer';
+import AdminUserReducer from './Admin/UserReducer';
+import AuthorAccountReducer from './Author/AccountReducer';
+import AuthorWorksReducer from './Author/WorksReducer';
+import AuthInfoReducer from './Auth/AuthInfoReducer';
+import AddPhotoInfoReducer from './Author/AddPhotoInfoReducer';
+import FindReducer from './NoPageBind/FindReducer';
+import GlobalVarReducer from './Global/GlobalVarReducer'
+import DrawerInputReducer from './Draw/DrawerInputReducer';
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +25,8 @@ export const store = configureStore({
     AuthorWorks: AuthorWorksReducer,
     AuthInfo : AuthInfoReducer,
     Find : FindReducer,
-    AddPhotoInfo : AddPhotoInfoReducer
+    AddPhotoInfo : AddPhotoInfoReducer,
+    GlobalVar : GlobalVarReducer,
+    DrawerInput : DrawerInputReducer
   },
 });

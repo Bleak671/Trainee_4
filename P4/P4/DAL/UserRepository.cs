@@ -54,12 +54,13 @@ namespace P4.DAL
             int result = 1;
             try
             {
-                db.Users.Update(user);
+                var old = db.Users.FirstOrDefault(i => i.UserId == user.UserId);
+                db.Entry(old).CurrentValues.SetValues(user);
                 result = db.SaveChanges();
             }
             catch
             {
-                throw;
+                throw new Exception("DB Error");
             }
             if (result != 1)
             {
