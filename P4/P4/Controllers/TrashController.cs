@@ -31,13 +31,20 @@ namespace P4.Controllers
         }
         // GET: TrashController
         [HttpGet("{id}")]
-        public string Get([FromRoute] string id)
+        public ActionResult<List<Photo>> Get(string id)
         {
-            return JsonConvert.SerializeObject(_photoBll.GetUsersTrashPhotos(Guid.Parse(id)));
+            try
+            {
+                return new ObjectResult(_photoBll.GetUsersTrashPhotos(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] JsonElement value)
+        public ActionResult Post([FromBody] JsonElement value)
         {
             try
             {
@@ -51,17 +58,33 @@ namespace P4.Controllers
         }
 
         // PUT: TrashController/Edit/5
-        [HttpPut]
-        public void Put([FromBody] JsonElement value)
+        [HttpPut("{id}")]
+        public ActionResult Put(string id, [FromBody] Photo photo)
         {
-            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
+            try
+            {
+                _photoBll.UpdatePhoto(Guid.Parse(id), photo);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: TrashController/Delete/5
         [HttpDelete("Delete/{id}")]
-        public void Delete([FromRoute] string id)
+        public ActionResult Delete(string id)
         {
-            _photoBll.DeletePhoto(Guid.Parse(id));
+            try
+            {
+                _photoBll.DeletePhoto(Guid.Parse(id));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

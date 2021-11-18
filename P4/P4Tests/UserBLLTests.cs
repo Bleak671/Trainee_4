@@ -84,7 +84,7 @@ namespace P4.Tests
             {
                 User u = new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login };
 
-                Assert.Throws(typeof(Exception), () => db.UpdateUser(u));
+                Assert.Throws(typeof(Exception), () => db.UpdateUser(Guid.Parse(id), u));
             }
         }
     }

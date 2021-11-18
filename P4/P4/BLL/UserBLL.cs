@@ -40,12 +40,12 @@ namespace P4.BLL
             return _userRepos.GetOne(id);
         }
 
-        public void UpdateUser(User user)
+        public void UpdateUser(Guid id, User user)
         {
             List<User> list = _userRepos.GetAll();
-            if (list.Any(x => x.Login == user.Login))
+            if (list.Any(x => x.Login == user.Login && x.UserId != id))
                 throw new Exception("Nickname exists");
-            _userRepos.Update(user);
+            _userRepos.Update(id, user);
         }
 
         public void DeleteUser(Guid id)

@@ -49,12 +49,12 @@ namespace P4.DAL
             return db.Users.FirstOrDefault(p => p.UserId == id);
         }
 
-        public void Update(User user)
+        public void Update(Guid id, User user)
         {
             int result = 1;
             try
             {
-                var old = db.Users.FirstOrDefault(i => i.UserId == user.UserId);
+                var old = db.Users.FirstOrDefault(i => i.UserId == id);
                 db.Entry(old).CurrentValues.SetValues(user);
                 result = db.SaveChanges();
             }

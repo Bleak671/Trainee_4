@@ -30,32 +30,62 @@ namespace P4.Controllers
         }
         // GET: HomeController
         [HttpGet]
-        public string Get()
+        public ActionResult<List<Photo>> Get()
         {
-            return JsonConvert.SerializeObject(_photoBll.GetPublishedNotTrashPhotos());
+            try
+            {
+                return new ObjectResult(_photoBll.GetPublishedNotTrashPhotos());
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // GET: api/Home/5
         [HttpGet("{id}")]
-        public string Get([FromRoute] string id)
+        public ActionResult<Photo> Get(string id)
         {
-            return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
+            try
+            {
+                return new ObjectResult(_photoBll.GetPhoto(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [Authorize]
         // POST: HomeController/CreateReview
         [HttpPost("CreateReview")]
-        public void PostReview([FromBody] JsonElement value)
+        public ActionResult PostReview([FromBody] JsonElement value)
         {
-            _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value.ToString()));
+            try
+            {
+                _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value.ToString()));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [Authorize]
         // POST: HomeController/CreateComment
         [HttpPost("CreateComment")]
-        public void PostComment([FromBody] JsonElement value)
+        public ActionResult PostComment([FromBody] JsonElement value)
         {
-            _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value.ToString()));
+            try
+            {
+                _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value.ToString()));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

@@ -37,27 +37,26 @@ namespace P4.Controllers
             _authUtility = authUtility;
         }
         // POST: AuthController/asd
-        [HttpPost("{username}")]
-        public IActionResult Get([FromRoute] string username, [FromBody] int password)
+        [HttpPost("{email}")]
+        public ActionResult Get(string email, [FromBody] int password)
         {
-            var token = _authUtility.GetJWT(username, password.ToString());
+            var token = _authUtility.GetJWT(email, password.ToString());
             if (token != null)
-                return Ok(JsonConvert.SerializeObject(token));
+                return Ok(token);
             else
                 return BadRequest();
         }
 
         // POST: AuthController/Create
         [HttpPost]
-        public IActionResult Post([FromBody] JsonElement value)
+        public ActionResult Post([FromBody] User user)
         {
             try
             {
-                var user = JsonConvert.DeserializeObject<User>(System.Text.Json.JsonSerializer.Serialize(value));
                 _userBll.CreateUser(user);
                 var token = _authUtility.GetJWT(user.Email, user.HashedPassword);
                 if (token != null)
-                    return Ok(JsonConvert.SerializeObject(token));
+                    return Ok(token);
                 else
                     return BadRequest();
             }

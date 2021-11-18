@@ -1,5 +1,6 @@
 import { NotificationManager } from "react-notifications";
 import { loadData } from "../singleFunctions/loadData";
+import { host } from "../constants/globals";
 
 export function handleChange(dispatch, setState, event) {
   var data = event.target.value;
@@ -20,9 +21,9 @@ export function handleSubmit(token, id, found, loading, dispatch, setState, even
     },
     body: JSON.stringify(user)     
   };
-  fetch( `https://localhost:44340/api/AuthorAccount`, requestOptions)
+  fetch( host + `AuthorAccount/${user.userId}`, requestOptions)
   .then(
-    () => { NotificationManager.success('Changed', '',2000); loadData(token, `https://localhost:44340/api/AuthorAccount/${id}`, dispatch, setState) },
+    () => { NotificationManager.success('Changed', '',2000); loadData(token, host + `AuthorAccount/${id}`, dispatch, setState) },
     (error) => { NotificationManager.error('Something wrong: '+error, '',2000); }
   )
 }

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { defaultReducer } from "../../Utils/builders/reducerBuilder";
 
 export const AuthInfoReducer = createSlice({
     name:"AuthInfo",
@@ -9,9 +10,7 @@ export const AuthInfoReducer = createSlice({
         }
     },
     reducers: {
-        setState: (state, value) => {
-            state.value = value.payload;
-        }
+        setState: defaultReducer
     }
 })
 

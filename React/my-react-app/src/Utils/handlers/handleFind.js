@@ -9,7 +9,7 @@ export function handleSubmit(found, loading, redirString, history, event) {
   event.preventDefault();
   var value = found.found.payload;
     var res = loading.value.data.find((element) => { 
-      if (element.Name == value)
+      if (element.name == value)
         return true;
       else  
         return false;

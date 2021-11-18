@@ -39,9 +39,9 @@ namespace P4.BLL
             return _photoReviewRepos.GetOne(id);
         }
 
-        public void UpdateReview(PhotoReview photoReview)
+        public void UpdateReview(Guid id, PhotoReview photoReview)
         {
-            _photoReviewRepos.Update(photoReview);
+            _photoReviewRepos.Update(id, photoReview);
         }
 
         public void DeleteReview(Guid id)

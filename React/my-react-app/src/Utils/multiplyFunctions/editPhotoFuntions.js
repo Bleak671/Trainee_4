@@ -14,7 +14,7 @@ export function changePublished(token, loading, connString, updString, dispatch,
     },
     body: JSON.stringify(photo)     
   };
-  fetch( connString, requestOptions)
+  fetch( connString + `/${photo.photoId}`, requestOptions)
   .then(
     () => { loadData(token, updString, dispatch, setState) }
   )
@@ -34,7 +34,7 @@ export function changeTrash(token, loading, connString, updString, dispatch, set
     },
     body: JSON.stringify(photo)     
   };
-  fetch( connString, requestOptions)
+  fetch( connString + `/${photo.photoId}`, requestOptions)
   .then(
     () => { loadData(token, updString, dispatch, setState) }
   )

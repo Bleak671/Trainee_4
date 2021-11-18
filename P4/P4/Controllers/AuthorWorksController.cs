@@ -31,30 +31,60 @@ namespace P4.Controllers
         }
         // GET: AuthorWorksController
         [HttpGet]
-        public string Get()
+        public ActionResult<List<Photo>> Get()
         {
-            return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
+            try
+            {
+                return Ok(_photoBll.GetPublishedNotTrashPhotos());
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // GET: AuthorWorksController/5
         [HttpGet("{id}")]
-        public string Get([FromRoute] string id)
+        public ActionResult<Photo> Get(string id)
         {
-            return JsonConvert.SerializeObject(_photoBll.GetUsersPhotos(Guid.Parse(id)));
+            try
+            {
+                return Ok(_photoBll.GetUsersPhotos(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // POST: AuthorWorksController/Create
         [HttpPost]
-        public void Post([FromBody] JsonElement value)
+        public ActionResult Post([FromBody] JsonElement value)
         {
-            _photoBll.CreatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
+            try
+            {
+                _photoBll.CreatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: AuthorWorksController/Edit
-        [HttpPut]
-        public void Put([FromBody] JsonElement value)
+        [HttpPut("{id}")]
+        public ActionResult Put(string id, [FromBody] Photo photo)
         {
-            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
+            try
+            {
+                _photoBll.UpdatePhoto(Guid.Parse(id), photo);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

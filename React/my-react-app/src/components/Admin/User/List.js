@@ -29,7 +29,7 @@ export function AdminUserList() {
   } else if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
-    filteredArray = loading.value.data.filter(function(item) { return item.UserId != globals.value.guid } );
+    filteredArray = loading.value.data.filter(function(item) { return item.userId != globals.value.guid } );
     return (
       <div>
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/admin/photo" >to Photos</Link>
@@ -44,9 +44,9 @@ export function AdminUserList() {
           <tbody>
           {filteredArray.map(item => (
             <tr scope="row">
-              <td>{item.Email}</td>
-              <td>{item.Login}</td>
-              <td><Link to={"user/" + item.UserId}>to User</Link></td>
+              <td>{item.email}</td>
+              <td>{item.login}</td>
+              <td><Link to={"user/" + item.userId}>to User</Link></td>
             </tr>
           ))}
           </tbody>

@@ -5,7 +5,8 @@ import {
   Route,
   Link,
   Redirect,
-  useParams
+  useParams,
+  useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setState } from '../../redux/Auth/AuthInfoReducer';
@@ -14,6 +15,7 @@ import { handleChangeEmail, handleChangePassword, handleSubmitLogin } from '../.
 
 export function Authorization() {   
   const dispatch = useDispatch();
+  const history = useHistory();
   const state = useSelector((state) => state.AuthInfo);
   const globals = useSelector((state) => state.GlobalVar);
   //render or redirect, depending on authorizing 
@@ -30,6 +32,9 @@ export function Authorization() {
       </div>
     )
   else {
-    return <Redirect to="/" />
+    history.push({
+      pathname: `/`,
+    });
+    return null;
   }
 }    

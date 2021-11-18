@@ -5,7 +5,7 @@ import { host } from "../constants/globals";
 
 export function register(email, password, dispatch, setState) {
   var hashedPassword = getHash(password);
-  var json = { "Email": email, "HashedPassword":hashedPassword }
+  var json = { "email": email, "hashedPassword":hashedPassword }
   fetch(host + `Authorization/`, {
       method: "POST",
       headers: {

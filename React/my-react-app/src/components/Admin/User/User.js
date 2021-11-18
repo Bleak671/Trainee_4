@@ -34,8 +34,8 @@ export function AdminUser(props) {
     return(
       <div className="d-flex flex-column" margin-bottom="1000">
         <Link to="/admin/user" className="w-25 mb-3 p-2 nav-link text-dark">Back</Link>
-        <span className="pb-3 text-dark">Login: {loading.value.data.Login}</span>
-        <span className="pb-3 text-dark">Email: {loading.value.data.Email}</span>
+        <span className="pb-3 text-dark">Login: {loading.value.data.login}</span>
+        <span className="pb-3 text-dark">Email: {loading.value.data.email}</span>
         <div className="pb-3">
           <span className="text-dark">Admin: {loading.value.data.isAdmin ? "Yes" : "No"}</span>
           <button className="ms-3 rounded-3" onClick={changeAdmin.bind(null, token, loading, id, dispatch, setState)}>Change</button>

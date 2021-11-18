@@ -33,26 +33,24 @@ export function AdminPhoto(props) {
   } else if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
-    var date = new Date(loading.value.data.UploadDate);
+    var date = new Date(loading.value.data.uploadDate);
     return(
       <div className="d-flex flex-column" margin-bottom="1000">
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/admin/photo" className="w-25 mb-3 p-2 nav-link text-dark">Back</Link>
         <div>
-          <img className="pb-3 rounded-3" src={loading.value.data.Link}/>
+          <img className="pb-3 rounded-3" src={loading.value.data.link}/>
         </div>
-        <span className="pb-3 text-dark">Name: {loading.value.data.Name}</span>
+        <span className="pb-3 text-dark">Name: {loading.value.data.name}</span>
         <span className="pb-3 text-dark">Upload date: {date.toLocaleString("en-US", timeOptions)}</span>
-        <span className="pb-3 text-dark">Views: {loading.value.data.Views}</span>
+        <span className="pb-3 text-dark">Views: {loading.value.data.views}</span>
         <div className="pb-3">
-          <Link className="ms-3" to={"/admin/user/" + loading.value.data.UserId}>to User</Link>
+          <Link className="ms-3" to={"/admin/user/" + loading.value.data.userId}>to User</Link>
         </div>
         <div className="pb-3">
           <span className="pb-3 text-dark">Published: {loading.value.data.isPublished ? "Yes" : "No"}</span>
-          <button className="ms-3 rounded-3" onClick={changePublished.bind(null, token, loading, host + `Admin/EditPhoto`, host + `Home/${id}`, dispatch, setState)}>Change</button>
         </div>
         <div>
           <span className="pb-3 text-dark">Trash: {loading.value.data.isTrash ? "Yes" : "No"}</span>
-          <button className="ms-3 rounded-3" onClick={changeTrash.bind(null, token, loading, host +  `Admin/EditPhoto`, host +  `Home/${id}`, dispatch, setState)}>Change</button>
         </div>
         <button className="w-25 ms-5 mt-5 bg-danger rounded-3" onClick={deletePhoto.bind(null, token, host +  `Admin/DeletePhoto/${id}`, history, '/admin/photo')}>Delete</button>
       </div>

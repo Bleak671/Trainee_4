@@ -49,12 +49,12 @@ namespace P4.DAL
             return db.Photos.FirstOrDefault(p => p.PhotoId == id);
         }
 
-        public void Update(Photo photo)
+        public void Update(Guid id, Photo photo)
         {
             int result = 1;
             try
             {
-                var old = db.Photos.FirstOrDefault(i => i.PhotoId == photo.PhotoId);
+                var old = db.Photos.FirstOrDefault(i => i.PhotoId == id);
                 db.Entry(old).CurrentValues.SetValues(photo);
                 result = db.SaveChanges();
             }

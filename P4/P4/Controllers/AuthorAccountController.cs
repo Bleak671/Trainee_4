@@ -31,23 +31,46 @@ namespace P4.Controllers
         }
         // GET: AuthorAccount
         [HttpGet("{id}")]
-        public string Get(string id)
+        public ActionResult<User> Get(string id)
         {
-            return JsonConvert.SerializeObject(_userBll.GetUser(Guid.Parse(id)));
+            try
+            {
+                return Ok(_userBll.GetUser(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: AuthorAccount/Edit
-        [HttpPut]
-        public void Put([FromBody] JsonElement value)
+        [HttpPut("{id}")]
+        public ActionResult Put(string id, [FromBody] User user)
         {
-            _userBll.UpdateUser(JsonConvert.DeserializeObject<User>(value.ToString()));
+            try
+            {
+                _userBll.UpdateUser(Guid.Parse(id), user);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // Delete: AuthorAccount/Delete/5
         [HttpDelete("{id}")]
-        public void Delete([FromRoute] string id)
+        public ActionResult Delete([FromRoute] string id)
         {
-            _userBll.DeleteUser(Guid.Parse(id));
+            try
+            {
+                _userBll.DeleteUser(Guid.Parse(id));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

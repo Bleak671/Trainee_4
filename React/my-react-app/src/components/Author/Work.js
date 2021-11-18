@@ -45,16 +45,16 @@ export function AuthorWork(props) {
   } else if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
-    var date = new Date(loading.value.data.UploadDate);
+    var date = new Date(loading.value.data.uploadDate);
     return(
       <div className="d-flex flex-column" margin-bottom="1000">
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/authorWorks" className="w-25 mb-3 p-2 nav-link text-dark">Back</Link>
         <div>
-          <img className="pb-3 rounded-3" src={loading.value.data.Link} onClick={toEdit.bind(null, loading, history, global, dispatch, setStateGlobal)}/>
+          <img className="pb-3 rounded-3" src={loading.value.data.link} onClick={toEdit.bind(null, loading, history, global, dispatch, setStateGlobal)}/>
         </div>
-        <span className="pb-3 text-dark">Name: {loading.value.data.Name}</span>
+        <span className="pb-3 text-dark">Name: {loading.value.data.name}</span>
         <span className="pb-3 text-dark">Upload date: {date.toLocaleString("en-US", options)}</span>
-        <span className="pb-3 text-dark">Views: {loading.value.data.Views}</span>
+        <span className="pb-3 text-dark">Views: {loading.value.data.views}</span>
         <div className="pb-3">
           <span className="pb-3 text-dark">Published: {loading.value.data.isPublished ? "Yes" : "No"}</span>
           <button className="ms-3 rounded-3" onClick={changePublished.bind(null, token, loading, host +  `Trash`, host +  `Home/${id}`, dispatch, setState)}>Change</button>

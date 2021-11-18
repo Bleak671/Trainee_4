@@ -47,7 +47,7 @@ namespace P4Tests
                 User user = new User { UserId = Guid.Parse(id), Email = "", HashedPassword = "", isAdmin = false, isBanned = false, Login = "" };
                 db.Create(user);
                 user.Login = "qweqweqsadd";
-                Assert.DoesNotThrow(() => db.Update(user));
+                Assert.DoesNotThrow(() => db.Update(Guid.Parse(id), user));
             }
 
         }
@@ -57,7 +57,7 @@ namespace P4Tests
         {
             using (UserRepository db = new UserRepository(_context))
             {
-                Assert.Throws(typeof(Exception), () => db.Update(new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login }));
+                Assert.Throws(typeof(Exception), () => db.Update(Guid.Parse(id), new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login }));
             }
 
         }

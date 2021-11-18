@@ -59,7 +59,8 @@ namespace P4.Utility
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserId.ToString()),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.isAdmin.ToString())
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.isAdmin.ToString()),
+                    new Claim("isBanned", user.isBanned.ToString())
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

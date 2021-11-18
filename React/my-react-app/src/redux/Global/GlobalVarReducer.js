@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { defaultReducer } from "../../Utils/builders/reducerBuilder";
 
 export const GlobalVarReducer = createSlice({
     name:"GlobalVar",
@@ -10,9 +11,7 @@ export const GlobalVarReducer = createSlice({
         }
     },
     reducers: {
-        setState: (state, value) => {
-            state.value = value.payload;
-        }
+        setState: defaultReducer
     }
 })
 

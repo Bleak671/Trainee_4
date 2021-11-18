@@ -5,7 +5,8 @@ import {
   Route,
   Link,
   Redirect,
-  useParams
+  useParams,
+  useHistory
 } from "react-router-dom";
 import { shiftChar } from '../../Utils/singleFunctions/shiftChar';
 import { NotificationManager } from 'react-notifications';
@@ -16,13 +17,14 @@ import { handleChangeEmail, handleChangePassword, handleSubmitRegister } from '.
 
 export function Registration() {   
   const dispatch = useDispatch();
+  const history = useHistory();
   const state = useSelector((state) => state.AuthInfo);
   const globals = useSelector((state) => state.GlobalVar);
   //render or redirect, depending on authorizing 
   if (globals.value.accessToken == null)
     return(
       <div className="mt-5 pt-5 pb-5 w-100 border rounded-3 bg-info bg-gradient d-flex align-items-center flex-column">
-        <form onSubmit={handleSubmitRegister.bind(null, state)}>
+        <form onSubmit={handleSubmitRegister.bind(null, state, dispatch, setState)}>
           <input id="email" className="w-25 mt-2" type="email" placeholder="Email" onChange={handleChangeEmail.bind(null, state, dispatch, setState)}></input>
           <input id="password" className="w-25 mt-2" type="password" placeholder="Password" onChange={handleChangePassword.bind(null, state, dispatch, setState)}></input>
           <div className="w-100">
@@ -32,6 +34,9 @@ export function Registration() {
       </div>
     )
   else {
-    return <Redirect to="/" />
+    history.push({
+      pathname: `/`,
+    });
+    return null;
   }
 }    

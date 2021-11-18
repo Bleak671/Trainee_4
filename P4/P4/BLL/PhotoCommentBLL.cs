@@ -44,9 +44,9 @@ namespace P4.BLL
             return _photoCommentRepos.GetOne(id);
         }
 
-        public void UpdateComment(PhotoComment photoComment)
+        public void UpdateComment(Guid id, PhotoComment photoComment)
         {
-            _photoCommentRepos.Update(photoComment);
+            _photoCommentRepos.Update(id, photoComment);
         }
 
         public void DeleteComment(Guid id)

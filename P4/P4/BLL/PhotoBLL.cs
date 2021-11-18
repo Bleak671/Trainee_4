@@ -84,9 +84,9 @@ namespace P4.BLL
             return _photoRepos.GetOne(id);
         }
 
-        public void UpdatePhoto(Photo photo)
+        public void UpdatePhoto(Guid id, Photo photo)
         {
-            _photoRepos.Update(photo);
+            _photoRepos.Update(id, photo);
         }
 
         public void DeletePhoto(Guid id)

@@ -9,7 +9,7 @@ export function loadData(token, connString, dispatch, setState) {
       }             
     };
     fetch(connString,requestOptions)
-      .then(res => res.json())
+      .then(res =>  res.json())
       .then(
         (result) => {
           dispatch(setState({
@@ -26,4 +26,5 @@ export function loadData(token, connString, dispatch, setState) {
           }))
         }
       ) 
+    
   } 

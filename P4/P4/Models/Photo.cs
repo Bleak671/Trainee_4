@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace P4.Models
 {
@@ -14,6 +14,7 @@ namespace P4.Models
 
         [Required]
         public Guid UserId { get; set; }
+        [JsonIgnore]
         public User User { get; set; }
 
         public string Name { get; set; }

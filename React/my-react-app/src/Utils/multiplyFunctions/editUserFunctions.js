@@ -32,7 +32,7 @@ function updateData(token, id, obj, dispatch, setState) {
       },
       body: JSON.stringify(obj)     
     };
-    fetch( host + `Admin/EditUser`, requestOptions)
+    fetch( host + `Admin/EditUser`  + `/${obj.userId}`, requestOptions)
     .then(
       () => { loadData(token, host + `Admin/GetUser/${id}`, dispatch, setState) }
     )

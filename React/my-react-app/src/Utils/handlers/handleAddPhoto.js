@@ -1,5 +1,6 @@
 import { NotificationManager } from 'react-notifications';
 import sha256 from 'crypto-js/sha256';
+import { host } from '../constants/globals';
 
 var hash,link;
 
@@ -17,8 +18,8 @@ export function handleChangeName(state, dispatch, setState, event) {
 
 export function handleSubmit(token, guid, history, state, event) {
   event.preventDefault();
-  var link = state.value.Link;
-  var name = state.value.Name;
+  var link = state.value.link;
+  var name = state.value.name;
   fetch(link)
     .then(res => res.blob())
     .then((blob => { 
@@ -49,7 +50,7 @@ export function handleSubmit(token, guid, history, state, event) {
               },
               body: JSON.stringify(photo)     
             };
-            fetch( `https://localhost:44340/api/Trash`, requestOptions)
+            fetch( host + `Trash`, requestOptions)
             .then(
               (response) => { 
                 if (response.status == 400)

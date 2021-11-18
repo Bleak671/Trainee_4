@@ -26,9 +26,12 @@ export function login(email, password, dispatch, setState) {
           dispatch(setState({
               accessToken : response.access_token.split("").map(shiftChar(17)).join(''),
               guid : base64ToString["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
-              isAdmin : base64ToString["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+              isAdmin : base64ToString["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+              isBanned : base64ToString["isBanned"]
             })
           )
+          if (base64ToString["isBanned"] == "True")
+            NotificationManager.warning('You are BANNED!', 'Log In',5000);
         }
         else {
           NotificationManager.error('Incorrect email/password', 'Log In',2000);
