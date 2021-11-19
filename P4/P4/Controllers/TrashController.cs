@@ -44,11 +44,11 @@ namespace P4.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] JsonElement value)
+        public ActionResult Post([FromBody] Photo value)
         {
             try
             {
-                _photoBll.CreatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
+                _photoBll.CreatePhoto(value);
                 return Ok();
             }
             catch

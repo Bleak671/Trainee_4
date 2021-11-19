@@ -4,7 +4,6 @@ export const defaultReducer = (state, value) => {
 
 export const defaultState = {
   value: {
-    error: null,
     isLoaded: false,
     data: null
   }

@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  Redirect,
-  useParams
+  useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setState } from '../../../redux/Admin/UserReducer';
@@ -18,17 +14,22 @@ import { host } from '../../../Utils/constants/globals';
 export function AdminUser(props) {  
   //constants
   const dispatch = useDispatch();
+  const history = useHistory();
   const loading = useSelector((state) => state.AdminUser);
-  const token = useSelector((state) => state.GlobalVar).value.accessToken.split("").map(shiftChar(-17)).join('');
+  const globals = useSelector((state) => state.GlobalVar).value;
   const id = props.match.params.UserId.toString();
+  if (globals.accessToken != null)
+    var token = globals.accessToken.split("").map(shiftChar(-17)).join('');
+  else
+    history.push({
+      pathname: '/',
+    });  
 
   //load data once after rendering
   useEffect(() => { loadData(token, host +  `Admin/GetUser/${id}`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (loading.value.error) {
-    return <div>Ошибка: {loading.value.error.message}</div>;
-  } else if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     return(

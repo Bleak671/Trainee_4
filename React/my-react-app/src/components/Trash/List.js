@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  useParams
+  useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setState } from '../../redux/Trash/ListReducer';
@@ -16,17 +13,22 @@ import { host } from '../../Utils/constants/globals';
 export function TrashList() {  
   //constants
   const dispatch = useDispatch();
+  const history = useHistory();
   const loading = useSelector((state) => state.TrashList);
-  const token = useSelector((state) => state.GlobalVar).value.accessToken.split("").map(shiftChar(-17)).join('');
-  const guid = useSelector((state) => state.GlobalVar).value.guid;
+  const globals = useSelector((state) => state.GlobalVar).value
+  const guid = globals.guid;
+  if (globals.accessToken != null)
+    var token = globals.accessToken.split("").map(shiftChar(-17)).join('');
+  else
+    history.push({
+      pathname: '/',
+    }); 
 
   //load once after rendering
   useEffect(() => { loadData(token, host +  `Trash/${guid}`, dispatch, setState) }, []);  
      
   //render, depending on state of loading
-  if (loading.value.error) {
-    return <div>Ошибка: {loading.value.error.message}</div>;
-  } else if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     return (

@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  useParams,
   useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,7 +8,6 @@ import { setState } from '../../redux/Photo/ListReducer';
 import { setState as setStateFind } from '../../redux/NoPageBind/FindReducer';
 import { sortByDate, sortByName } from '../../Utils/multiplyFunctions/sortFunctions';
 import { loadData } from '../../Utils/singleFunctions/loadData';
-import { NotificationManager } from 'react-notifications';
 import { handleChange, handleSubmit } from '../../Utils/handlers/handleFind';
 import { host } from '../../Utils/constants/globals';
 
@@ -28,9 +23,7 @@ export function PhotoList() {
   useEffect(() => { loadData(token, host +  "Home", dispatch, setState)  }, []);
      
   //render, depending on state of loading
-  if (loading.value.error) {
-    return <div>Ошибка: {loading.value.error.message}</div>;
-  } else if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     return (
@@ -39,10 +32,8 @@ export function PhotoList() {
           <button className="rounded-3" onClick={sortByName.bind(null, loading, dispatch, setState)}>По названию</button>
           <button className="rounded-3" onClick={sortByDate.bind(null, loading, dispatch, setState)}>По дате</button>
           <div className="mt-3">
-            <form onSubmit={handleSubmit.bind(null, found, loading, "/home/", history)}>
-              <input id="in" type="text" onChange={handleChange.bind(null, dispatch, setStateFind)}/>
-              <input className="rounded-3" type="submit" value="Find"/>
-            </form>
+            <input id="in" type="text" onChange={handleChange.bind(null, dispatch, setStateFind)}/>
+            <button className="rounded-3" onClick={dispatch.bind(null,{type: 'FIND_REQUESTED', payload: {found, loading, redirString:"/home/", history}})}>Find</button>
           </div>
         </div>
         <div className="d-flex flex-wrap justify-content-between">

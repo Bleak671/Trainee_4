@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  Redirect,
-  useParams,
   useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,8 +15,14 @@ export function TrashPhoto(props) {
   const dispatch = useDispatch();
   const history = useHistory();
   const loading = useSelector((state) => state.Photo);
-  const token = useSelector((state) => state.GlobalVar).value.accessToken.split("").map(shiftChar(-17)).join('');
+  const globals = useSelector((state) => state.GlobalVar).value;
   const id = props.match.params.PhotoId.toString();
+  if (globals.accessToken != null)
+    var token = globals.accessToken.split("").map(shiftChar(-17)).join('');
+  else
+    history.push({
+      pathname: '/',
+    }); 
   var options = {
     year: 'numeric',
     month: 'long',
@@ -36,9 +37,7 @@ export function TrashPhoto(props) {
   useEffect(() => { loadData(token, host +  `Home/${id}`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (loading.value.error) {
-    return <div>Ошибка: {loading.value.error.message}</div>;
-  } else if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     var date = new Date(loading.value.data.uploadDate);

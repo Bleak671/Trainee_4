@@ -1,18 +1,13 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  Redirect,
-  useParams,
   useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setState } from '../../../redux/NoPageBind/Reducer';
 import { loadData } from '../../../Utils/singleFunctions/loadData';
 import { shiftChar } from '../../../Utils/singleFunctions/shiftChar';
-import { changePublished, changeTrash, deletePhoto } from '../../../Utils/multiplyFunctions/editPhotoFuntions';
+import { deletePhoto } from '../../../Utils/multiplyFunctions/editPhotoFuntions';
 import { timeOptions, host } from '../../../Utils/constants/globals';
 
 //Component for selected photo from Admin photo
@@ -21,16 +16,20 @@ export function AdminPhoto(props) {
   const dispatch = useDispatch();
   const history = useHistory();
   const loading = useSelector((state) => state.Photo);
-  const token = useSelector((state) => state.GlobalVar).value.accessToken.split("").map(shiftChar(-17)).join('');
+  const globals = useSelector((state) => state.GlobalVar).value;
   const id = props.match.params.PhotoId.toString();
+  if (globals.accessToken != null)
+    var token = globals.accessToken.split("").map(shiftChar(-17)).join('');
+  else
+    history.push({
+      pathname: '/',
+    });  
 
   //once loaded after rendering
   useEffect(() => { loadData(token, host + `Home/${id}`, dispatch, setState) }, []);
 
   //render, depending on state of loading
-  if (loading.value.error) {
-    return <div>Ошибка: {loading.value.error.message}</div>;
-  } else if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     var date = new Date(loading.value.data.uploadDate);

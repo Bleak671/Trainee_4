@@ -13,14 +13,12 @@ export function loadData(token, connString, dispatch, setState) {
       .then(
         (result) => {
           dispatch(setState({
-            error: null,
             isLoaded: true,
             data: result
           }))
         },
         (error) => {
           dispatch(setState({
-            error: error,
             isLoaded: true,
             data: []
           }))

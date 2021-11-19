@@ -7,23 +7,30 @@ export function handleChange(dispatch, setState, event) {
   dispatch(setState(data));
 }
 
-export function handleSubmit(token, id, found, loading, dispatch, setState, event) {
-  event.preventDefault();
-  var user = Object.assign({}, loading.value.data);
-  user.Login = found.found.payload;
-  const requestOptions = {
-    method: 'PUT',
-    mode: 'cors',
-    headers: {  
-        'Content-Type': 'application/json',    
-        'Access-Control-Allow-Origin':'*',
-        "Authorization": "Bearer " + token  // using token
-    },
-    body: JSON.stringify(user)     
-  };
-  fetch( host + `AuthorAccount/${user.userId}`, requestOptions)
-  .then(
-    () => { NotificationManager.success('Changed', '',2000); loadData(token, host + `AuthorAccount/${id}`, dispatch, setState) },
-    (error) => { NotificationManager.error('Something wrong: '+error, '',2000); }
-  )
+export function handleSubmit(payload) {
+  return new Promise((resolve, reject) => {
+    try {
+      var user = Object.assign({}, payload.loading.value.data);
+      user.Login = payload.found.found.payload;
+      const requestOptions = {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {  
+            'Content-Type': 'application/json',    
+            'Access-Control-Allow-Origin':'*',
+            "Authorization": "Bearer " + payload.token  // using token
+        },
+        body: JSON.stringify(user)     
+      };
+      fetch( host + `AuthorAccount/${user.userId}`, requestOptions)
+      .then(
+        () => { resolve() },
+        (error) => { reject(error) }
+      )
+      resolve();
+    }
+    catch(e) {
+      reject(e);
+    }
+  });
 }

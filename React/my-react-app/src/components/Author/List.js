@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  useParams,
   useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,7 +9,6 @@ import { setState as setStateFind } from '../../redux/NoPageBind/FindReducer';
 import { shiftChar } from '../../Utils/singleFunctions/shiftChar';
 import { sortByDate, sortByName } from '../../Utils/multiplyFunctions/sortFunctions';
 import { loadData } from '../../Utils/singleFunctions/loadData';
-import { NotificationManager } from 'react-notifications';
 import { handleChange, handleSubmit } from '../../Utils/handlers/handleFind';
 import { host } from '../../Utils/constants/globals';
 
@@ -22,17 +17,21 @@ export function AuthorWorks() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.AuthorWorks);
   const found = useSelector((state) => state.Find);
-  const token = useSelector((state) => state.GlobalVar).value.accessToken.split("").map(shiftChar(-17)).join('');
-  const guid = useSelector((state) => state.GlobalVar).value.guid;
+  const globals = useSelector((state) => state.GlobalVar).value;
+  const guid = globals.guid;
   const history = useHistory();
+  if (globals.accessToken != null)
+    var token = globals.accessToken.split("").map(shiftChar(-17)).join('');
+  else
+    history.push({
+      pathname: '/',
+    });  
 
   //load once
   useEffect(() => {  loadData(token, host +  `AuthorWorks/${guid}`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (loading.value.error) {
-    return <div>Ошибка: {loading.value.error.message}</div>;
-  } else if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     return (
@@ -43,10 +42,8 @@ export function AuthorWorks() {
           <button className="rounded-3" onClick={sortByName.bind(null, loading, dispatch, setState)}>По названию</button>
           <button className="rounded-3" onClick={sortByDate.bind(null, loading, dispatch, setState)}>По дате</button>
           <div className="mt-3">
-            <form onSubmit={handleSubmit.bind(null, found, loading, "/authorWorks/", history)}>
-              <input id="in" type="text" onChange={handleChange.bind(null, dispatch, setStateFind)}/>
-              <input className="rounded-3" type="submit" value="Find"/>
-            </form>
+            <input id="in" type="text" onChange={handleChange.bind(null, dispatch, setStateFind)}/>
+            <button className="rounded-3" onClick={dispatch.bind(null,{type: 'FIND_REQUESTED', payload: {found, loading, redirString:"/authorWorks/", history}})}>Find</button>
           </div>
         </div>
         <div className="d-flex flex-wrap justify-content-between">

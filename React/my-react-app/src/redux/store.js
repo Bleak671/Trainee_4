@@ -12,6 +12,10 @@ import AddPhotoInfoReducer from './Author/AddPhotoInfoReducer';
 import FindReducer from './NoPageBind/FindReducer';
 import GlobalVarReducer from './Global/GlobalVarReducer'
 import DrawerInputReducer from './Draw/DrawerInputReducer';
+import createSagaMiddleware from 'redux-saga';
+import saga from '../saga/saga';
+
+const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
   reducer: {
@@ -29,4 +33,11 @@ export const store = configureStore({
     GlobalVar : GlobalVarReducer,
     DrawerInput : DrawerInputReducer
   },
+  middleware : (getDefaultMiddleware) =>
+  getDefaultMiddleware({
+    thunk: false,
+    serializableCheck: false,
+  }).concat(sagaMiddleware)
 });
+
+sagaMiddleware.run(saga);

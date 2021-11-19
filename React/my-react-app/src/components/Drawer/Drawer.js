@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { watermark } from 'dynamic-watermark';
+import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { setState } from '../../redux/Draw/DrawerInputReducer';
 import { getRegion, ascii, sharpen, contrast, RGBAtoGray, flipHorizontal, flipVertical, rotate, saltPepperRemoval, init, saveToPNG, draw } from '../../Utils/multiplyFunctions/drawFunctions';
@@ -8,9 +8,15 @@ import { handleChangeRegion, handleChangeRemoveNoise } from "../../Utils/handler
 
 export function Drawer(props) {
     const dispatch = useDispatch();
+    const history = useHistory();
     const drawerIn = useSelector((state) => state.DrawerInput);
     const id = props.match.params.PhotoId.toString();
-    var image = useSelector((state) => state.GlobalVar).value.link;
+    const globals = useSelector((state) => state.GlobalVar).value;
+    var image = globals.link;
+    if (globals.link == null)
+      history.push({
+        pathname: '/',
+      });  
     let canvas
     let c;
     var originalImg = new Image();
@@ -30,13 +36,11 @@ export function Drawer(props) {
                     <button id="Refresh" onClick={ draw.bind(null, originalImg)}>Refresh</button>
                 </div>
                 <div>
-                    <button id="Save" onClick={ saveToPNG.bind(null, id)}>Save</button>
+                    <button id="Save" onClick={ saveToPNG.bind(null, id, originalImg)}>Save</button>
                 </div>
                 <div>
-                  <form onSubmit={saltPepperRemoval.bind(null, drawerIn, image)}>
                     <input type="text" size="2" onChange={handleChangeRemoveNoise.bind(null, drawerIn, dispatch, setState)}/>
-                    <input type="submit" value="Remove Noise" />
-                  </form>
+                    <button onClick={dispatch.bind(null,{type: 'NOISE_REMOVE_REQUESTED', payload: { drawerIn, image}})}>Remove Noise</button>
                 </div>
                 <div>
                     <button id="Rotate" onClick={ rotate.bind(null, image)}>Rotate</button>
@@ -60,10 +64,8 @@ export function Drawer(props) {
                     <button id="Ascii" onClick={ ascii.bind(null, image)}>Ascii</button>
                 </div>
                 <div>
-                  <form onSubmit={getRegion.bind(null, drawerIn, canvas, c ,image)}>
-                    <input type="text" size="2" onChange={handleChangeRegion.bind(null, drawerIn, canvas, c, image)}/>
-                    <input type="submit" value="region"/>
-                  </form>
+                    <input type="text" size="2" onChange={handleChangeRegion.bind(null, drawerIn, dispatch, setState)}/>
+                    <button onClick={dispatch.bind(null,{type: 'REGION_REQUESTED', payload: {drawerIn, originalImg}})}>Region</button>
                 </div>
             </div>
             <canvas id="canvas"> 

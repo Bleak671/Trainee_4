@@ -13,12 +13,26 @@ export function handleChangePassword(state, dispatch, setState, event) {
   dispatch(setState(data));
 }
 
-export function handleSubmitLogin(state, dispatch, setState, event) {
-  event.preventDefault();
-  login(state.value.email, state.value.password, dispatch, setState);
+export function handleSubmitLogin(payload) {
+  return new Promise((resolve, reject) => {
+    try {
+      login(payload.state.value.email, payload.state.value.password, payload.dispatch, payload.setState);
+      resolve();
+    }
+    catch(e) {
+      reject(e);
+    }
+  });
 }
 
-export function handleSubmitRegister(state, dispatch, setState, event) {
-  event.preventDefault();
-  register(state.value.email, state.value.password, dispatch, setState);
+export function handleSubmitRegister(payload) {
+  return new Promise((resolve, reject) => {
+    try {
+      register(payload.state.value.email, payload.state.value.password, payload.dispatch, payload.setState);
+      resolve();
+    }
+    catch(e) {
+      reject(e);
+    }
+  });
 }

@@ -60,11 +60,9 @@ export function draw(img){
   }
 
   //noise removal algorithm
-  export function saltPepperRemoval(state, image){
-    var canvas = document.getElementById("canvas");
+  export function saltPepperRemoval(state){
+    return new Promise(() => {var canvas = document.getElementById("canvas");
     var c = canvas.getContext('2d');
-    if(!image)
-        return
     let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
     let noiseRemove = function(colorData,w,h,window){
         for(let i = 0, end = h; i < end; i++){
@@ -81,12 +79,12 @@ export function draw(img){
         }
         return colorData;
     }
-    let w = state.value.RemoveNoise;
+    let w = state.removeNoise;
     w = isNaN(w) || w > 9 || w < 3 ? 3 : w%2 ? w : w-1;
     data.r = noiseRemove(data.r, data.w, data.h, w);
     data.g = noiseRemove(data.g, data.w, data.h, w);
     data.b = noiseRemove(data.b, data.w, data.h, w);
-    c.putImageData( RGBAtoData(data), 0, 0 );
+    c.putImageData( RGBAtoData(data), 0, 0 );});
   }
 
   //color drop on borders
@@ -291,8 +289,10 @@ export function draw(img){
   }
 
   //finding region dependiong on multiplyer
-  function region(state, canvas, c, originalImg, e) {
-        let th = state.value.Region;
+  function region(state, originalImg, e) {
+        var canvas = document.getElementById("canvas");
+        var c = canvas.getContext('2d');
+        let th = state.region;
         let rect = canvas.getBoundingClientRect();
         let mouseX = Math.floor((e.clientX - rect.left) * originalImg.width / rect.width);
         let mouseY = Math.floor((e.clientY - rect.top) * originalImg.height / rect.height);
@@ -342,17 +342,13 @@ export function draw(img){
         }
         
         c.putImageData( data, 0, 0 );
-        
-
-        document.getElementById("Region").onClick = removeEvent.bind(null, canvas);
   }
 
   //setting listener region
-  export function getRegion(state, originalImg, image){
+  export function getRegion(state, originalImg){
     var canvas = document.getElementById("canvas");
-    if(!image)
-        return
     canvas.addEventListener('click',  region.bind(null, state, originalImg));
+    document.getElementById("Region").onClick = removeEvent.bind(null, canvas, state, originalImg);
   }
 
   //getting distance between dots
@@ -365,9 +361,9 @@ export function draw(img){
   }
 
   //resetting listener region
-  function removeEvent(canvas){
+  function removeEvent(canvas, state, originalImg){
     canvas.removeEventListener('click', region);
-    document.getElementById("Region").onClick = getRegion;
+    document.getElementById("Region").onClick = getRegion.bind(state, originalImg);
   }
 
   //saving photo

@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  useParams
+  useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setState } from '../../../redux/Admin/UserListReducer';
@@ -15,21 +12,25 @@ import { host } from '../../../Utils/constants/globals';
 export function AdminUserList() {  
   //const
   const dispatch = useDispatch();
+  const history = useHistory();
   const loading = useSelector((state) => state.AdminUserList);
-  const token = useSelector((state) => state.GlobalVar).value.accessToken.split("").map(shiftChar(-17)).join('');
-  const globals = useSelector((state) => state.GlobalVar);
+  const globals = useSelector((state) => state.GlobalVar).value;
+  if (globals.accessToken != null)
+    var token = globals.accessToken.split("").map(shiftChar(-17)).join('');
+  else
+    history.push({
+      pathname: '/',
+    });  
   var filteredArray;
 
   //load once
   useEffect(() => { loadData(token, host +  `Admin`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (loading.value.error) {
-    return <div>Ошибка: {loading.value.error.message}</div>;
-  } else if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
-    filteredArray = loading.value.data.filter(function(item) { return item.userId != globals.value.guid } );
+    filteredArray = loading.value.data.filter(function(item) { return item.userId != globals.guid } );
     return (
       <div>
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/admin/photo" >to Photos</Link>
@@ -37,6 +38,9 @@ export function AdminUserList() {
           <thead>
             <tr>
               <th scope="col">Email</th>
+              <th scope="col">Name</th>
+              <th scope="col">Banned</th>
+              <th scope="col">Admin</th>
               <th scope="col">Name</th>
               <th scope="col"></th>
             </tr>
@@ -46,6 +50,8 @@ export function AdminUserList() {
             <tr scope="row">
               <td>{item.email}</td>
               <td>{item.login}</td>
+              <td>{item.isBanned ? "Yes" : "No"}</td>
+              <td>{item.isAdmin ? "Yes" : "No"}</td>
               <td><Link to={"user/" + item.userId}>to User</Link></td>
             </tr>
           ))}

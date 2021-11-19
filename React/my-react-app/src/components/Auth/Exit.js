@@ -1,10 +1,5 @@
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
     Redirect,
-    useParams
   } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setState } from "../../redux/Global/GlobalVarReducer";

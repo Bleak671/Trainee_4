@@ -1,10 +1,6 @@
 import { useSelector } from 'react-redux';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  useParams
 } from "react-router-dom";
 import { generateNav } from '../../Utils/singleFunctions/generateNav';
 

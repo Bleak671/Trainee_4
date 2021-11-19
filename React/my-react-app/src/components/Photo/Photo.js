@@ -1,10 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  useParams
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { setState } from '../../redux/NoPageBind/Reducer';
@@ -22,9 +18,7 @@ export function Photo(props) {
   useEffect(() => { loadData("", host +  `Home/${id}`, dispatch, setState)  }, []);
    
   //render, depending on state of loading
-  if (loading.value.error) {
-    return <div>Ошибка: {loading.value.error.message}</div>;
-  } else if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded) {
     return <div>Загрузка...</div>;
   } else {
     var date = new Date(loading.value.data.uploadDate);

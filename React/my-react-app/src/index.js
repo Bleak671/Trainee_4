@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
-import { createSlice, PayloadAction} from '@reduxjs/toolkit';  
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter } from 'react-router-dom';
 import { store } from './redux/store';
 
 const rootElement = document.getElementById('root');
