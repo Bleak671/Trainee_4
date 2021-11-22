@@ -1,22 +1,16 @@
 import { saveAs } from 'file-saver';
-
-export function init(image) {
-    let img = new Image();
-    img.src = image;
-    img.crossOrigin = 'Anonymous';
-    img.onload = function(){
-      draw(img);
-    };
-  }
-
   //draw image
-export function draw(img){
-    var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    c.clearRect(0, 0, canvas.width, canvas.height);      
-    c.drawImage(img,0,0);
+export function draw(payload){
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        var img = payload.img;
+        canvas.width = img.width;
+        canvas.height = img.height;
+        c.clearRect(0, 0, canvas.width, canvas.height);      
+        c.drawImage(img,0,0);
+        resolve();
+    })
   }
 
   //split photo into channels
@@ -44,104 +38,110 @@ export function draw(img){
   }
 
   //turn photo gray
-  export function RGBAtoGray(image){
-    var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    if(!image)
-        return
-    let img = c.getImageData(0,0,canvas.width,canvas.height);
-    for(let i = 0; i < img.data.length; i+=4){
-        let v = (img.data[i] * 0.2126) + (img.data[i+1] * 0.7152) + (img.data[i+2] * 0.0722);
-        img.data[i] = v;
-        img.data[i+1] = v;
-        img.data[i+2] = v;
-    }
-    c.putImageData( img, 0, 0 );
+  export function RGBAtoGray(payload){
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        let img = c.getImageData(0,0,canvas.width,canvas.height);
+        for(let i = 0; i < img.data.length; i+=4){
+            let v = (img.data[i] * 0.2126) + (img.data[i+1] * 0.7152) + (img.data[i+2] * 0.0722);
+            img.data[i] = v;
+            img.data[i+1] = v;
+            img.data[i+2] = v;
+        }
+        c.putImageData( img, 0, 0 );
+        resolve();
+    })
   }
 
   //noise removal algorithm
-  export function saltPepperRemoval(state){
-    return new Promise(() => {var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
-    let noiseRemove = function(colorData,w,h,window){
-        for(let i = 0, end = h; i < end; i++){
-            for(let j = 0, end = w; j < end; j++){
-                let n = [];
-                for(let y = -Math.floor(window/2); y < window-Math.floor(window/2); y++){
-                    for(let x = -Math.floor(window/2); x < window-Math.floor(window/2); x++){
-                        n.push( colorData[((i+y) * w + (j+x))] );
+  export function saltPepperRemoval(payload){
+    return new Promise(() => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        var state = payload.state;
+        let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
+        let noiseRemove = function(colorData,w,h,window){
+            for(let i = 0, end = h; i < end; i++){
+                for(let j = 0, end = w; j < end; j++){
+                    let n = [];
+                    for(let y = -Math.floor(window/2); y < window-Math.floor(window/2); y++){
+                        for(let x = -Math.floor(window/2); x < window-Math.floor(window/2); x++){
+                            n.push( colorData[((i+y) * w + (j+x))] );
+                        }
                     }
+                    n.sort( function(a, b){ return a - b } );
+                    colorData[ i * w + j ] = n[Math.floor((window*window)/2)];
                 }
-                n.sort( function(a, b){ return a - b } );
-                colorData[ i * w + j ] = n[Math.floor((window*window)/2)];
             }
+            return colorData;
         }
-        return colorData;
-    }
-    let w = state.removeNoise;
-    w = isNaN(w) || w > 9 || w < 3 ? 3 : w%2 ? w : w-1;
-    data.r = noiseRemove(data.r, data.w, data.h, w);
-    data.g = noiseRemove(data.g, data.w, data.h, w);
-    data.b = noiseRemove(data.b, data.w, data.h, w);
-    c.putImageData( RGBAtoData(data), 0, 0 );});
+        let w = state.removeNoise;
+        w = isNaN(w) || w > 9 || w < 3 ? 3 : w%2 ? w : w-1;
+        data.r = noiseRemove(data.r, data.w, data.h, w);
+        data.g = noiseRemove(data.g, data.w, data.h, w);
+        data.b = noiseRemove(data.b, data.w, data.h, w);
+        c.putImageData( RGBAtoData(data), 0, 0 );
+    });
   }
 
   //color drop on borders
-  export function sharpen(image){
-    var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    if(!image)
-        return
-    let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
-    let sharp = function(colorData,w,h){
-        let newColorData = Array(h).fill().map(_=>Array(w).fill(0));
-        for(let i = 1, end = h-1; i < end; i++){
-            for(let j = 1, end = w-1; j < end; j++){
-                let v = ( colorData[ (i-1) * w + j ] + colorData[ (i+1) * w + j ]
-                                + colorData[ i * w + (j-1) ] + colorData[ i * w + (j+1) ] ) - (4*colorData[ i * w + j ]);
-                newColorData[i * w + j] = v;
+  export function sharpen(payload){
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
+        let sharp = function(colorData,w,h){
+            let newColorData = Array(h).fill().map(_=>Array(w).fill(0));
+            for(let i = 1, end = h-1; i < end; i++){
+                for(let j = 1, end = w-1; j < end; j++){
+                    let v = ( colorData[ (i-1) * w + j ] + colorData[ (i+1) * w + j ]
+                                    + colorData[ i * w + (j-1) ] + colorData[ i * w + (j+1) ] ) - (4*colorData[ i * w + j ]);
+                    newColorData[i * w + j] = v;
+                }
             }
-        }
-        for(let i = 1; i < h-1; i++){
-            for(let j = 1; j < w-1; j++){
-                colorData[i * w + j] -= newColorData[i * w + j]*0.5; 
+            for(let i = 1; i < h-1; i++){
+                for(let j = 1; j < w-1; j++){
+                    colorData[i * w + j] -= newColorData[i * w + j]*0.5; 
+                }
             }
+            return colorData;
         }
-        return colorData;
-    }
-    data.r = sharp(data.r, data.w, data.h);
-    data.g = sharp(data.g, data.w, data.h);
-    data.b = sharp(data.b, data.w, data.h);
-    c.putImageData( RGBAtoData(data), 0, 0 );
+        data.r = sharp(data.r, data.w, data.h);
+        data.g = sharp(data.g, data.w, data.h);
+        data.b = sharp(data.b, data.w, data.h);
+        c.putImageData( RGBAtoData(data), 0, 0 );
+        resolve();
+    })
   }
 
   //stretching colors to using absolute white and black
-  export function contrast(image){
-    var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    if(!image)
-        return
-    let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
-    let increaseContrast = function(colorData){
-        let black = 255, white = 0;
-        for (let i = 0; i < colorData.length; i++) {
-            if (colorData[i] < black) {
-                black = colorData[i];
+  export function contrast(payload){
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
+        let increaseContrast = function(colorData){
+            let black = 255, white = 0;
+            for (let i = 0; i < colorData.length; i++) {
+                if (colorData[i] < black) {
+                    black = colorData[i];
+                }
+                if (colorData[i] > white) {
+                    white = colorData[i];
+                }
             }
-            if (colorData[i] > white) {
-                white = colorData[i];
+            for (let i = 0; i < colorData.length; i++) {
+                colorData[i] = (colorData[i] - black) / (white - black) * 255;
             }
+        return colorData;
         }
-        for (let i = 0; i < colorData.length; i++) {
-            colorData[i] = (colorData[i] - black) / (white - black) * 255;
-        }
-    return colorData;
-    }
-    data.r = increaseContrast(data.r);
-    data.g = increaseContrast(data.g);
-    data.b = increaseContrast(data.b);
-    c.putImageData( RGBAtoData(data), 0, 0 );
+        data.r = increaseContrast(data.r);
+        data.g = increaseContrast(data.g);
+        data.b = increaseContrast(data.b);
+        c.putImageData( RGBAtoData(data), 0, 0 );
+        resolve();
+    })
   }
 
   //turning
@@ -179,119 +179,99 @@ export function draw(img){
 
 
   //reverse photo by Oy
-  export function flipHorizontal(image) {
-    var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    if(!image)
-        return
-    let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
-    data.r = reverseRow(data.r, data.w, data.h);
-    data.g = reverseRow(data.g, data.w, data.h);
-    data.b = reverseRow(data.b, data.w, data.h);
-    data.a = reverseRow(data.a, data.w, data.h);
-    c.putImageData( RGBAtoData(data), 0, 0 );
+  export function flipHorizontal(payload) {
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
+        data.r = reverseRow(data.r, data.w, data.h);
+        data.g = reverseRow(data.g, data.w, data.h);
+        data.b = reverseRow(data.b, data.w, data.h);
+        data.a = reverseRow(data.a, data.w, data.h);
+        c.putImageData( RGBAtoData(data), 0, 0 );
+        resolve();
+    })
   }
 
   //reverse photo by Ox
-  export function flipVertical(image) {
-    var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    if(!image)
-        return
-    let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
-    data.r = reverseColumn(data.r, data.w, data.h);
-    data.g = reverseColumn(data.g, data.w, data.h);
-    data.b = reverseColumn(data.b, data.w, data.h);
-    data.a = reverseColumn(data.a, data.w, data.h);
-    c.putImageData( RGBAtoData(data), 0, 0 );
+  export function flipVertical(payload) {
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
+        data.r = reverseColumn(data.r, data.w, data.h);
+        data.g = reverseColumn(data.g, data.w, data.h);
+        data.b = reverseColumn(data.b, data.w, data.h);
+        data.a = reverseColumn(data.a, data.w, data.h);
+        c.putImageData( RGBAtoData(data), 0, 0 );
+        resolve();
+    })
   }
 
   //turning photo
-  export function rotate(image){
-    var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    if(!image)
-        return
-    let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
-    data.r = transpose(data.r, data.w, data.h);
-    data.g = transpose(data.g, data.w, data.h);
-    data.b = transpose(data.b, data.w, data.h);
-    data.a = transpose(data.a, data.w, data.h);
-    let tmp = data.w;
-    data.w = data.h;
-    data.h = tmp;
-    data.r = reverseRow(data.r, data.w, data.h);
-    data.g = reverseRow(data.g, data.w, data.h);
-    data.b = reverseRow(data.b, data.w, data.h);
-    data.a = reverseRow(data.a, data.w, data.h);
-    canvas.width = data.w;
-    canvas.height = data.h;
-    c.putImageData( RGBAtoData(data), 0, 0 );
-  }
-
-  function drawCanvasAux(canvas, canvasAux, cAux,image){
-    if(!image)
-        return
-    if(!canvasAux){
-        canvasAux = document.createElement('canvas');
-        document.body.appendChild( canvasAux );
-    }
-    let canvasPos = canvas.getBoundingClientRect();
-    canvasAux.style.display = "block";
-    canvasAux.style.position = "absolute";
-    canvasAux.style.top = canvasPos.y+"px";
-    canvasAux.style.left = canvasPos.x+"px";
-    canvasAux.style.margin = "0px";
-    canvasAux.style.zIndex = "1";
-    canvasAux.width = canvas.width;
-    canvasAux.height = canvas.height;
-    cAux = canvasAux.getContext('2d');
+  export function rotate(payload){
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        let data = dataToRGBA(c.getImageData(0,0,canvas.width,canvas.height));
+        data.r = transpose(data.r, data.w, data.h);
+        data.g = transpose(data.g, data.w, data.h);
+        data.b = transpose(data.b, data.w, data.h);
+        data.a = transpose(data.a, data.w, data.h);
+        let tmp = data.w;
+        data.w = data.h;
+        data.h = tmp;
+        data.r = reverseRow(data.r, data.w, data.h);
+        data.g = reverseRow(data.g, data.w, data.h);
+        data.b = reverseRow(data.b, data.w, data.h);
+        data.a = reverseRow(data.a, data.w, data.h);
+        canvas.width = data.w;
+        canvas.height = data.h;
+        c.putImageData( RGBAtoData(data), 0, 0 );
+        resolve();
+    })
   }
 
   //image to ascii
-  export function ascii(image){
-    var canvas = document.getElementById("canvas");
-    var c = canvas.getContext('2d');
-    if(!image)
-        return
-    RGBAtoGray();
-    let data = c.getImageData(0,0,canvas.width,canvas.height);
-
-    let chars = ["@","%","#","*","+","=","-",":","."," "];
-    let chars2 = ["$","@","B","%","8","&","W","M","#","*","o","a","h","k","b","d","p","q","w","m","Z","O",
-                                "0","Q","L","C","J","U","Y","X","z","c","v","u","n","x","r","j","f","t","/","\\","|","(",
-                                ")","1","{","}","[","]","?","-","_","+","~","\<","\>","i","!","l","I",";",":",",","\"","^",
-                                "`","'","."," "];
-    let string = "";
-    let grayStep = Math.ceil( 255 / chars.length );
-    c.fillStyle = "white";
-    c.fillRect(0,0,canvas.width,canvas.height);
-    c.font = "5px Courier";
-    c.fillStyle = "black";
-    for(let i = 0; i < canvas.height*4; i+=4){
-        for(let j = 0; j < canvas.width*4; j+=4){
-            for(let x = 0; x < chars.length; x++){
-                if( data.data[( i * canvas.width + j)*4] < (x*grayStep)+grayStep ){
-                    c.fillText( chars[x], j, i );
-                    break;
+  export function ascii(payload){
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        RGBAtoGray(payload);
+        let data = c.getImageData(0,0,canvas.width,canvas.height);
+        let text = [];
+    
+        let chars = ["@","%","#","*","+","=","-",":","."," "];
+        let chars2 = ["$","@","B","%","8","&","W","M","#","*","o","a","h","k","b","d","p","q","w","m","Z","O",
+                                    "0","Q","L","C","J","U","Y","X","z","c","v","u","n","x","r","j","f","t","/","\\","|","(",
+                                    ")","1","{","}","[","]","?","-","_","+","~","\<","\>","i","!","l","I",";",":",",","\"","^",
+                                    "`","'","."," "];
+        let string = "";
+        let grayStep = Math.ceil( 255 / chars.length );
+        c.fillStyle = "white";
+        c.fillRect(0,0,canvas.width,canvas.height);
+        c.font = "4px Courier";
+        c.fillStyle = "black";
+        for(let i = 0; i < canvas.height*4; i+=4){
+            for(let j = 0; j < canvas.width*4; j+=4){
+                for(let x = 0; x < chars.length; x++){
+                    if( data.data[( i * canvas.width + j)*4] < (x*grayStep)+grayStep ){
+                        c.fillText( chars[x], j, i );
+                        break;
+                    }
                 }
             }
         }
-    }
-  }
-
-  function drawSelection(selection, canvasAux, cAux,image){
-    if(!image || !selection)
-        return
-    cAux.fillStyle = "rgba(0,0,0,0.5)";
-    cAux.fillRect(0,0,canvasAux.width,canvasAux.height);
-    cAux.clearRect(selection.x,selection.y,selection.w,selection.h);
+        resolve();
+    })
   }
 
   //finding region dependiong on multiplyer
-  function region(state, originalImg, e) {
-        var canvas = document.getElementById("canvas");
-        var c = canvas.getContext('2d');
+  function region(payload, e) {
+        var canvas = payload.canvas;
+        var c = payload.c;
+        var state = payload.state;
+        var originalImg = payload.originalImg;
         let th = state.region;
         let rect = canvas.getBoundingClientRect();
         let mouseX = Math.floor((e.clientX - rect.left) * originalImg.width / rect.width);
@@ -345,10 +325,11 @@ export function draw(img){
   }
 
   //setting listener region
-  export function getRegion(state, originalImg){
-    var canvas = document.getElementById("canvas");
-    canvas.addEventListener('click',  region.bind(null, state, originalImg));
-    document.getElementById("Region").onClick = removeEvent.bind(null, canvas, state, originalImg);
+  export function getRegion(payload){
+    return new Promise((resolve) => {
+        payload.canvas.onclick = region.bind(null, payload);
+        resolve();
+    })
   }
 
   //getting distance between dots
@@ -361,25 +342,32 @@ export function draw(img){
   }
 
   //resetting listener region
-  function removeEvent(canvas, state, originalImg){
-    canvas.removeEventListener('click', region);
-    document.getElementById("Region").onClick = getRegion.bind(state, originalImg);
+  export function removeRegion(payload){
+    return new Promise((resolve) => {
+        payload.canvas.onclick = null;
+        resolve();
+    })
   }
 
   //saving photo
-  export function saveToPNG(id, img){
-    var canvas = document.getElementById("canvas");
-    var tempCtx=canvas.getContext('2d');
-    tempCtx.crossOrigin = "anonymous";
-    tempCtx.font="8px verdana";
-    var textWidth=tempCtx.measureText(id).width;
-    tempCtx.globalAlpha=.50;
-    tempCtx.fillStyle='white';
-    tempCtx.fillText(id,canvas.width-textWidth-10,canvas.height-20);
-    tempCtx.fillStyle='black';
-    tempCtx.fillText(id,canvas.width-textWidth-10+2,canvas.height-20+2);
-    canvas.toBlob(function(blob) {
-        saveAs(blob, "output.png");
-    }, "image/png");
-    draw(img);
+  export function saveToPNG(payload){
+    return new Promise((resolve) => {
+        var canvas = payload.canvas;
+        var tempCtx = payload.c;
+        var img = payload.img;
+        var id = payload.id;
+        tempCtx.crossOrigin = "anonymous";
+        tempCtx.font="8px verdana";
+        var textWidth=tempCtx.measureText(id).width;
+        tempCtx.globalAlpha=.50;
+        tempCtx.fillStyle='white';
+        tempCtx.fillText(id,canvas.width-textWidth-10,canvas.height-20);
+        tempCtx.fillStyle='black';
+        tempCtx.fillText(id,canvas.width-textWidth-10+2,canvas.height-20+2);
+        canvas.toBlob(function(blob) {
+            saveAs(blob, "output.png");
+        }, "image/png");
+        draw(canvas, tempCtx, img);
+        resolve();
+    })
   }      

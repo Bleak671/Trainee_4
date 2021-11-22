@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { setState } from '../../redux/Draw/DrawerInputReducer';
+import { setState as setGlobalState } from "../../redux/Global/GlobalVarReducer";
 import { getRegion, ascii, sharpen, contrast, RGBAtoGray, flipHorizontal, flipVertical, rotate, saltPepperRemoval, init, saveToPNG, draw } from '../../Utils/multiplyFunctions/drawFunctions';
 import { handleChangeRegion, handleChangeRemoveNoise } from "../../Utils/handlers/handleDrawer";
 
@@ -12,20 +13,31 @@ export function Drawer(props) {
     const drawerIn = useSelector((state) => state.DrawerInput);
     const id = props.match.params.PhotoId.toString();
     const globals = useSelector((state) => state.GlobalVar).value;
+    const canvasRef = useRef(null);
+    var canvas = globals.canvas;
+    var c = globals.c;
     var image = globals.link;
-    if (globals.link == null)
-      history.push({
-        pathname: '/',
-      });  
-    let canvas
-    let c;
     var originalImg = new Image();
     originalImg.src = image;
     originalImg.crossOrigin = 'Anonymous';
 
+    if (globals.link == null)
+    history.push({
+      pathname: '/',
+    });  
+
     //load once
-    useEffect(() => { 
-        init(image);
+    useEffect(() => {       
+        canvas = canvasRef.current;
+        c = canvas.getContext('2d');  
+        var tmpState = Object.assign({}, globals);
+        tmpState.canvas = canvas;
+        tmpState.c = c;
+        dispatch(setGlobalState(tmpState));
+        //init(canvas, c, image);
+        originalImg.onload = () => {
+            dispatch({type: 'REFRESH_REQUESTED', payload: { canvas, c, img:originalImg}})
+        }
      }, []);
 
     //render, depending on state of loading
@@ -33,43 +45,43 @@ export function Drawer(props) {
         <div>
             <div id="toolbar" className="d-flex flex-row justify-content-between">
                 <div>
-                    <button id="Refresh" onClick={ draw.bind(null, originalImg)}>Refresh</button>
+                    <button id="Refresh" onClick={ dispatch.bind(null, {type: 'REFRESH_REQUESTED', payload: { canvas, c, img:originalImg }}) }>Refresh</button>
                 </div>
                 <div>
-                    <button id="Save" onClick={ saveToPNG.bind(null, id, originalImg)}>Save</button>
+                    <button id="Save" onClick={ dispatch.bind(null, {type: 'SAVE_REQUESTED', payload: { canvas, c, id, img:originalImg }}) }>Save</button>
                 </div>
                 <div>
                     <input type="text" size="2" onChange={handleChangeRemoveNoise.bind(null, drawerIn, dispatch, setState)}/>
-                    <button onClick={dispatch.bind(null,{type: 'NOISE_REMOVE_REQUESTED', payload: { drawerIn, image}})}>Remove Noise</button>
+                    <button onClick={dispatch.bind(null, {type: 'NOISE_REMOVE_REQUESTED', payload: { canvas, c, state:drawerIn }})}>Remove Noise</button>
                 </div>
                 <div>
-                    <button id="Rotate" onClick={ rotate.bind(null, image)}>Rotate</button>
+                    <button id="Rotate" onClick={ dispatch.bind(null, {type: 'ROTATE_REQUESTED', payload: { canvas, c }}) }>Rotate</button>
                 </div>
                 <div>
-                    <button id="Flip X" onClick={ flipHorizontal.bind(null, image)}>Flip X</button>
+                    <button id="Flip X" onClick={ dispatch.bind(null, {type: 'FLIPX_REQUESTED', payload: { canvas, c }}) }>Flip X</button>
                 </div>
                 <div>
-                    <button id="Flip Y" onClick={ flipVertical.bind(null, image)}>Flip Y</button>
+                    <button id="Flip Y" onClick={ dispatch.bind(null, {type: 'FLIPY_REQUESTED', payload: { canvas, c }}) }>Flip Y</button>
                 </div>
                 <div>
-                    <button id="Gray" onClick={ RGBAtoGray.bind(null, image)}>Gray</button>
+                    <button id="Gray" onClick={ dispatch.bind(null, {type: 'GRAY_REQUESTED', payload: { canvas, c }}) }>Gray</button>
                 </div>
                 <div>
-                    <button id="Contrast" onClick={ contrast.bind(null, image)}>Contrast</button>
+                    <button id="Contrast" onClick={ dispatch.bind(null, {type: 'CONTRAST_REQUESTED', payload: { canvas, c }}) }>Contrast</button>
                 </div>
                 <div>
-                    <button id="Sharpen" onClick={ sharpen.bind(null, image)}>Sharpen</button>
+                    <button id="Sharpen" onClick={ dispatch.bind(null, {type: 'SHARPEN_REQUESTED', payload: { canvas, c }}) }>Sharpen</button>
                 </div>
                 <div>
-                    <button id="Ascii" onClick={ ascii.bind(null, image)}>Ascii</button>
+                    <button id="Ascii" onClick={ dispatch.bind(null, {type: 'ASCII_REQUESTED', payload: { canvas, c }}) }>Ascii</button>
                 </div>
                 <div>
                     <input type="text" size="2" onChange={handleChangeRegion.bind(null, drawerIn, dispatch, setState)}/>
-                    <button onClick={dispatch.bind(null,{type: 'REGION_REQUESTED', payload: {drawerIn, originalImg}})}>Region</button>
+                    <button onClick={dispatch.bind(null,{type: 'REGION_REQUESTED', payload: { canvas, c, state:drawerIn, originalImg }})}>Region</button>
+                    <button onClick={dispatch.bind(null,{type: 'UNREGION_REQUESTED', payload: { canvas }})}>Unregion</button>
                 </div>
             </div>
-            <canvas id="canvas"> 
-
+            <canvas ref={canvasRef} id="canvas"> 
             </canvas>
         </div>
         

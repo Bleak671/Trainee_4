@@ -11,27 +11,3 @@ export function handleChangeRegion(state, dispatch, setState, event) {
   data.region = event.target.value;
   dispatch(setState(data));
 }
-
-export function handleSubmitRemoveNoise(payload) {
-  return new Promise((resolve, reject) => {
-    try {
-      saltPepperRemoval(payload.drawerIn.value);
-      resolve();
-    }
-    catch(e) {
-      reject(e);
-    }
-  });
-}
-
-export function handleSubmitRegion(payload) {
-  return new Promise((resolve, reject) => {
-    try {
-      getRegion(payload.drawerIn.value, payload.originalImg);
-      resolve();
-    }
-    catch(e) {
-      reject(e);
-    }
-  });
-}
