@@ -30,7 +30,9 @@ export function AdminUser(props) {
      
   //render, depending on state of loading
   if (!loading.value.isLoaded) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
+  } else if (loading.value.data.userId == globals.guid) {
+    return <div>It's you</div>;
   } else {
     return(
       <div className="d-flex flex-column" margin-bottom="1000">

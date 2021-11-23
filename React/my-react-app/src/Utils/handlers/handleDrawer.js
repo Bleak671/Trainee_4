@@ -1,5 +1,3 @@
-import { saltPepperRemoval, getRegion } from '../multiplyFunctions/drawFunctions';
-
 export function handleChangeRemoveNoise(state, dispatch, setState, event) {
   var data = Object.assign({},state.value);
   data.removeNoise = event.target.value;

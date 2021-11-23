@@ -28,7 +28,7 @@ export function AdminUserList() {
      
   //render, depending on state of loading
   if (!loading.value.isLoaded) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
   } else {
     filteredArray = loading.value.data.filter(function(item) { return item.userId != globals.guid } );
     return (

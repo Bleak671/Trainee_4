@@ -1,8 +1,5 @@
-import { NotificationManager } from "react-notifications";
 import { getHash } from "./getHash";
 import { shiftChar } from "./shiftChar";
-import { useSelector, useDispatch } from 'react-redux';
-import { setState } from '../../redux/Global/GlobalVarReducer';
 import { host } from "../constants/globals";
 
 export function login(email, password, dispatch, setState) {

@@ -32,7 +32,7 @@ export function AuthorWorks() {
      
   //render, depending on state of loading
   if (!loading.value.isLoaded) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
   } else {
     return (
       <div>

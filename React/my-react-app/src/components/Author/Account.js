@@ -31,7 +31,7 @@ export function AuthorAccount(props) {
      
   //render, depending on state of loading
   if (!loading.value.isLoaded) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
   } else {
     return(
       <div className="d-flex flex-column" margin-bottom="1000"> 

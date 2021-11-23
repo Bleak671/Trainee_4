@@ -12,7 +12,7 @@ function* sagaGenerator(process, prefix, action) {
    try {
       yield process(action.payload)
       .then(
-         () => {NotificationManager.success('Success','',2000);},
+         (flag) => { if (!flag) NotificationManager.success('Success','',2000);},
          (e) => {NotificationManager.error('Fail: ' + e,'',2000);}
       );
       yield put({type: prefix + "SUCCEEDED"});

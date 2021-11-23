@@ -1,5 +1,3 @@
-import { NotificationManager } from "react-notifications";
-
 export function handleChange(dispatch, setState, event) {
   var data = event.target.value;
   dispatch(setState(data));

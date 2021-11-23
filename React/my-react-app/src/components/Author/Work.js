@@ -10,7 +10,7 @@ import { shiftChar } from '../../Utils/singleFunctions/shiftChar';
 import { loadData } from '../../Utils/singleFunctions/loadData';
 import { changePublished, changeTrash } from '../../Utils/multiplyFunctions/editPhotoFuntions';
 import { toEdit } from '../../Utils/singleFunctions/toEdit';
-import { host } from '../../Utils/constants/globals';
+import { host, timeOptions } from '../../Utils/constants/globals';
 
 export function AuthorWork(props) { 
   //const 
@@ -25,22 +25,13 @@ export function AuthorWork(props) {
       pathname: '/',
     });  
   const id = props.match.params.PhotoId.toString();
-  var options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    timezone: 'UTC',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric'
-  };
 
   //load once
   useEffect(() => { loadData(token, `https://localhost:44340/api/Home/${id}`, dispatch, setState) }, []);
      
   //render, depending on state of loading
   if (!loading.value.isLoaded) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
   } else {
     var date = new Date(loading.value.data.uploadDate);
     return(
@@ -50,7 +41,7 @@ export function AuthorWork(props) {
           <img className="pb-3 rounded-3" src={loading.value.data.link} onClick={toEdit.bind(null, loading, history, globals, dispatch, setStateGlobal)}/>
         </div>
         <span className="pb-3 text-dark">Name: {loading.value.data.name}</span>
-        <span className="pb-3 text-dark">Upload date: {date.toLocaleString("en-US", options)}</span>
+        <span className="pb-3 text-dark">Upload date: {date.toLocaleString("en-US", timeOptions)}</span>
         <span className="pb-3 text-dark">Views: {loading.value.data.views}</span>
         <div className="pb-3">
           <span className="pb-3 text-dark">Published: {loading.value.data.isPublished ? "Yes" : "No"}</span>

@@ -19,7 +19,7 @@ export function Photo(props) {
    
   //render, depending on state of loading
   if (!loading.value.isLoaded) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
   } else {
     var date = new Date(loading.value.data.uploadDate);
     return(

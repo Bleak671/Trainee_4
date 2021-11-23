@@ -8,7 +8,7 @@ import { setState } from '../../redux/Photo/ListReducer';
 import { setState as setStateFind } from '../../redux/NoPageBind/FindReducer';
 import { sortByDate, sortByName } from '../../Utils/multiplyFunctions/sortFunctions';
 import { loadData } from '../../Utils/singleFunctions/loadData';
-import { handleChange, handleSubmit } from '../../Utils/handlers/handleFind';
+import { handleChange } from '../../Utils/handlers/handleFind';
 import { host } from '../../Utils/constants/globals';
 
 export function PhotoList() {  
@@ -24,7 +24,7 @@ export function PhotoList() {
      
   //render, depending on state of loading
   if (!loading.value.isLoaded) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
   } else {
     return (
       <div>

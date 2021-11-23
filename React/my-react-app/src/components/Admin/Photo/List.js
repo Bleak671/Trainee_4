@@ -9,7 +9,7 @@ import { setState as setStateFind } from '../../../redux/NoPageBind/FindReducer'
 import { shiftChar } from '../../../Utils/singleFunctions/shiftChar';
 import { sortByDate, sortByName } from '../../../Utils/multiplyFunctions/sortFunctions';
 import { loadData } from '../../../Utils/singleFunctions/loadData';
-import { handleChange, handleSubmit } from '../../../Utils/handlers/handleFind';
+import { handleChange } from '../../../Utils/handlers/handleFind';
 import { host } from '../../../Utils/constants/globals';
 
 //Component for list of photos in Admin page
@@ -32,7 +32,7 @@ export function AdminPhotoList() {
 
   //render, depending on state of loading
   if (!loading.value.isLoaded) {
-    return <div>Загрузка...</div>;
+    return <div>Loading...</div>;
   } else {
     return (
       <div>

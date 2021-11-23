@@ -1,5 +1,3 @@
-import { NotificationManager } from "react-notifications";
-import { loadData } from "../singleFunctions/loadData";
 import { host } from "../constants/globals";
 
 export function handleChange(dispatch, setState, event) {

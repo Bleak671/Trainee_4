@@ -1,4 +1,3 @@
-import { NotificationManager } from "react-notifications";
 import { getHash } from "./getHash";
 import { shiftChar } from "./shiftChar";
 import { host } from "../constants/globals";
