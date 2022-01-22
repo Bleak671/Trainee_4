@@ -1,7 +1,8 @@
-using JavaScriptEngineSwitcher.ChakraCore;
+    using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,19 +39,19 @@ namespace P4
         {
             string connection = Configuration.GetConnectionString("LocalDatabase");
             services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlServer(connection));
+                options.UseSqlServer(connection, sqlServerOptions => sqlServerOptions.CommandTimeout(180)), ServiceLifetime.Singleton);
 
-            services.AddScoped<AuthUtility>();
+            services.AddSingleton<AuthUtility>();
 
-            services.AddScoped<UserBLL>();
-            services.AddScoped<PhotoBLL>();
-            services.AddScoped<PhotoCommentBLL>();
-            services.AddScoped<PhotoReviewBLL>();
+            services.AddSingleton<UserBLL>();
+            services.AddSingleton<PhotoBLL>();
+            services.AddSingleton<PhotoCommentBLL>();
+            services.AddSingleton<PhotoReviewBLL>();
 
-            services.AddScoped<IRepository<User>, UserRepository>();
-            services.AddScoped<IRepository<Photo>, PhotoRepository>();
-            services.AddScoped<IRepository<PhotoComment>, PhotoCommentRepository>();
-            services.AddScoped<IRepository<PhotoReview>, PhotoReviewRepository>();
+            services.AddSingleton<IRepository<User>, UserRepository>();
+            services.AddSingleton<IRepository<Photo>, PhotoRepository>();
+            services.AddSingleton<IRepository<PhotoComment>, PhotoCommentRepository>();
+            services.AddSingleton<IRepository<PhotoReview>, PhotoReviewRepository>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -79,10 +80,15 @@ namespace P4
 
             services.AddMemoryCache();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddReact();
-            services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
+            services.AddControllers();
 
-            services.AddControllersWithViews();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("SomePolicy",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -96,35 +102,24 @@ namespace P4
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
+                app.UseSwagger();
+
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("v1/swagger.json", "My API V1");
+                });
+            }
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseDeveloperExceptionPage();
-
-            app.UseReact(config => { });
+            app.UseCors("SomePolicy");
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
             });
         }
     }

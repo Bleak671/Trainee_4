@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
@@ -7,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace P4.Controllers
 {
@@ -27,30 +30,62 @@ namespace P4.Controllers
         }
         // GET: HomeController
         [HttpGet]
-        public string Get()
+        public ActionResult<List<Photo>> Get()
         {
-            return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
+            try
+            {
+                return new ObjectResult(_photoBll.GetPublishedNotTrashPhotos());
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        // GET: HomeController/Details/5
+        // GET: api/Home/5
         [HttpGet("{id}")]
-        public string Get(string id)
+        public ActionResult<Photo> Get(string id)
         {
-            return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
+            try
+            {
+                return new ObjectResult(_photoBll.GetPhoto(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
+        [Authorize]
         // POST: HomeController/CreateReview
         [HttpPost("CreateReview")]
-        public void PostReview([FromBody] string value)
+        public ActionResult PostReview([FromBody] JsonElement value)
         {
-            _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value));
+            try
+            {
+                _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value.ToString()));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
+        [Authorize]
         // POST: HomeController/CreateComment
         [HttpPost("CreateComment")]
-        public void PostComment([FromBody] string value)
+        public ActionResult PostComment([FromBody] JsonElement value)
         {
-            _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value));
+            try
+            {
+                _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value.ToString()));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

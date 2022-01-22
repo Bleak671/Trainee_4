@@ -23,11 +23,15 @@ namespace P4.BLL
 
         public List<PhotoReview> GetUsersReviews(Guid id)
         {
-            return _photoReviewRepos.GetAll().Where(p => p.UserId.ToString() == id.ToString()).ToList();
+            return _photoReviewRepos.GetAll()
+                .Where(p => p.UserId.ToString() == id.ToString())
+                .ToList();
         }
         public List<PhotoReview> GetPhotosReviews(Guid id)
         {
-            return _photoReviewRepos.GetAll().Where(p => p.PhotoId.ToString() == id.ToString()).ToList();
+            return _photoReviewRepos.GetAll()
+                .Where(p => p.PhotoId.ToString() == id.ToString())
+                .ToList();
         }
 
         public PhotoReview GetReview(Guid id)
@@ -35,9 +39,9 @@ namespace P4.BLL
             return _photoReviewRepos.GetOne(id);
         }
 
-        public void UpdateReview(PhotoReview photoReview)
+        public void UpdateReview(Guid id, PhotoReview photoReview)
         {
-            _photoReviewRepos.Update(photoReview);
+            _photoReviewRepos.Update(id, photoReview);
         }
 
         public void DeleteReview(Guid id)

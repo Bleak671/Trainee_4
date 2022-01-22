@@ -38,7 +38,7 @@ namespace P4Tests
             {
                 Photo photo = new Photo { PhotoId = Guid.Parse(id), Link = link, UserId = uId };
                 db.Create(photo);
-                Assert.Throws(typeof(Exception), () => db.Create(photo));
+                Assert.Throws(typeof(ArgumentException), () => db.Create(photo));
             }
         }
 
@@ -50,7 +50,7 @@ namespace P4Tests
                 Photo photo = new Photo { PhotoId = Guid.Parse(id), Link = link, UserId = Guid.Parse(uId) };
                 db.Create(photo);
                 photo.Link = "qweqweqs.add";
-                Assert.DoesNotThrow(() => db.Update(photo));
+                Assert.DoesNotThrow(() => db.Update(Guid.Parse(id),photo));
             }
 
         }
@@ -60,7 +60,7 @@ namespace P4Tests
         {
             using (PhotoRepository db = new PhotoRepository(_context))
             {
-                Assert.Throws(typeof(Exception), () => db.Update(new Photo { PhotoId = Guid.Parse(id), Link = link, UserId = Guid.Parse(uId) }));
+                Assert.Throws(typeof(Exception), () => db.Update(Guid.Parse(id),new Photo { PhotoId = Guid.Parse(id), Link = link, UserId = Guid.Parse(uId) }));
             }
 
         }

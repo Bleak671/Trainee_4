@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
@@ -6,10 +8,12 @@ using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [Authorize(Roles = "True")]
     [ApiController]
     [Route("api/[controller]")]
     public class AdminController : ControllerBase
@@ -27,52 +31,105 @@ namespace P4.Controllers
         }
         // GET: Admin
         [HttpGet]
-        public string Get()
+        public ActionResult<List<User>> Get() 
         {
-            return JsonConvert.SerializeObject(_userBll.GetUsers());
+            try
+            {
+                return new ObjectResult(_userBll.GetUsers());
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("GetUser/{id}")]
         // GET: Admin/GetUser/5
-        public string GetUser(string id)
+        public ActionResult<User> GetUser(string id)
         {
-            return JsonConvert.SerializeObject(_userBll.GetUser(Guid.Parse(id)));
+            try
+            {
+                return new ObjectResult(_userBll.GetUser(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("GetPhoto/{id}")]
         // GET: Admin/GetPhoto/5
-        public Photo GetPhoto(string id)
+        public ActionResult<Photo> GetPhoto(string id)
         {
-            return _photoBll.GetPhoto(Guid.Parse(id));
+            try
+            {
+                return new ObjectResult(_photoBll.GetPhoto(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
 
         // PUT: Admin/EditUser
-        [HttpPut("EditUser")]
-        public void PutUser([FromBody] string value)
+        [HttpPut("EditUser/{id}")]
+        public ActionResult PutUser(string id, [FromBody] User user)
         {
-            _userBll.UpdateUser(JsonConvert.DeserializeObject<User>(value));
+            try
+            {
+                _userBll.UpdateUser(Guid.Parse(id), user);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: Admin/EditPhoto
-        [HttpPut("EditPhoto")]
-        public void PutPhoto([FromBody] string value)
+        [HttpPut("EditPhoto/{id}")]
+        public ActionResult PutPhoto(string id, [FromBody] Photo photo)
         {
-            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value));
+            try
+            {
+                _photoBll.UpdatePhoto(Guid.Parse(id), photo);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: Admin/DeleteUser/5
         [HttpDelete("DeleteUser/{id}")]
-        public void DeleteUser(string id)
+        public ActionResult DeleteUser(string id)
         {
-            _userBll.DeleteUser(Guid.Parse(id));
+            try
+            {
+                _userBll.DeleteUser(Guid.Parse(id));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: Admin/DeletePhoto/5
         [HttpDelete("DeletePhoto/{id}")]
-        public void DeletePhoto(string id)
+        public ActionResult DeletePhoto(string id)
         {
-            _photoBll.DeletePhoto(Guid.Parse(id));
+            try
+            {
+                _photoBll.DeletePhoto(Guid.Parse(id));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

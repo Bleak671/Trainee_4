@@ -18,6 +18,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
+                if (photoCom.UserId.ToString() == Guid.Empty.ToString())
+                    photoCom.UserId = Guid.NewGuid();
                 db.PhotoComments.Add(photoCom);
                 result = db.SaveChanges();
             }
@@ -41,12 +43,13 @@ namespace P4.DAL
             return db.PhotoComments.FirstOrDefault(p => p.PhotoCommentId == id);
         }
 
-        public void Update(PhotoComment photoCom)
+        public void Update(Guid id, PhotoComment photoCom)
         {
             int result = 1;
             try
             {
-                db.PhotoComments.Update(photoCom);
+                var old = db.PhotoComments.FirstOrDefault(i => i.PhotoCommentId == id);
+                db.Entry(old).CurrentValues.SetValues(photoCom);
                 result = db.SaveChanges();
             }
             catch

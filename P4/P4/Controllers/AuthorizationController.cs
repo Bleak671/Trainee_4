@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace P4.Controllers
@@ -35,21 +37,33 @@ namespace P4.Controllers
             _authUtility = authUtility;
         }
         // POST: AuthController/asd
-        [HttpPost("{username}")]
-        public IActionResult Get(string username, [FromBody] string password)
+        [HttpPost("{email}")]
+        public ActionResult Get(string email, [FromBody] int password)
         {
-            var token = _authUtility.GetJWT(username, password);
+            var token = _authUtility.GetJWT(email, password.ToString());
             if (token != null)
-                return Ok(JsonConvert.SerializeObject(token));
+                return Ok(token);
             else
                 return BadRequest();
         }
 
         // POST: AuthController/Create
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] User user)
         {
-            _userBll.CreateUser(JsonConvert.DeserializeObject<User>(value));
+            try
+            {
+                _userBll.CreateUser(user);
+                var token = _authUtility.GetJWT(user.Email, user.HashedPassword);
+                if (token != null)
+                    return Ok(token);
+                else
+                    return BadRequest();
+            }
+            catch
+            {
+                return BadRequest();
+            }            
         }
     }
 }

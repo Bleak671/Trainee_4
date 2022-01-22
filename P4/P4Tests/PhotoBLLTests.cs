@@ -23,7 +23,7 @@ namespace P4.Tests
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
             _context = new PhotoRepository(new AppDBContext(options));
-            _context.Create(new Photo { PhotoId = Guid.Parse("31231234-1234-1242-1242-123412341234"), Link = "", UserId = Guid.Parse("11111111-1111-1111-1111-111111111111") });
+            _context.Create(new Photo { PhotoId = Guid.Parse("31231234-1234-1242-1242-123412341234"), Link = "", Hash="ascfdawdeqwda", UserId = Guid.Parse("11111111-1111-1111-1111-111111111111") });
         }
 
         [TestCase("31231234-1234-1242-1242-123412341235", "asd.com", "11111111-1111-1111-1111-111111111111")]
@@ -34,6 +34,17 @@ namespace P4.Tests
                 Photo photo = new Photo { PhotoId = Guid.Parse(id), Link = link, UserId = Guid.Parse(uId) };
 
                 Assert.DoesNotThrow(() => db.CreatePhoto(photo));
+            }
+        }
+
+        [TestCase("31231234-1234-1242-1242-123412341235", "asd.com", "ascfdawdeqwda", "11111111-1111-1111-1111-111111111111")]
+        public void PhotoBLL_CreateSameHash_ShouldThrow(string id, string link, string hash, string uId)
+        {
+            using (PhotoBLL db = new PhotoBLL(_context))
+            {
+                Photo photo = new Photo { PhotoId = Guid.Parse(id), Link = link, Hash = hash, UserId = Guid.Parse(uId) };
+
+                Assert.Throws(typeof(Exception), () => db.CreatePhoto(photo));
             }
         }
 

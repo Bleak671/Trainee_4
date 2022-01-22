@@ -49,7 +49,8 @@ namespace P4Tests
             {
                 PhotoReview photo = new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) };
                 db.Create(photo);
-                Assert.DoesNotThrow(() => db.Update(photo));
+                photo.isPositive = !photo.isPositive;
+                Assert.DoesNotThrow(() => db.Update(Guid.Parse(id), photo));
             }
 
         }
@@ -59,7 +60,7 @@ namespace P4Tests
         {
             using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
             {
-                Assert.Throws(typeof(Exception), () => db.Update(new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) }));
+                Assert.Throws(typeof(Exception), () => db.Update(Guid.Parse(id), new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) }));
             }
 
         }

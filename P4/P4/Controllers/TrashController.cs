@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
@@ -6,10 +8,12 @@ using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TrashController : ControllerBase
@@ -26,31 +30,61 @@ namespace P4.Controllers
             _photoReviewBll = photoReviewDB;
         }
         // GET: TrashController
-        [HttpGet]
-        public string Get()
+        [HttpGet("{id}")]
+        public ActionResult<List<Photo>> Get(string id)
         {
-            return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
+            try
+            {
+                return new ObjectResult(_photoBll.GetUsersTrashPhotos(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        // GET: TrashController/Details/5
-        [HttpGet("{id}")]
-        public string Details(string id)
+        [HttpPost]
+        public ActionResult Post([FromBody] Photo value)
         {
-            return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
+            try
+            {
+                _photoBll.CreatePhoto(value);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: TrashController/Edit/5
-        [HttpPut]
-        public void Put([FromBody] string value)
+        [HttpPut("{id}")]
+        public ActionResult Put(string id, [FromBody] Photo photo)
         {
-            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value));
+            try
+            {
+                _photoBll.UpdatePhoto(Guid.Parse(id), photo);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: TrashController/Delete/5
         [HttpDelete("Delete/{id}")]
-        public void Delete(string id)
+        public ActionResult Delete(string id)
         {
-            _photoBll.DeletePhoto(Guid.Parse(id));
+            try
+            {
+                _photoBll.DeletePhoto(Guid.Parse(id));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

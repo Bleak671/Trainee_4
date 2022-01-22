@@ -18,6 +18,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
+                if (photoRev.UserId.ToString() == Guid.Empty.ToString())
+                    photoRev.UserId = Guid.NewGuid();
                 db.PhotoReviews.Add(photoRev);
                 result = db.SaveChanges();
             }
@@ -41,12 +43,13 @@ namespace P4.DAL
             return db.PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
         }
 
-        public void Update(PhotoReview photoRev)
+        public void Update(Guid id, PhotoReview photoRev)
         {
             int result = 1;
             try
             {
-                db.PhotoReviews.Update(photoRev);
+                var old = db.PhotoReviews.FirstOrDefault(i => i.PhotoReviewId == id);
+                db.Entry(old).CurrentValues.SetValues(photoRev);
                 result = db.SaveChanges();
             }
             catch

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
@@ -6,10 +8,12 @@ using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AuthorWorksController : ControllerBase
@@ -27,30 +31,60 @@ namespace P4.Controllers
         }
         // GET: AuthorWorksController
         [HttpGet]
-        public string Get()
+        public ActionResult<List<Photo>> Get()
         {
-            return JsonConvert.SerializeObject(_photoBll.GetAllPhotos());
+            try
+            {
+                return Ok(_photoBll.GetPublishedNotTrashPhotos());
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        // GET: AuthorWorksController/Details/5
+        // GET: AuthorWorksController/5
         [HttpGet("{id}")]
-        public string Get(string id)
+        public ActionResult<Photo> Get(string id)
         {
-            return JsonConvert.SerializeObject(_photoBll.GetPhoto(Guid.Parse(id)));
+            try
+            {
+                return Ok(_photoBll.GetUsersPhotos(Guid.Parse(id)));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // POST: AuthorWorksController/Create
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] JsonElement value)
         {
-            _photoBll.CreatePhoto(JsonConvert.DeserializeObject<Photo>(value));
+            try
+            {
+                _photoBll.CreatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: AuthorWorksController/Edit
-        [HttpPut]
-        public void Put([FromBody] string value)
+        [HttpPut("{id}")]
+        public ActionResult Put(string id, [FromBody] Photo photo)
         {
-            _photoBll.UpdatePhoto(JsonConvert.DeserializeObject<Photo>(value));
+            try
+            {
+                _photoBll.UpdatePhoto(Guid.Parse(id), photo);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

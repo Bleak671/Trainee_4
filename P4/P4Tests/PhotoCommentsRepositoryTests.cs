@@ -49,7 +49,8 @@ namespace P4Tests
             {
                 PhotoComment photo = new PhotoComment { PhotoCommentId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) };
                 db.Create(photo);
-                Assert.DoesNotThrow(() => db.Update(photo));
+                photo.Text = "smth";
+                Assert.DoesNotThrow(() => db.Update(Guid.Parse(id), photo));
             }
 
         }
@@ -59,7 +60,7 @@ namespace P4Tests
         {
             using (PhotoCommentRepository db = new PhotoCommentRepository(_context))
             {
-                Assert.Throws(typeof(Exception), () => db.Update(new PhotoComment { PhotoCommentId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) }));
+                Assert.Throws(typeof(Exception), () => db.Update(Guid.Parse(id), new PhotoComment { PhotoCommentId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) }));
             }
 
         }

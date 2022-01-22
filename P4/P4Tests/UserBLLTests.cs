@@ -38,6 +38,17 @@ namespace P4.Tests
             }
         }
 
+        [TestCase("31231234-1234-1242-1242-123412341235", "zxc", "qwe", "asd")]
+        public void UserBLL_CreateSameEmail_ShouldNotThrow(string id, string email, string hPass, string login)
+        {
+            using (UserBLL db = new UserBLL(_context))
+            {
+                User u = new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login };
+
+                Assert.Throws(typeof(Exception), () => db.CreateUser(u));
+            }
+        }
+
         [TestCase("31231234-1234-1242-1242-123412341234", "asd", "qwe", "tre")]
         public void UserBLL_Read_ShouldNotThrow(string id, string email, string hPass, string login)
         {
@@ -63,6 +74,17 @@ namespace P4.Tests
             {
                 object result = db.GetJWT(email, password);
                 Assert.NotNull(result);
+            }
+        }
+
+        [TestCase("31231234-1234-1242-1242-123412341235", "zxc", "qwe", "asd")]
+        public void UserBLL_UpdateExistingLogin_ShouldNotThrow(string id, string email, string hPass, string login)
+        {
+            using (UserBLL db = new UserBLL(_context))
+            {
+                User u = new User { UserId = Guid.Parse(id), Email = email, HashedPassword = hPass, isAdmin = false, isBanned = false, Login = login };
+
+                Assert.Throws(typeof(Exception), () => db.UpdateUser(Guid.Parse(id), u));
             }
         }
     }

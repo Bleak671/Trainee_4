@@ -26,7 +26,8 @@ namespace P4.Utility
 
         public object GetJWT(string email, string password)
         {
-            var identity = GetIdentity(email, password);
+            User user = _userRep.GetAll().FirstOrDefault(x => x.Email == email && x.HashedPassword == password);
+            var identity = GetIdentity(user);
             if (identity == null)
             {
                 return null;
@@ -43,18 +44,23 @@ namespace P4.Utility
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return encodedJwt;
+            var response = new
+            {
+                access_token = encodedJwt
+            };
+
+            return response;
         }
 
-        private ClaimsIdentity GetIdentity(string email, string password)
+        private ClaimsIdentity GetIdentity(User user)
         {
-            User user = _userRep.GetAll().FirstOrDefault(x => x.Email == email && x.HashedPassword == password);
             if (user != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.isAdmin.ToString())
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserId.ToString()),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.isAdmin.ToString()),
+                    new Claim("isBanned", user.isBanned.ToString())
                 };
                 ClaimsIdentity claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,

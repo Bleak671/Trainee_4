@@ -8,7 +8,7 @@ namespace P4.DAL
         List<T> GetAll();
         T GetOne(Guid id);
         void Create(T item); 
-        void Update(T item);
+        void Update(Guid id, T item);
         void Delete(Guid id); 
     }
 }
