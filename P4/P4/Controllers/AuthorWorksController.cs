@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,34 +8,34 @@ using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace P4.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class HomeController : ControllerBase
+    public class AuthorWorksController : ControllerBase
     {
         private UserBLL _userBll;
         private PhotoBLL _photoBll;
         private PhotoCommentBLL _photoCommentBll;
         private PhotoReviewBLL _photoReviewBll;
-        public HomeController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
+        public AuthorWorksController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
         {
             _userBll = userDB;
             _photoBll = photoDB;
             _photoCommentBll = photoCommentDB;
             _photoReviewBll = photoReviewDB;
         }
-        // GET: HomeController
+        // GET: AuthorWorksController
         [HttpGet]
         public ActionResult<List<Photo>> Get()
         {
             try
             {
-                return new ObjectResult(_photoBll.GetPublishedNotTrashPhotos());
+                return Ok(_photoBll.GetPublishedNotTrashPhotos());
             }
             catch
             {
@@ -42,13 +43,13 @@ namespace P4.Controllers
             }
         }
 
-        // GET: api/Home/5
+        // GET: AuthorWorksController/5
         [HttpGet("{id}")]
         public ActionResult<Photo> Get(string id)
         {
             try
             {
-                return new ObjectResult(_photoBll.GetPhoto(Guid.Parse(id)));
+                return Ok(_photoBll.GetUsersPhotos(Guid.Parse(id)));
             }
             catch
             {
@@ -56,14 +57,13 @@ namespace P4.Controllers
             }
         }
 
-        [Authorize]
-        // POST: HomeController/CreateReview
-        [HttpPost("CreateReview")]
-        public ActionResult PostReview([FromBody] JsonElement value)
+        // POST: AuthorWorksController/Create
+        [HttpPost]
+        public ActionResult Post([FromBody] JsonElement value)
         {
             try
             {
-                _photoReviewBll.CreatePhotoReview(JsonConvert.DeserializeObject<PhotoReview>(value.ToString()));
+                _photoBll.CreatePhoto(JsonConvert.DeserializeObject<Photo>(value.ToString()));
                 return Ok();
             }
             catch
@@ -72,14 +72,13 @@ namespace P4.Controllers
             }
         }
 
-        [Authorize]
-        // POST: HomeController/CreateComment
-        [HttpPost("CreateComment")]
-        public ActionResult PostComment([FromBody] JsonElement value)
+        // PUT: AuthorWorksController/Edit
+        [HttpPut("{id}")]
+        public ActionResult Put(string id, [FromBody] Photo photo)
         {
             try
             {
-                _photoCommentBll.CreatePhotoComment(JsonConvert.DeserializeObject<PhotoComment>(value.ToString()));
+                _photoBll.UpdatePhoto(Guid.Parse(id), photo);
                 return Ok();
             }
             catch
