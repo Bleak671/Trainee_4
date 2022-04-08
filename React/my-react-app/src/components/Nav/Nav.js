@@ -11,7 +11,7 @@ export function Nav() {
   const GENRES = generateNav(token, isAdmin);
 
   return (
-    <nav className="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav className="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-info bg-opacity-75 border-bottom box-shadow mb-3">
       <ul className="navbar-nav flex-grow-1 container navbar-collapse collapse d-sm-inline-flex justify-content-around">
         {GENRES.map(genre => (
           <li>

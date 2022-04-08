@@ -35,7 +35,7 @@ export function AdminPhotoList() {
     return <div>Loading...</div>;
   } else {
     return (
-      <div>
+      <div class="bg-white bg-opacity-25 rounded-3 p-3">
         <div className="pb-3">
           <button className="rounded-3" onClick={sortByName.bind(null, loading, dispatch, setState)}>По названию</button>
           <button className="rounded-3" onClick={sortByDate.bind(null, loading, dispatch, setState)}>По дате</button>

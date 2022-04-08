@@ -39,7 +39,7 @@ export function TrashList() {
         </div>
         <div className="d-flex flex-wrap justify-content-between">
           {loading.value.data.map(item => (
-            <div className="d-flex flex-column bg-info rounded-3 mb-3">
+            <div className="d-flex flex-column bg-info rounded-3 mb-3 bg-opacity-75">
               <span className="ms-1">{item.name !== null ? item.name : "NoName"}</span>
               <Link id={item.photoId} key={item.photoId} to={"/trash/" + item.photoId}>  
                 <img className="rounded-3" height="150" src={item.link}/>

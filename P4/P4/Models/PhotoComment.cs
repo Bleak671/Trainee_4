@@ -18,7 +18,8 @@ namespace P4.Models
         public Guid UserId { get; set; }
         [JsonIgnore]
         public User User { get; set; }
-
+        public string UserName { get; set; }
         public string Text { get; set; }
+        public DateTime UploadDate { get; set; }
     }
 }

@@ -33,24 +33,32 @@ export function AuthorWork(props) {
   if (!loading.value.isLoaded) {
     return <div>Loading...</div>;
   } else {
-    var date = new Date(loading.value.data.uploadDate);
+    var date = new Date(loading.value.data.photo.uploadDate);
     return(
-      <div className="d-flex flex-column" margin-bottom="1000">
-        <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/authorWorks" className="w-25 mb-3 p-2 nav-link text-dark">Back</Link>
-        <div>
-          <img className="pb-3 rounded-3" src={loading.value.data.link} onClick={toEdit.bind(null, loading, history, globals, dispatch, setStateGlobal)}/>
+      <div className="d-flex flex-column bg-white bg-opacity-25 rounded-3 p-3" margin-bottom="1000">
+        <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/authorWorks">Back</Link>
+        <div class="align-self-center">
+          <img className="pb-3 mw-100 rounded-3" src={loading.value.data.photo.link} onClick={toEdit.bind(null, loading, history, globals, dispatch, setStateGlobal)}/>
         </div>
-        <span className="pb-3 text-dark">Name: {loading.value.data.name}</span>
+        <span className="pb-3 text-dark">Name: {loading.value.data.photo.name}</span>
         <span className="pb-3 text-dark">Upload date: {date.toLocaleString("en-US", timeOptions)}</span>
-        <span className="pb-3 text-dark">Views: {loading.value.data.views}</span>
+        <span className="pb-3 text-dark">Views: {loading.value.data.photo.views}</span>
+        <span className="pb-3 text-dark">Likes: {loading.value.data.positive}</span>
+        <span className="pb-3 text-dark">Dislikes: {loading.value.data.negative}</span>
         <div className="pb-3">
-          <span className="pb-3 text-dark">Published: {loading.value.data.isPublished ? "Yes" : "No"}</span>
+          <span className="pb-3 text-dark">Published: {loading.value.data.photo.isPublished ? "Yes" : "No"}</span>
           <button className="ms-3 rounded-3" onClick={changePublished.bind(null, token, loading, host +  `Trash`, host +  `Home/${id}`, dispatch, setState)}>Change</button>
         </div>
-        <div>
-          <span className="pb-3 text-dark">Trash: {loading.value.data.isTrash ? "Yes" : "No"}</span>
+        <div className="pb-3">
+          <span className="pb-3 text-dark">Trash: {loading.value.data.photo.isTrash ? "Yes" : "No"}</span>
           <button className="ms-3 rounded-3" onClick={changeTrash.bind(null, token, loading, host +  `Trash`, host +  `Home/${id}`, dispatch, setState)}>Change</button>
         </div>
+        <h2 className="pb-3 ms-5 text-dark">Comments:</h2>
+        {loading.value.data.comments.map(item => (
+          <div className="rounded-3 m-5 mt-1 mb-1 img-thumbnail">
+            <span className="ms-1">{item.text !== null ? item.text : "Error"}</span>
+          </div>
+        ))}
       </div>
     );
   }    

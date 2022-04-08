@@ -1,13 +1,9 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using P4.BLL;
 using P4.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 
@@ -44,11 +40,19 @@ namespace P4.Controllers
 
         // GET: api/Home/5
         [HttpGet("{id}")]
-        public ActionResult<Photo> Get(string id)
+        public ActionResult<object> Get(string id)
         {
             try
             {
-                return new ObjectResult(_photoBll.GetPhoto(Guid.Parse(id)));
+                var photo = _photoBll.GetPhoto(Guid.Parse(id));
+                var comments = _photoReviewBll.GetPhotosReviews(photo.PhotoId);
+                return new ObjectResult(new
+                {
+                    photo = photo,
+                    comments = _photoCommentBll.GetPhotosComments(photo.PhotoId),
+                    positive = comments.FindAll(c => c.isPositive == true).Count,
+                    negative = comments.FindAll(c => c.isPositive == false).Count
+                }) ;
             }
             catch
             {

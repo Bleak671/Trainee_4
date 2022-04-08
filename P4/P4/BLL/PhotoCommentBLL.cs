@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-using P4.DAL;
+﻿using P4.DAL;
 using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace P4.BLL
 {
@@ -28,7 +26,7 @@ namespace P4.BLL
 
         public List<PhotoComment> GetUsersComments(Guid id)
         {
-            return _photoCommentRepos.GetAll()
+                 return _photoCommentRepos.GetAll()
                 .Where(p => p.UserId.ToString() == id.ToString())
                 .ToList();
         }
@@ -36,6 +34,7 @@ namespace P4.BLL
         {
             return _photoCommentRepos.GetAll()
                 .Where(p => p.PhotoId.ToString() == id.ToString())
+                .OrderByDescending(p => p.UploadDate)
                 .ToList();
         }
 

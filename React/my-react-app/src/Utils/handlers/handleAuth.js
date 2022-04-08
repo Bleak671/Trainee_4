@@ -1,3 +1,4 @@
+import { NotificationManager } from 'react-notifications';
 import { login } from '../singleFunctions/login'
 import { register } from '../singleFunctions/register';
 
@@ -15,24 +16,16 @@ export function handleChangePassword(state, dispatch, setState, event) {
 
 export function handleSubmitLogin(payload) {
   return new Promise((resolve, reject) => {
-    try {
-      login(payload.state.value.email, payload.state.value.password, payload.dispatch, payload.setState);
-      resolve();
-    }
-    catch(e) {
-      reject(e);
-    }
+    login(payload.state.value.email, payload.state.value.password, payload.dispatch, payload.setState)
+    .then(res => resolve(res))
+    .catch(e => reject(e));
   });
 }
 
 export function handleSubmitRegister(payload) {
   return new Promise((resolve, reject) => {
-    try {
-      register(payload.state.value.email, payload.state.value.password, payload.dispatch, payload.setState);
-      resolve();
-    }
-    catch(e) {
-      reject(e);
-    }
+    register(payload.state.value.email, payload.state.value.password, payload.dispatch, payload.setState)
+    .then(res => resolve(res))
+    .catch(e => reject(e));
   });
 }

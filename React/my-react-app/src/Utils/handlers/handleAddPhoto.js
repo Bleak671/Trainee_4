@@ -9,6 +9,12 @@ export function handleChangeLink(state, dispatch, setState, event) {
   dispatch(setState(data));
 }
 
+export function handleChangeComment(state, dispatch, setState, event) {
+  var data = Object.assign({},state.value);
+  data.comment = event.target.value;
+  dispatch(setState(data));
+}
+
 export function handleChangeLinkByFile(state, dispatch, setState, event) {
   var data = Object.assign({},state.value);
   if (event.target.files[0]) {
@@ -37,12 +43,14 @@ export function handleSubmit(payload) {
           getDownloadURL(ref(storage, `images/${payload.state.value.file.name}`))
             .then(url => {
               AddPhotoToDB(url, payload.state.value.name, payload.guid, payload.token, payload.history);
+              resolve();
             })
         }
       );
     }
     else {
       AddPhotoToDB(payload.state.value.link, payload.state.value.name, payload.guid, payload.token, payload.history);
+      resolve();
     }
   })
 }

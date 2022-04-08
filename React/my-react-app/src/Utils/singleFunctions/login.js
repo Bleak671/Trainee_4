@@ -3,7 +3,7 @@ import { shiftChar } from "./shiftChar";
 import { host } from "../constants/globals";
 
 export function login(email, password, dispatch, setState) {
-  return new Promise(() => {
+  return new Promise((resolve, reject) => {
     // gathering data
     var hashedPassword = getHash(password);
     // отправляет запрос и получаем ответ
@@ -28,14 +28,16 @@ export function login(email, password, dispatch, setState) {
               })
             )
             if (base64ToString["isBanned"] == "True")
-              throw new Error('You are BANNED!');
+              reject('You are BANNED!');
+            else
+              resolve();
           }
           else {
-            throw new Error('Incorrect email/password');
+            reject('Incorrect email/password');
           }     
       }
       ,(error) => {
-        throw new Error('Fetch error');
+        reject('Fetch error' + error);
       } 
     );
   });

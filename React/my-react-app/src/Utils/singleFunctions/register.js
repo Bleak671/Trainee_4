@@ -3,7 +3,7 @@ import { shiftChar } from "./shiftChar";
 import { host } from "../constants/globals";
 
 export function register(email, password, dispatch, setState) {
-  return new Promise(() => {
+  return new Promise((resolve, reject) => {
     var hashedPassword = getHash(password);
     var json = { "email": email, "hashedPassword":hashedPassword }
     fetch(host + `Authorization/`, {
@@ -13,13 +13,7 @@ export function register(email, password, dispatch, setState) {
         'Access-Control-Allow-Origin':'*'},
         body: JSON.stringify(json)
     })
-    .then((res) => {
-      if (res.ok) {
-        return res.json(); 
-      }
-      else
-        throw new Error();
-    })
+    .then(res => res.json())
     .then(
       (response) => {
         if (response.access_token != null) {
@@ -33,11 +27,11 @@ export function register(email, password, dispatch, setState) {
         )
         }
         else {
-          throw new Error('Registration error, try another email');
+          reject('Registration error, try another email');
         }
       }
       ,(error) => {
-        throw new Error('Fetch error');
+        reject('Fetch error');
       } 
     ); 
   });

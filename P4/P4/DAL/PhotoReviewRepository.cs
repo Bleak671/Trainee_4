@@ -15,17 +15,29 @@ namespace P4.DAL
 
         public void Create(PhotoReview photoRev)
         {
+            if (db.PhotoReviews.Any(pr => pr.UserId == photoRev.UserId &&
+                                          pr.PhotoId == photoRev.PhotoId))
+            {
+                if (db.PhotoReviews.Any(pr => pr.UserId == photoRev.UserId &&
+                                              pr.PhotoId == photoRev.PhotoId &&
+                                              pr.isPositive == photoRev.isPositive))
+                    return;
+                else
+                    Delete(db.PhotoReviews.First(pr => pr.UserId == photoRev.UserId &&
+                                          pr.PhotoId == photoRev.PhotoId).PhotoReviewId);
+            }
+
             int result = 1;
             try
             {
-                if (photoRev.UserId.ToString() == Guid.Empty.ToString())
-                    photoRev.UserId = Guid.NewGuid();
+                if (photoRev.PhotoReviewId.ToString() == Guid.Empty.ToString())
+                    photoRev.PhotoReviewId = Guid.NewGuid();
                 db.PhotoReviews.Add(photoRev);
                 result = db.SaveChanges();
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception("DB Error");
+                throw new Exception("DB Error " + e.Message);
             }
             if (result != 1)
             {

@@ -35,7 +35,7 @@ export function AuthorWorks() {
     return <div>Loading...</div>;
   } else {
     return (
-      <div>
+      <div class="bg-white bg-opacity-25 rounded-3 p-3">
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/" >Back</Link>
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/authorWorks/Add">Add Work</Link>
         <div className="pb-3">

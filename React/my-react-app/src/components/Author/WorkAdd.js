@@ -25,15 +25,15 @@ export function AuthorWorkAdd() {
   //render, depending on state of loading
   if (isBanned != "True")
     return(
-      <div className="d-flex flex-column" margin-bottom="1000">
-        <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/authorWorks" className="w-25 mb-3 p-2 nav-link text-dark">Back</Link>
-          <div className="w-100">
-            <input className="w-75" id="link" type="text" className="pb-3 rounded-3" placeholder="Photo link" onChange={handleChangeLink.bind(null, state, dispatch, setState)}/>
-            <span className="me-3 ms-3">Or</span>
-            <input type="file" onChange={handleChangeLinkByFile.bind(null, state, dispatch, setState)} />
-          </div>
-          <input id="name" type="text" className="pb-3 rounded-3" placeholder="Photo name" onChange={handleChangeName.bind(null, state, dispatch, setState)}/>
-          <button className="w-25 ms-5 mt-5 bg-info rounded-3" onClick={dispatch.bind(null,{type: 'PHOTO_ADD_REQUESTED', payload: {token, guid, history, state}})}>Send</button>
+      <div className="p-3 d-flex flex-column bg-white bg-opacity-25 rounded-3" margin-bottom="1000">
+        <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/authorWorks">Back</Link>
+        <div className="w-100">
+          <input id="link" type="text" className="pb-3 rounded-3" placeholder="Photo link" onChange={handleChangeLink.bind(null, state, dispatch, setState)}/>
+          <span className="me-3 ms-3">Or</span>
+          <input type="file" onChange={handleChangeLinkByFile.bind(null, state, dispatch, setState)} />
+        </div>
+        <input id="name" type="text" className="pb-3 rounded-3" placeholder="Photo name" onChange={handleChangeName.bind(null, state, dispatch, setState)}/>
+        <button className="w-25 ms-5 mt-5 bg-info rounded-3" onClick={dispatch.bind(null,{type: 'PHOTO_ADD_REQUESTED', payload: {token, guid, history, state}})}>Send</button>
       </div>
     );
   else {

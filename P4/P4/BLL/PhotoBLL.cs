@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-using P4.DAL;
+﻿using P4.DAL;
 using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace P4.BLL
 {

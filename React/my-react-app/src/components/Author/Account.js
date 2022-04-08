@@ -34,7 +34,7 @@ export function AuthorAccount(props) {
     return <div>Loading...</div>;
   } else {
     return(
-      <div className="d-flex flex-column" margin-bottom="1000"> 
+      <div className="p-3 d-flex flex-column bg-white bg-opacity-25 rounded-3" margin-bottom="1000"> 
         <Link to="/" className="w-25 mb-3 p-2 nav-link text-dark">Back</Link>
         <span className="pb-3 text-dark">Email: {loading.value.data.email}</span>
         <div className="pb-3">

@@ -20,6 +20,8 @@ namespace P4.DAL
             {
                 if (photoCom.UserId.ToString() == Guid.Empty.ToString())
                     photoCom.UserId = Guid.NewGuid();
+                if (photoCom.UserName == null)
+                    photoCom.UserName = db.Users.FirstOrDefault(u => u.UserId == photoCom.UserId)?.Login;
                 db.PhotoComments.Add(photoCom);
                 result = db.SaveChanges();
             }

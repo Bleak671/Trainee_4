@@ -27,11 +27,18 @@ import {Drawer} from './components/Drawer/Drawer.js'
 import {Nav} from './components/Nav/Nav';
 import {NotificationContainer} from 'react-notifications';
 import "react-notifications/lib/notifications.css"
+import { findByPlaceholderText } from '@testing-library/react';
 
 function App() {
+  const myStyle={
+    backgroundImage: "url(/12579401.jpg)",
+    backgroundSize: 'cover',
+    backgroundAttachment: 'fixed',
+    minHeight: '100vh'
+};
   return (
     <Router>
-      <div className="container">
+      <div className="pe-5 ps-5" style={myStyle}>
         <Nav/>
 
         <Switch>

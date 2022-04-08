@@ -32,7 +32,7 @@ export function AdminUserList() {
   } else {
     filteredArray = loading.value.data.filter(function(item) { return item.userId != globals.guid } );
     return (
-      <div>
+      <div class="bg-white bg-opacity-50 rounded-3 p-3">
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/admin/photo" >to Photos</Link>
         <table className="table">
           <thead>

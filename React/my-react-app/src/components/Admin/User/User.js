@@ -35,7 +35,7 @@ export function AdminUser(props) {
     return <div>It's you</div>;
   } else {
     return(
-      <div className="d-flex flex-column" margin-bottom="1000">
+      <div className="d-flex flex-column bg-white bg-opacity-25 rounded-3 p-3" margin-bottom="1000">
         <Link to="/admin/user" className="w-25 mb-3 p-2 nav-link text-dark">Back</Link>
         <span className="pb-3 text-dark">Login: {loading.value.data.login}</span>
         <span className="pb-3 text-dark">Email: {loading.value.data.email}</span>
