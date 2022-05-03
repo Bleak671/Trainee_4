@@ -17,8 +17,6 @@ namespace P4.Models
 
         [Required]
         public Guid ToUserId { get; set; }
-        [JsonIgnore]
-        public User ToUser { get; set; }
 
         public string Text { get; set; }
         [Required]

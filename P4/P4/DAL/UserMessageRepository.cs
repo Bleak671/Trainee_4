@@ -5,28 +5,27 @@ using System.Linq;
 
 namespace P4.DAL
 {
-    public class PhotoRepository : IRepository<Photo>
+    public class UserMessageRepository : IRepository<UserMessage>
     {
         private AppDBContext db;
-        public PhotoRepository(AppDBContext context)
+        public UserMessageRepository(AppDBContext context)
         {
             db = context;
         }
 
-        public void Create(Photo photo)
+        public void Create(UserMessage userMessage)
         {
             int result = 1;
             try
             {
-                if (photo.UserId.ToString() == Guid.Empty.ToString())
-                    photo.UserId = Guid.NewGuid();
-                db.Photos.Add(photo);
+                if (userMessage.UserMessageId.ToString() == Guid.Empty.ToString())
+                    userMessage.UserMessageId = Guid.NewGuid();
+                db.UserMessages.Add(userMessage);
                 result = db.SaveChanges();
             }
             catch
             {
-
-                throw;
+                throw new Exception("DB Error");
             }
             if (result != 1)
             {
@@ -34,30 +33,23 @@ namespace P4.DAL
             }
         }
 
-        public List<Photo> GetAll()
+        public List<UserMessage> GetAll()
         {
-            var pList = db.Photos.ToList();
-            foreach (Photo p in pList)
-            {
-                p.User = db.Users.Find(p.UserId);
-            }
-            return pList;
+            return db.UserMessages.ToList<UserMessage>();
         }
 
-        public Photo GetOne(Guid id)
+        public UserMessage GetOne(Guid id)
         {
-            var res = db.Photos.FirstOrDefault(p => p.PhotoId == id);
-            res.User = db.Users.FirstOrDefault(u => u.UserId == res.UserId);
-            return res;
+            return db.UserMessages.FirstOrDefault(p => p.UserMessageId == id);
         }
 
-        public void Update(Guid id, Photo photo)
+        public void Update(Guid id, UserMessage photoCom)
         {
             int result = 1;
             try
             {
-                var old = db.Photos.FirstOrDefault(i => i.PhotoId == id);
-                db.Entry(old).CurrentValues.SetValues(photo);
+                var old = db.UserMessages.FirstOrDefault(i => i.UserMessageId == id);
+                db.Entry(old).CurrentValues.SetValues(photoCom);
                 result = db.SaveChanges();
             }
             catch
@@ -70,14 +62,13 @@ namespace P4.DAL
             }
         }
 
-
         public void Delete(Guid id)
         {
             int result = 1;
             try
             {
-                Photo pht = db.Photos.FirstOrDefault(p => p.PhotoId == id);
-                db.Photos.Remove(pht);
+                UserMessage pht = db.UserMessages.FirstOrDefault(p => p.UserMessageId == id);
+                db.UserMessages.Remove(pht);
                 result = db.SaveChanges();
             }
             catch
@@ -89,7 +80,6 @@ namespace P4.DAL
                 throw new Exception("Can't Delete");
             }
         }
-    
 
         public void Dispose()
         {

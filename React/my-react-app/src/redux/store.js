@@ -14,6 +14,7 @@ import GlobalVarReducer from './Global/GlobalVarReducer'
 import DrawerInputReducer from './Draw/DrawerInputReducer';
 import createSagaMiddleware from 'redux-saga';
 import saga from '../saga/saga';
+import UserReducer from './User/UserReducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -31,7 +32,8 @@ export const store = configureStore({
     Find : FindReducer,
     AddPhotoInfo : AddPhotoInfoReducer,
     GlobalVar : GlobalVarReducer,
-    DrawerInput : DrawerInputReducer
+    DrawerInput : DrawerInputReducer,
+    User: UserReducer
   },
   middleware : (getDefaultMiddleware) =>
   getDefaultMiddleware({

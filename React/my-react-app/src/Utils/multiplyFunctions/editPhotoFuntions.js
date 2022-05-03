@@ -90,11 +90,41 @@ export function addReview(token, loading, connString, updString, dispatch, setSt
   )
 }
 
+export function addMessage(payload) {
+  if (typeof(payload.state.value.message) !== 'undefined')
+  {
+    var message = {
+      ToUserId : payload.id,
+      FromUserId : payload.guid,
+      text : payload.state.value.message
+    };
+    const requestOptions = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {  
+          'Content-Type': 'application/json',    
+          'Access-Control-Allow-Origin':'*',
+          "Authorization": "Bearer " + payload.token  // using token
+      },
+      body: JSON.stringify(message)     
+    };
+    fetch( host + `User/CreateMessage`, requestOptions)
+    .then(
+      () => { payload.history.push({
+        pathname: '/Home',
+      }); 
+      payload.history.push({
+        pathname: '/user/' + payload.id,
+      });}
+    )
+  }
+}
+
 export function addComment(payload) {
-  if (typeof(payload.state.value.comment) !== 'undefined')
+  if (typeof(payload.state.value.message) !== 'undefined')
   {
     var pId = payload.state.value.data.photo.photoId;
-    var review = {
+    var comment = {
       PhotoId : pId,
       UserId : payload.guid,
       text : payload.state.value.comment
@@ -107,7 +137,7 @@ export function addComment(payload) {
           'Access-Control-Allow-Origin':'*',
           "Authorization": "Bearer " + payload.token  // using token
       },
-      body: JSON.stringify(review)     
+      body: JSON.stringify(comment)     
     };
     fetch( host + `Home/CreateComment`, requestOptions)
     .then(

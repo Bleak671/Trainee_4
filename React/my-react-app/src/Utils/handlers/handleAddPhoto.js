@@ -15,6 +15,12 @@ export function handleChangeComment(state, dispatch, setState, event) {
   dispatch(setState(data));
 }
 
+export function handleChangeMessage(state, dispatch, setState, event) {
+  var data = Object.assign({},state.value);
+  data.message = event.target.value;
+  dispatch(setState(data));
+}
+
 export function handleChangeLinkByFile(state, dispatch, setState, event) {
   var data = Object.assign({},state.value);
   if (event.target.files[0]) {

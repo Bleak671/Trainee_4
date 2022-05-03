@@ -5,22 +5,22 @@ using System.Linq;
 
 namespace P4.DAL
 {
-    public class PhotoRepository : IRepository<Photo>
+    public class TagRepository : IRepository<Tag>
     {
         private AppDBContext db;
-        public PhotoRepository(AppDBContext context)
+        public TagRepository(AppDBContext context)
         {
             db = context;
         }
 
-        public void Create(Photo photo)
+        public void Create(Tag tag)
         {
             int result = 1;
             try
             {
-                if (photo.UserId.ToString() == Guid.Empty.ToString())
-                    photo.UserId = Guid.NewGuid();
-                db.Photos.Add(photo);
+                if (tag.TagId.ToString() == Guid.Empty.ToString())
+                    tag.TagId = Guid.NewGuid();
+                db.Tags.Add(tag);
                 result = db.SaveChanges();
             }
             catch
@@ -34,30 +34,24 @@ namespace P4.DAL
             }
         }
 
-        public List<Photo> GetAll()
+        public List<Tag> GetAll()
         {
-            var pList = db.Photos.ToList();
-            foreach (Photo p in pList)
-            {
-                p.User = db.Users.Find(p.UserId);
-            }
-            return pList;
+            var tList = db.Tags.ToList();
+            return tList;
         }
 
-        public Photo GetOne(Guid id)
+        public Tag GetOne(Guid id)
         {
-            var res = db.Photos.FirstOrDefault(p => p.PhotoId == id);
-            res.User = db.Users.FirstOrDefault(u => u.UserId == res.UserId);
-            return res;
+            return db.Tags.FirstOrDefault(p => p.TagId == id);
         }
 
-        public void Update(Guid id, Photo photo)
+        public void Update(Guid id, Tag tag)
         {
             int result = 1;
             try
             {
-                var old = db.Photos.FirstOrDefault(i => i.PhotoId == id);
-                db.Entry(old).CurrentValues.SetValues(photo);
+                var old = db.Tags.FirstOrDefault(i => i.TagId == id);
+                db.Entry(old).CurrentValues.SetValues(tag);
                 result = db.SaveChanges();
             }
             catch
@@ -76,8 +70,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
-                Photo pht = db.Photos.FirstOrDefault(p => p.PhotoId == id);
-                db.Photos.Remove(pht);
+                Tag pht = db.Tags.FirstOrDefault(p => p.TagId == id);
+                db.Tags.Remove(pht);
                 result = db.SaveChanges();
             }
             catch
@@ -89,7 +83,7 @@ namespace P4.DAL
                 throw new Exception("Can't Delete");
             }
         }
-    
+
 
         public void Dispose()
         {

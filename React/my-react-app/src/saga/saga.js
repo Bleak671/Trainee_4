@@ -5,7 +5,7 @@ import { handleSubmitLogin, handleSubmitRegister } from '../Utils/handlers/handl
 import { handleSubmit as handleSubmitFind } from '../Utils/handlers/handleFind'
 import { handleSubmit as handleSubmitUserUpd } from '../Utils/handlers/handleUser'
 import { getRegion, removeRegion, ascii, sharpen, contrast, RGBAtoGray, flipHorizontal, flipVertical, rotate, saltPepperRemoval, saveToPNG, draw } from '../Utils/multiplyFunctions/drawFunctions';
-import { addComment } from '../Utils/multiplyFunctions/editPhotoFuntions'
+import { addComment, addMessage } from '../Utils/multiplyFunctions/editPhotoFuntions'
 
 
 // воркер Saga: будет запускаться на действия типа `USER_FETCH_REQUESTED`
@@ -50,6 +50,7 @@ function* saga() {
   yield takeLatest("USER_UPD_REQUESTED", sagaGenerator.bind(null, handleSubmitUserUpd, "USER_UPD_"));
 
   yield takeLatest("NOTIFY_REQUESTED", notify);
-  yield takeLatest("COMMENT_ADD_REQUESTED", sagaGenerator.bind(null, addComment, "ADD_COMMENT_"))
+  yield takeLatest("COMMENT_ADD_REQUESTED", sagaGenerator.bind(null, addComment, "ADD_COMMENT_"));
+  yield takeLatest("MESSAGE_ADD_REQUESTED", sagaGenerator.bind(null, addMessage, "ADD_MESSAGE_"));
 }
 export default saga;

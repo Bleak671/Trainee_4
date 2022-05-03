@@ -30,5 +30,7 @@ namespace P4.Models
         public List<PhotoComment> PhotoComments { get; set; }
         [JsonIgnore]
         public List<PhotoReview> PhotoReviews { get; set; }
+        [JsonIgnore]
+        public List<Photo_m2m_Tag> PhotoTags { get; set; }
     }
 }

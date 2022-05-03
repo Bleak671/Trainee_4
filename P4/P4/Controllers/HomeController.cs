@@ -51,7 +51,8 @@ namespace P4.Controllers
                     photo = photo,
                     comments = _photoCommentBll.GetPhotosComments(photo.PhotoId),
                     positive = comments.FindAll(c => c.isPositive == true).Count,
-                    negative = comments.FindAll(c => c.isPositive == false).Count
+                    negative = comments.FindAll(c => c.isPositive == false).Count,
+                    user = photo.User
                 }) ;
             }
             catch

@@ -22,5 +22,7 @@ namespace P4.Models
         public List<PhotoComment> UserComments { get; set; }
         [JsonIgnore]
         public List<PhotoReview> UserReviews { get; set; }
+        [JsonIgnore]
+        public List<UserMessage> UserFromMessages { get; set; }
     }
 }

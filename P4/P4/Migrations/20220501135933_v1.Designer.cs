@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using P4.Models;
 
 namespace P4.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20220501135933_v1")]
+    partial class v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,43 +121,6 @@ namespace P4.Migrations
                     b.ToTable("PhotoReviews");
                 });
 
-            modelBuilder.Entity("P4.Models.Photo_m2m_Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<Guid>("PhotoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PhotoId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("PhotoTags");
-                });
-
-            modelBuilder.Entity("P4.Models.Tag", b =>
-                {
-                    b.Property<Guid>("TagId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TagId");
-
-                    b.ToTable("Tags");
-                });
-
             modelBuilder.Entity("P4.Models.User", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -182,32 +147,6 @@ namespace P4.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("P4.Models.UserMessage", b =>
-                {
-                    b.Property<Guid>("UserMessageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<Guid>("FromUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ToUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UploadDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("UserMessageId");
-
-                    b.HasIndex("FromUserId");
-
-                    b.ToTable("UserMessages");
                 });
 
             modelBuilder.Entity("P4.Models.Photo", b =>
@@ -259,55 +198,16 @@ namespace P4.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("P4.Models.Photo_m2m_Tag", b =>
-                {
-                    b.HasOne("P4.Models.Photo", "Photo")
-                        .WithMany("PhotoTags")
-                        .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("P4.Models.Tag", "Tag")
-                        .WithMany("TagPhotos")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Photo");
-
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("P4.Models.UserMessage", b =>
-                {
-                    b.HasOne("P4.Models.User", "FromUser")
-                        .WithMany("UserFromMessages")
-                        .HasForeignKey("FromUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("FromUser");
-                });
-
             modelBuilder.Entity("P4.Models.Photo", b =>
                 {
                     b.Navigation("PhotoComments");
 
                     b.Navigation("PhotoReviews");
-
-                    b.Navigation("PhotoTags");
-                });
-
-            modelBuilder.Entity("P4.Models.Tag", b =>
-                {
-                    b.Navigation("TagPhotos");
                 });
 
             modelBuilder.Entity("P4.Models.User", b =>
                 {
                     b.Navigation("UserComments");
-
-                    b.Navigation("UserFromMessages");
 
                     b.Navigation("UserPhotos");
 

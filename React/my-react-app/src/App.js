@@ -23,6 +23,7 @@ import {AdminPhotoList} from './components/Admin/Photo/List.js'
 import {AdminUserList} from './components/Admin/User/List.js'
 import {AdminPhoto} from './components/Admin/Photo/Photo.js'
 import {AdminUser} from './components/Admin/User/User.js'
+import {User} from './components/User/User.js'
 import {Drawer} from './components/Drawer/Drawer.js'
 import {Nav} from './components/Nav/Nav';
 import {NotificationContainer} from 'react-notifications';
@@ -42,6 +43,9 @@ function App() {
         <Nav/>
 
         <Switch>
+          <Route path="/user/:UserId" render={(props)=><User {...props}/>}>
+          </Route>
+
           <Route path="/home/:PhotoId" render={(props)=><Photo {...props}/>}>
           </Route>
 

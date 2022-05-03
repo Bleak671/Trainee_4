@@ -36,6 +36,7 @@ export function Photo(props) {
     return(
       <div className="d-flex flex-column  bg-white bg-opacity-25 rounded-3 p-3" margin-bottom="1000">
         <Link to="/" className="w-25 mb-3 p-2 nav-link text-dark">Back</Link>
+        <Link to={loading.value.data.photo.userId == globals.guid ? "/authorAccount" : "/user/" + loading.value.data.photo.userId} className="w-25 mb-3 p-2 nav-link text-dark">{loading.value.data.user.login}</Link>
         <div class="align-self-center">
           <img className="pb-3 mw-100 rounded-3" src={loading.value.data.photo.link}/>
         </div>

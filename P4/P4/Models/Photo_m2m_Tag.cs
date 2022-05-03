@@ -13,11 +13,11 @@ namespace P4.Models
         [Required]
         public Guid PhotoId { get; set; }
         [JsonIgnore]
-        public User Photo { get; set; }
+        public Photo Photo { get; set; }
 
         [Required]
         public Guid TagId { get; set; }
         [JsonIgnore]
-        public User Tag { get; set; }
+        public Tag Tag { get; set; }
     }
 }

@@ -38,11 +38,17 @@ namespace P4
             services.AddSingleton<PhotoBLL>();
             services.AddSingleton<PhotoCommentBLL>();
             services.AddSingleton<PhotoReviewBLL>();
+            services.AddSingleton<TagBLL>();
+            services.AddSingleton<PhotoTagBLL>();
+            services.AddSingleton<UserMessageBLL>();
 
             services.AddSingleton<IRepository<User>, UserRepository>();
             services.AddSingleton<IRepository<Photo>, PhotoRepository>();
             services.AddSingleton<IRepository<PhotoComment>, PhotoCommentRepository>();
             services.AddSingleton<IRepository<PhotoReview>, PhotoReviewRepository>();
+            services.AddSingleton<IRepository<Tag>, TagRepository>();
+            services.AddSingleton<IRepository<Photo_m2m_Tag>, PhotoTagRepository>();
+            services.AddSingleton<IRepository<UserMessage>, UserMessageRepository>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>

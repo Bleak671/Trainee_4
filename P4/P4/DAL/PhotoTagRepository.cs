@@ -5,22 +5,22 @@ using System.Linq;
 
 namespace P4.DAL
 {
-    public class PhotoRepository : IRepository<Photo>
+    public class PhotoTagRepository : IRepository<Photo_m2m_Tag>
     {
         private AppDBContext db;
-        public PhotoRepository(AppDBContext context)
+        public PhotoTagRepository(AppDBContext context)
         {
             db = context;
         }
 
-        public void Create(Photo photo)
+        public void Create(Photo_m2m_Tag photoTag)
         {
             int result = 1;
             try
             {
-                if (photo.UserId.ToString() == Guid.Empty.ToString())
-                    photo.UserId = Guid.NewGuid();
-                db.Photos.Add(photo);
+                if (photoTag.Id.ToString() == Guid.Empty.ToString())
+                    photoTag.Id = Guid.NewGuid();
+                db.PhotoTags.Add(photoTag);
                 result = db.SaveChanges();
             }
             catch
@@ -34,30 +34,29 @@ namespace P4.DAL
             }
         }
 
-        public List<Photo> GetAll()
+        public List<Photo_m2m_Tag> GetAll()
         {
-            var pList = db.Photos.ToList();
-            foreach (Photo p in pList)
+            var pList = db.PhotoTags.ToList();
+            foreach (Photo_m2m_Tag p in pList)
             {
-                p.User = db.Users.Find(p.UserId);
+                p.Photo = db.Photos.Find(p.PhotoId);
+                p.Tag = db.Tags.Find(p.TagId);
             }
             return pList;
         }
 
-        public Photo GetOne(Guid id)
+        public Photo_m2m_Tag GetOne(Guid id)
         {
-            var res = db.Photos.FirstOrDefault(p => p.PhotoId == id);
-            res.User = db.Users.FirstOrDefault(u => u.UserId == res.UserId);
-            return res;
+            return db.PhotoTags.FirstOrDefault(p => p.Id == id);
         }
 
-        public void Update(Guid id, Photo photo)
+        public void Update(Guid id, Photo_m2m_Tag photoTag)
         {
             int result = 1;
             try
             {
-                var old = db.Photos.FirstOrDefault(i => i.PhotoId == id);
-                db.Entry(old).CurrentValues.SetValues(photo);
+                var old = db.PhotoTags.FirstOrDefault(i => i.Id == id);
+                db.Entry(old).CurrentValues.SetValues(photoTag);
                 result = db.SaveChanges();
             }
             catch
@@ -76,8 +75,8 @@ namespace P4.DAL
             int result = 1;
             try
             {
-                Photo pht = db.Photos.FirstOrDefault(p => p.PhotoId == id);
-                db.Photos.Remove(pht);
+                Photo_m2m_Tag pht = db.PhotoTags.FirstOrDefault(p => p.Id == id);
+                db.PhotoTags.Remove(pht);
                 result = db.SaveChanges();
             }
             catch
@@ -89,7 +88,7 @@ namespace P4.DAL
                 throw new Exception("Can't Delete");
             }
         }
-    
+
 
         public void Dispose()
         {
