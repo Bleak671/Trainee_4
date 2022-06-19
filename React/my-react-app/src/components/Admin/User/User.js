@@ -29,7 +29,7 @@ export function AdminUser(props) {
   useEffect(() => { loadData(token, host +  `Admin/GetUser/${id}`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded && loading.value.data !== undefined) {
     return <div>Loading...</div>;
   } else if (loading.value.data.userId == globals.guid) {
     return <div>It's you</div>;

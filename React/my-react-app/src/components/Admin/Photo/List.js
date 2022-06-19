@@ -31,7 +31,7 @@ export function AdminPhotoList() {
   useEffect(() => { loadData(token, host + `AuthorWorks`, dispatch, setState) }, []);
 
   //render, depending on state of loading
-  if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded && loading.value.data !== undefined) {
     return <div>Loading...</div>;
   } else {
     return (
@@ -46,14 +46,14 @@ export function AdminPhotoList() {
         </div>
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/admin/user" >to Users</Link>
         <div className="d-flex flex-wrap justify-content-between">
-          {loading.value.data.map(item => (
+          {loading.value.data.map !== undefined ? loading.value.data.map(item => (
             <div className="d-flex flex-column bg-info rounded-3 mb-3">
               <span className="ms-1">{item.name !== null ? item.name : "NoName"}</span>
               <Link id={item.photoId} key={item.photoId} to={"/admin/photo/" + item.photoId}>  
                 <img className="rounded-3" height="150" src={item.link}/>
               </Link>
             </div>
-          ))}
+          )) : ""}
         </div>
       </div>
     );

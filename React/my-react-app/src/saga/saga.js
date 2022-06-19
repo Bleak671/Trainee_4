@@ -4,7 +4,7 @@ import { NotificationManager } from 'react-notifications'
 import { handleSubmitLogin, handleSubmitRegister } from '../Utils/handlers/handleAuth'
 import { handleSubmit as handleSubmitFind } from '../Utils/handlers/handleFind'
 import { handleSubmit as handleSubmitUserUpd } from '../Utils/handlers/handleUser'
-import { getRegion, removeRegion, ascii, sharpen, contrast, RGBAtoGray, flipHorizontal, flipVertical, rotate, saltPepperRemoval, saveToPNG, draw } from '../Utils/multiplyFunctions/drawFunctions';
+import { colorBrighten, getRegion, removeRegion, ascii, sharpen, contrast, RGBAtoGray, flipHorizontal, flipVertical, rotate, saltPepperRemoval, saveToPNG, draw } from '../Utils/multiplyFunctions/drawFunctions';
 import { addComment, addMessage } from '../Utils/multiplyFunctions/editPhotoFuntions'
 
 
@@ -41,10 +41,11 @@ function* saga() {
   yield takeLatest("ROTATE_REQUESTED", sagaGenerator.bind(null, rotate, "ROTATE_"));
   yield takeLatest("FLIPX_REQUESTED", sagaGenerator.bind(null, flipHorizontal, "FLIPX_"));
   yield takeLatest("FLIPY_REQUESTED", sagaGenerator.bind(null, flipVertical, "FLIPY_"));
-  yield takeLatest("GRAY_REQUESTED", sagaGenerator.bind(null, RGBAtoGray, "GARY_"));
+  yield takeLatest("GRAY_REQUESTED", sagaGenerator.bind(null, RGBAtoGray, "GRAY_"));
   yield takeLatest("CONTRAST_REQUESTED", sagaGenerator.bind(null, contrast, "CONTRAST_"));
   yield takeLatest("SHARPEN_REQUESTED", sagaGenerator.bind(null, sharpen, "SHARPEN_"));
   yield takeLatest("ASCII_REQUESTED", sagaGenerator.bind(null, ascii, "ASCII_"));
+  yield takeLatest("BRIGHTEN_REQUESTED", sagaGenerator.bind(null, colorBrighten, "BRIGHTEN_"));
 
   yield takeLatest("FIND_REQUESTED", sagaGenerator.bind(null, handleSubmitFind, "FIND_"));
   yield takeLatest("USER_UPD_REQUESTED", sagaGenerator.bind(null, handleSubmitUserUpd, "USER_UPD_"));

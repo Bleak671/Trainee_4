@@ -27,7 +27,7 @@ export function AdminUserList() {
   useEffect(() => { loadData(token, host +  `Admin`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded && loading.value.data !== undefined) {
     return <div>Loading...</div>;
   } else {
     filteredArray = loading.value.data.filter(function(item) { return item.userId != globals.guid } );
@@ -41,12 +41,12 @@ export function AdminUserList() {
               <th scope="col">Name</th>
               <th scope="col">Banned</th>
               <th scope="col">Admin</th>
-              <th scope="col">Name</th>
+              <th scope="col">Link</th>
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
-          {filteredArray.map(item => (
+          {loading.value.data.map !== undefined ? filteredArray.map(item => (
             <tr scope="row">
               <td>{item.email}</td>
               <td>{item.login}</td>
@@ -54,7 +54,7 @@ export function AdminUserList() {
               <td>{item.isAdmin ? "Yes" : "No"}</td>
               <td><Link to={"user/" + item.userId}>to User</Link></td>
             </tr>
-          ))}
+          )) : ""}
           </tbody>
         </table>
       </div>

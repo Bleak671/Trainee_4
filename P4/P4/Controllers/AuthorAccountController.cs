@@ -12,15 +12,9 @@ namespace P4.Controllers
     public class AuthorAccountController : ControllerBase
     {
         private UserBLL _userBll;
-        private PhotoBLL _photoBll;
-        private PhotoCommentBLL _photoCommentBll;
-        private PhotoReviewBLL _photoReviewBll;
         public AuthorAccountController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
         {
             _userBll = userDB;
-            _photoBll = photoDB;
-            _photoCommentBll = photoCommentDB;
-            _photoReviewBll = photoReviewDB;
         }
         // GET: AuthorAccount
         [HttpGet("{id}")]

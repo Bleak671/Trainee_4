@@ -28,7 +28,7 @@ export function User(props) {
   useEffect(() => { loadData(token, host +  `User?id1=` + id + `&&id2=` + globals.guid, dispatch, setState)}, []);
      
   //render, depending on state of loading
-  if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded && loading.value.data !== undefined) {
     return <div>Loading...</div>;
   } else {
     return(
@@ -38,11 +38,11 @@ export function User(props) {
         <p className="text-dark">Admin: {loading.value.data.user.isAdmin ? "Yes" : "No"}</p>
         <p className="text-dark">Banned: {loading.value.data.user.isBanned ? "Yes" : "No"}</p>
         <div className="p-5 w-100 d-flex flex-column justify-content-between">
-          {loading.value.data.messages.map(item => (
+          {loading.value.data !== undefined ? loading.value.data.messages.map(item => (
             <div className={"ms-1 p-2 rounded-3 bg-info flex-columnrounded-3 mb-3 row" + (item.fromUserId == globals.guid ? " justify-content-md-end" : "")}>
               {item.text}
             </div>
-          ))}
+          )) : ""}
         </div>
         <div class="m-5">
           <input id="message" type="text" className="rounded-3 w-50 h-100 ms-5" placeholder="Message..." onChange={handleChangeMessage.bind(null, loading, dispatch, setState)}/>

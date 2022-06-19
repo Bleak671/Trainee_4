@@ -67,7 +67,7 @@ export function deletePhoto(token, connString, history, redirectString, link) {
 }
 
 //sending request to add comment
-export function addReview(token, loading, connString, updString, dispatch, setState, isPositiv, uGuid) {
+export function addReview(token, loading, connString, updString, dispatch, setState, isPositiv, uGuid, callback) {
   var pId = loading.value.data.photo.photoId;
   var review = {
     PhotoId : pId,
@@ -82,11 +82,15 @@ export function addReview(token, loading, connString, updString, dispatch, setSt
         'Access-Control-Allow-Origin':'*',
         "Authorization": "Bearer " + token  // using token
     },
-    body: JSON.stringify(review)     
+    body: JSON.stringify(review),     
   };
-  fetch( connString, requestOptions)
+
+  return fetch( connString, requestOptions)
   .then(
-    () => { loadData(token, updString, dispatch, setState) }
+    () => { 
+      if (callback) 
+        callback() 
+    }
   )
 }
 
@@ -108,20 +112,23 @@ export function addMessage(payload) {
       },
       body: JSON.stringify(message)     
     };
-    fetch( host + `User/CreateMessage`, requestOptions)
+    return fetch( host + `User/CreateMessage`, requestOptions)
     .then(
       () => { payload.history.push({
         pathname: '/Home',
       }); 
       payload.history.push({
         pathname: '/user/' + payload.id,
-      });}
+      });},
+      (e) => { 
+        console.log(e)
+      }
     )
   }
 }
 
 export function addComment(payload) {
-  if (typeof(payload.state.value.message) !== 'undefined')
+  if (typeof(payload.state.value.comment) !== 'undefined')
   {
     var pId = payload.state.value.data.photo.photoId;
     var comment = {
@@ -139,14 +146,15 @@ export function addComment(payload) {
       },
       body: JSON.stringify(comment)     
     };
-    fetch( host + `Home/CreateComment`, requestOptions)
+    return fetch( host + `Home/CreateComment`, requestOptions)
     .then(
-      () => { payload.history.push({
-        pathname: '/Home',
-      }); 
-      payload.history.push({
-        pathname: '/Home/' + pId,
-      });}
+      () => { 
+        if (payload.callback) 
+        payload.callback()
+      },
+      (e) => { 
+        console.log(e)
+      }
     )
   }
 }

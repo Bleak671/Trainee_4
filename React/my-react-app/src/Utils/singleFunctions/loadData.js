@@ -8,7 +8,8 @@ export function loadData(token, connString, dispatch, setState) {
           "Authorization": "Bearer " + token  // using token
       }             
     };
-    fetch(connString,requestOptions)
+
+    return fetch(connString,requestOptions)
       .then(
         res =>  res.json()
       )
@@ -22,41 +23,11 @@ export function loadData(token, connString, dispatch, setState) {
         (error) => {
           dispatch(setState({
             isLoaded: true,
-            data: []
+            data: new Array(0)
           }))
         }
       ) 
       .catch(
         e => e
       )
-  } 
-
-  export function loadDataWithData(token, connString, dispatch, setState, body) {
-    const requestOptions = {
-      method: 'GET',
-      mode: 'cors',
-      headers: {  
-          'Content-Type': 'application/json',    
-          'Access-Control-Allow-Origin':'*',
-          "Authorization": "Bearer " + token  // using token
-      },
-      body: body             
-    };
-    fetch(connString,requestOptions)
-      .then(res =>  res.json())
-      .then(
-        (result) => {
-          dispatch(setState({
-            isLoaded: true,
-            data: result
-          }))
-        },
-        (error) => {
-          dispatch(setState({
-            isLoaded: true,
-            data: []
-          }))
-        }
-      ) 
-    
   } 

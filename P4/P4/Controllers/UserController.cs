@@ -15,16 +15,10 @@ namespace P4.Controllers
     public class UserController : ControllerBase
     {
         private UserBLL _userBll;
-        private PhotoBLL _photoBll;
-        private PhotoCommentBLL _photoCommentBll;
-        private PhotoReviewBLL _photoReviewBll;
         private UserMessageBLL _userMessageBLL;
         public UserController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB, UserMessageBLL userMessageBLL)
         {
             _userBll = userDB;
-            _photoBll = photoDB;
-            _photoCommentBll = photoCommentDB;
-            _photoReviewBll = photoReviewDB;
             _userMessageBLL = userMessageBLL;
         }
         // GET: Admin

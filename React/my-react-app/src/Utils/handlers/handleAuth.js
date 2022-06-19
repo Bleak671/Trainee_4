@@ -3,6 +3,14 @@ import { login } from '../singleFunctions/login'
 import { register } from '../singleFunctions/register';
 
 export function handleChangeEmail(state, dispatch, setState, event) {
+  var v = document.getElementById("email").validity.valid;
+    if (v) {
+      document.getElementById("confirm").disabled = "";
+    }
+    else {
+      document.getElementById("confirm").disabled="disabled";
+    }
+
   var data = Object.assign({},state.value);
   data.email = event.target.value;
   dispatch(setState(data));

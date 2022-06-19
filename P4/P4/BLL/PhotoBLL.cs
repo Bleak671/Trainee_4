@@ -14,12 +14,12 @@ namespace P4.BLL
             _photoRepos = photoRepos;
         }
 
-        public void CreatePhoto(Photo photo)
+        public Guid CreatePhoto(Photo photo)
         {
             List<Photo> list = _photoRepos.GetAll();
             if (list.Any(x => x.Hash == photo.Hash))
                 throw new Exception("Hash exists");
-            _photoRepos.Create(photo);
+            return _photoRepos.Create(photo);
         }
 
         public List<Photo> GetAllPhotos()
@@ -84,12 +84,21 @@ namespace P4.BLL
 
         public void UpdatePhoto(Guid id, Photo photo)
         {
-            _photoRepos.Update(id, photo);
+            try
+            {
+                _photoRepos.Update(id, photo);
+            }
+            catch { throw; }
+            
         }
 
         public void DeletePhoto(Guid id)
         {
-            _photoRepos.Delete(id);
+            try
+            {
+                _photoRepos.Delete(id);
+            }
+            catch { throw; }
         }
 
         public void Dispose()

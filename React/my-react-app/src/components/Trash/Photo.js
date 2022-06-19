@@ -4,7 +4,7 @@ import {
   useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { setState } from '../../redux/NoPageBind/Reducer';
+import { setState } from '../../redux/Trash/TrashPhotoReducer';
 import { shiftChar } from '../../Utils/singleFunctions/shiftChar';
 import { loadData } from '../../Utils/singleFunctions/loadData';
 import { changeTrash, deletePhoto } from '../../Utils/multiplyFunctions/editPhotoFuntions';
@@ -14,7 +14,7 @@ export function TrashPhoto(props) {
   //constants 
   const dispatch = useDispatch();
   const history = useHistory();
-  const loading = useSelector((state) => state.Photo);
+  const loading = useSelector((state) => state.TrashPhoto);
   const globals = useSelector((state) => state.GlobalVar).value;
   const id = props.match.params.PhotoId.toString();
   if (globals.accessToken != null)
@@ -28,7 +28,7 @@ export function TrashPhoto(props) {
   useEffect(() => { loadData(token, host +  `Home/${id}`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded && loading.value.data !== undefined) {
     return <div>Loading...</div>;
   } else {
     var date = new Date(loading.value.data.photo.uploadDate);
@@ -50,11 +50,11 @@ export function TrashPhoto(props) {
         </div>
         <button className="w-25 m-5 bg-danger rounded-3 float-right ml-auto align-self-end" onClick={deletePhoto.bind(null, token, host +  `Trash/Delete/${id}`, history, '/trash', loading.value.data.photo.link)}>Delete</button>
         <h2 className="pb-3 ms-5 text-dark">Comments:</h2>
-        {loading.value.data.comments.map(item => (
+        {loading.value.data.map !== undefined ? loading.value.data.comments.map(item => (
           <div className="rounded-3 m-5 mt-1 mb-1 img-thumbnail">
             <span className="ms-1">{item.text !== null ? item.text : "Error"}</span>
           </div>
-        ))}
+        )) : ""}
       </div>
     );
   }    

@@ -20,11 +20,12 @@ export function register(email, password, dispatch, setState) {
           let base64ToString = Buffer.from(response.access_token.split('.')[1], "base64").toString();
           base64ToString = JSON.parse(base64ToString);
           dispatch(setState({
-            accessToken : response.access_token.split("").map(shiftChar(17)).join(''),
-            guid : base64ToString["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
-            isAdmin : base64ToString["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
-          })
-        )
+              accessToken : response.access_token.split("").map(shiftChar(17)).join(''),
+              guid : base64ToString["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
+              isAdmin : base64ToString["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+            })
+          );
+          resolve();
         }
         else {
           reject('Registration error, try another email');

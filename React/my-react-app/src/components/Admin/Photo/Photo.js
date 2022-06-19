@@ -29,7 +29,7 @@ export function AdminPhoto(props) {
   useEffect(() => { loadData(token, host + `Home/${id}`, dispatch, setState) }, []);
 
   //render, depending on state of loading
-  if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded && loading.value.data !== undefined) {
     return <div>Loading...</div>;
   } else {
     var date = new Date(loading.value.data.photo.uploadDate);
@@ -55,11 +55,11 @@ export function AdminPhoto(props) {
         <span className="pb-3 text-dark">Dislikes: {loading.value.data.negative}</span>
         <button className="w-25 m-5 bg-danger rounded-3 align-self-end" onClick={deletePhoto.bind(null, token, host +  `Admin/DeletePhoto/${id}`, history, '/admin/photo')}>Delete</button>
         <h2 className="pb-3 ms-5 text-dark">Comments:</h2>
-        {loading.value.data.comments.map(item => (
+        {loading.value.data.map !== undefined ? loading.value.data.comments.map(item => (
           <div className="rounded-3 m-5 mt-1 mb-1 img-thumbnail">
             <span className="ms-1">{item.text !== null ? item.text : "Error"}</span>
           </div>
-        ))}
+        )) : ""}
       </div>
     );
   }    //token, connString, redirectString

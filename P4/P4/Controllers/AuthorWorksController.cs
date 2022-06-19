@@ -14,16 +14,10 @@ namespace P4.Controllers
     [Route("api/[controller]")]
     public class AuthorWorksController : ControllerBase
     {
-        private UserBLL _userBll;
         private PhotoBLL _photoBll;
-        private PhotoCommentBLL _photoCommentBll;
-        private PhotoReviewBLL _photoReviewBll;
         public AuthorWorksController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
         {
-            _userBll = userDB;
             _photoBll = photoDB;
-            _photoCommentBll = photoCommentDB;
-            _photoReviewBll = photoReviewDB;
         }
         // GET: AuthorWorksController
         [HttpGet]

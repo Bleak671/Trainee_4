@@ -1,7 +1,9 @@
-﻿using P4.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace P4.DAL
 {
@@ -13,7 +15,7 @@ namespace P4.DAL
             db = context;
         }
 
-        public void Create(PhotoComment photoCom)
+        public Guid Create(PhotoComment photoCom)
         {
             int result = 1;
             try
@@ -21,9 +23,13 @@ namespace P4.DAL
                 if (photoCom.UserId.ToString() == Guid.Empty.ToString())
                     photoCom.UserId = Guid.NewGuid();
                 if (photoCom.UserName == null)
+                {
                     photoCom.UserName = db.Users.FirstOrDefault(u => u.UserId == photoCom.UserId)?.Login;
-                db.PhotoComments.Add(photoCom);
+                }
+                photoCom.UploadDate = DateTime.Now;
+                var e = db.PhotoComments.Add(photoCom);
                 result = db.SaveChanges();
+                return e.Entity.PhotoCommentId;
             }
             catch
             {
@@ -33,6 +39,7 @@ namespace P4.DAL
             {
                 throw new Exception("Can't Add");
             }
+            return Guid.Empty;
         }
 
         public List<PhotoComment> GetAll()
@@ -69,7 +76,7 @@ namespace P4.DAL
             int result = 1;
             try
             {
-                PhotoComment pht = db.PhotoComments.FirstOrDefault(p => p.PhotoCommentId == id);
+                PhotoComment pht = db .PhotoComments.FirstOrDefault(p => p.PhotoCommentId == id);
                 db.PhotoComments.Remove(pht);
                 result = db.SaveChanges();
             }

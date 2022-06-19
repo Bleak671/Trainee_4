@@ -23,7 +23,8 @@ namespace P4.BLL
 
         public List<UserMessage> GetUserMessages(Guid id1, Guid id2)
         {
-            return _UserMessageRepos.GetAll().Where(um => (um.FromUserId.ToString() == id1.ToString() &&
+            return _UserMessageRepos.GetAll()
+                .Where(um => (um.FromUserId.ToString() == id1.ToString() &&
                                                     um.ToUserId.ToString() == id2.ToString()) ||
                                                     (um.ToUserId.ToString() == id1.ToString() &&
                                                     um.FromUserId.ToString() == id2.ToString())).OrderBy(um => um.UploadDate).ToList();

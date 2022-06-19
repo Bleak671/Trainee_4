@@ -4,6 +4,7 @@ using P4.BLL;
 using P4.Models;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace P4.Controllers
 {
@@ -12,16 +13,14 @@ namespace P4.Controllers
     [Route("api/[controller]")]
     public class TrashController : ControllerBase
     {
-        private UserBLL _userBll;
         private PhotoBLL _photoBll;
-        private PhotoCommentBLL _photoCommentBll;
-        private PhotoReviewBLL _photoReviewBll;
-        public TrashController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
+        private PhotoTagBLL _photoTagBLL;
+        private TagBLL _tagBLL;
+        public TrashController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB, PhotoTagBLL photoTagBLL, TagBLL tagBLL)
         {
-            _userBll = userDB;
             _photoBll = photoDB;
-            _photoCommentBll = photoCommentDB;
-            _photoReviewBll = photoReviewDB;
+            _photoTagBLL = photoTagBLL;
+            _tagBLL = tagBLL;
         }
         // GET: TrashController
         [HttpGet("{id}")]
@@ -38,11 +37,38 @@ namespace P4.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] Photo value)
+        public ActionResult Post([FromBody] PhotoExt val)
         {
             try
             {
-                _photoBll.CreatePhoto(value);
+                var photo = new Photo {
+                    Link = val.Link,
+                    Name = val.Name,
+                    UserId = val.UserId,
+                    Hash = val.Hash
+                };
+                var list = val.Tags;
+                var pId = _photoBll.CreatePhoto(photo);
+                if (!pId.Equals(Guid.Empty))
+                {
+                    var tagList = _tagBLL.GetTags();
+                    foreach (var item in list)
+                    {
+                        var i = JsonConvert.DeserializeObject<TagExchangeStandart>(item.ToString());
+
+                        if (i.Value)
+                        {
+                            var tag = tagList.Find(t => t.Name == i.Name);
+                            Photo_m2m_Tag pt = new Photo_m2m_Tag
+                            {
+                                PhotoId = pId,
+                                TagId = tag.TagId
+                            };
+                            _photoTagBLL.CreatePhotoTag(pt);
+                        }
+                    }
+                }
+
                 return Ok();
             }
             catch

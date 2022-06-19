@@ -21,27 +21,27 @@ namespace P4.Models
             modelBuilder.Entity<PhotoComment>()
                 .HasOne(p => p.User)
                 .WithMany(t => t.UserComments)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PhotoReview>()
                 .HasOne(p => p.User)
                 .WithMany(t => t.UserReviews)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserMessage>()
                 .HasOne(p => p.FromUser)
                 .WithMany(t => t.UserFromMessages)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Photo_m2m_Tag>()
                .HasOne(p => p.Photo)
                .WithMany(t => t.PhotoTags)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Photo_m2m_Tag>()
                .HasOne(p => p.Tag)
                .WithMany(t => t.TagPhotos)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>().Property(x => x.UserId).HasDefaultValueSql("NEWID()");
             modelBuilder.Entity<Photo>().Property(x => x.PhotoId).HasDefaultValueSql("NEWID()");

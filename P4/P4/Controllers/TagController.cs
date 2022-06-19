@@ -7,27 +7,32 @@ using System.Collections.Generic;
 
 namespace P4.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TagController : ControllerBase
     {
-        private UserBLL _userBll;
-        private PhotoBLL _photoBll;
-        private PhotoCommentBLL _photoCommentBll;
-        private PhotoReviewBLL _photoReviewBll;
         private TagBLL _tagBLL;
         private PhotoTagBLL _photoTagBLL;
         public TagController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB, TagBLL tagBLL, PhotoTagBLL photoTagBLL)
         {
-            _userBll = userDB;
-            _photoBll = photoDB;
-            _photoCommentBll = photoCommentDB;
-            _photoReviewBll = photoReviewDB;
             _tagBLL = tagBLL;
             _photoTagBLL = photoTagBLL;
         }
         // GET: Admin
+        [HttpGet("Tags")]
+        public ActionResult<List<Tag>> GetTags()
+        {
+            try
+            {
+                var list = _tagBLL.GetTags();
+                return new ObjectResult(list);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet]
         public ActionResult<List<Tag>> Get(string id)
         {
@@ -35,7 +40,7 @@ namespace P4.Controllers
             {
                 var list = _photoTagBLL.GetPhotoTags().FindAll(pt => pt.PhotoId.ToString() == id);
                 var res = new List<Tag>();
-                foreach(var v in list)
+                foreach (var v in list)
                 {
                     res.Add(_tagBLL.GetTag(v.TagId));
                 }

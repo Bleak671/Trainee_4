@@ -30,25 +30,25 @@ namespace P4
         {
             string connection = Configuration.GetConnectionString("LocalDatabase");
             services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlServer(connection, sqlServerOptions => sqlServerOptions.CommandTimeout(180)), ServiceLifetime.Singleton);
+                options.UseSqlServer(connection, sqlServerOptions => sqlServerOptions.CommandTimeout(180)), ServiceLifetime.Transient);
 
-            services.AddSingleton<AuthUtility>();
+            services.AddTransient<AuthUtility>();
 
-            services.AddSingleton<UserBLL>();
-            services.AddSingleton<PhotoBLL>();
-            services.AddSingleton<PhotoCommentBLL>();
-            services.AddSingleton<PhotoReviewBLL>();
-            services.AddSingleton<TagBLL>();
-            services.AddSingleton<PhotoTagBLL>();
-            services.AddSingleton<UserMessageBLL>();
+            services.AddTransient<UserBLL>();
+            services.AddTransient<PhotoBLL>();
+            services.AddTransient<PhotoCommentBLL>();
+            services.AddTransient<PhotoReviewBLL>();
+            services.AddTransient<TagBLL>();
+            services.AddTransient<PhotoTagBLL>();
+            services.AddTransient<UserMessageBLL>();
 
-            services.AddSingleton<IRepository<User>, UserRepository>();
-            services.AddSingleton<IRepository<Photo>, PhotoRepository>();
-            services.AddSingleton<IRepository<PhotoComment>, PhotoCommentRepository>();
-            services.AddSingleton<IRepository<PhotoReview>, PhotoReviewRepository>();
-            services.AddSingleton<IRepository<Tag>, TagRepository>();
-            services.AddSingleton<IRepository<Photo_m2m_Tag>, PhotoTagRepository>();
-            services.AddSingleton<IRepository<UserMessage>, UserMessageRepository>();
+            services.AddTransient<IRepository<User>, UserRepository>();
+            services.AddTransient<IRepository<Photo>, PhotoRepository>();
+            services.AddTransient<IRepository<PhotoComment>, PhotoCommentRepository>();
+            services.AddTransient<IRepository<PhotoReview>, PhotoReviewRepository>();
+            services.AddTransient<IRepository<Tag>, TagRepository>();
+            services.AddTransient<IRepository<Photo_m2m_Tag>, PhotoTagRepository>();
+            services.AddTransient<IRepository<UserMessage>, UserMessageRepository>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>

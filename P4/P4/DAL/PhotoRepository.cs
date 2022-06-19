@@ -1,7 +1,9 @@
-﻿using P4.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace P4.DAL
 {
@@ -13,15 +15,16 @@ namespace P4.DAL
             db = context;
         }
 
-        public void Create(Photo photo)
+        public Guid Create(Photo photo)
         {
             int result = 1;
             try
             {
                 if (photo.UserId.ToString() == Guid.Empty.ToString())
                     photo.UserId = Guid.NewGuid();
-                db.Photos.Add(photo);
+                var e = db.Photos.Add(photo);
                 result = db.SaveChanges();
+                return e.Entity.PhotoId;
             }
             catch
             {
@@ -32,6 +35,7 @@ namespace P4.DAL
             {
                 throw new Exception("Can't Add");
             }
+            return Guid.Empty;
         }
 
         public List<Photo> GetAll()
@@ -56,11 +60,11 @@ namespace P4.DAL
             int result = 1;
             try
             {
-                var old = db.Photos.FirstOrDefault(i => i.PhotoId == id);
+                var old = db .Photos.FirstOrDefault(i => i.PhotoId == id);
                 db.Entry(old).CurrentValues.SetValues(photo);
                 result = db.SaveChanges();
             }
-            catch
+            catch (Exception e)
             {
                 throw new Exception("DB Error");
             }
@@ -77,6 +81,12 @@ namespace P4.DAL
             try
             {
                 Photo pht = db.Photos.FirstOrDefault(p => p.PhotoId == id);
+                var tags = db.PhotoTags.Where(pt => pt.PhotoId == pht.PhotoId);
+                var comments = db.PhotoComments.Where(pt => pt.PhotoId == pht.PhotoId);
+                var reviews = db.PhotoReviews.Where(pt => pt.PhotoId == pht.PhotoId);
+                db.PhotoTags.RemoveRange(tags);
+                db.PhotoComments.RemoveRange(comments);
+                db.PhotoReviews.RemoveRange(reviews);
                 db.Photos.Remove(pht);
                 result = db.SaveChanges();
             }

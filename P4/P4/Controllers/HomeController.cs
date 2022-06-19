@@ -13,16 +13,18 @@ namespace P4.Controllers
     [Route("api/[controller]")]
     public class HomeController : ControllerBase
     {
-        private UserBLL _userBll;
         private PhotoBLL _photoBll;
         private PhotoCommentBLL _photoCommentBll;
         private PhotoReviewBLL _photoReviewBll;
-        public HomeController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB)
+        private PhotoTagBLL _photoTagBLL;
+        private TagBLL _tagBLL;
+        public HomeController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB, PhotoTagBLL photoTagBLL, TagBLL tagBLL)
         {
-            _userBll = userDB;
             _photoBll = photoDB;
             _photoCommentBll = photoCommentDB;
             _photoReviewBll = photoReviewDB;
+            _photoTagBLL = photoTagBLL;
+            _tagBLL = tagBLL;
         }
         // GET: HomeController
         [HttpGet]
@@ -46,16 +48,23 @@ namespace P4.Controllers
             {
                 var photo = _photoBll.GetPhoto(Guid.Parse(id));
                 var comments = _photoReviewBll.GetPhotosReviews(photo.PhotoId);
+                var list = _photoTagBLL.GetPhotoTags().FindAll(pt => pt.PhotoId.ToString() == id);
+                var res = new List<Tag>();
+                foreach (var v in list)
+                {
+                    res.Add(_tagBLL.GetTag(v.TagId));
+                }
                 return new ObjectResult(new
                 {
                     photo = photo,
                     comments = _photoCommentBll.GetPhotosComments(photo.PhotoId),
                     positive = comments.FindAll(c => c.isPositive == true).Count,
                     negative = comments.FindAll(c => c.isPositive == false).Count,
-                    user = photo.User
+                    user = photo.User,
+                    tags = res
                 }) ;
             }
-            catch
+            catch (Exception E)
             {
                 return BadRequest();
             }

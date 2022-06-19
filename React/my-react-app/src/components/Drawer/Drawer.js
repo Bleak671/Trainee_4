@@ -66,10 +66,13 @@ export function Drawer(props) {
                     <button className="border rounded-3" id="Gray" onClick={ dispatch.bind(null, {type: 'GRAY_REQUESTED', payload: { canvas, c }}) }>Gray</button>
                 </div>
                 <div>
-                    <button className="border rounded-3" id="Contrast" onClick={ dispatch.bind(null, {type: 'CONTRAST_REQUESTED', payload: { canvas, c }}) }>Contrast</button>
+                    <button className="border rounded-3" id="Contrast" onClick={ dispatch.bind(null, {type: 'CONTRAST_REQUESTED', payload: { canvas, c }}) }>Cover all colors</button>
                 </div>
                 <div>
                     <button className="border rounded-3" id="Sharpen" onClick={ dispatch.bind(null, {type: 'SHARPEN_REQUESTED', payload: { canvas, c }}) }>Sharpen</button>
+                </div>
+                <div>
+                    <button className="border rounded-3" id="Brighten" onClick={ dispatch.bind(null, {type: 'BRIGHTEN_REQUESTED', payload: { canvas, c }}) }>Increase color saturation</button>
                 </div>
                 <div>
                     <button className="border rounded-3" id="Ascii" onClick={ dispatch.bind(null, {type: 'ASCII_REQUESTED', payload: { canvas, c }}) }>Ascii</button>
@@ -80,8 +83,9 @@ export function Drawer(props) {
                     <button className="border" onClick={dispatch.bind(null,{type: 'UNREGION_REQUESTED', payload: { canvas }})}>Unregion</button>
                 </div>
             </div>
-            <canvas ref={canvasRef} id="canvas"> 
-            </canvas>
+            <div className="w-100">
+                <canvas ref={canvasRef} max-width="100px" id="canvas"></canvas>
+            </div>       
         </div>
         
     );

@@ -1,7 +1,9 @@
-﻿using P4.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace P4.DAL
 {
@@ -13,15 +15,16 @@ namespace P4.DAL
             db = context;
         }
 
-        public void Create(Photo_m2m_Tag photoTag)
+        public Guid Create(Photo_m2m_Tag photoTag)
         {
             int result = 1;
             try
             {
                 if (photoTag.Id.ToString() == Guid.Empty.ToString())
                     photoTag.Id = Guid.NewGuid();
-                db.PhotoTags.Add(photoTag);
-                result = db.SaveChanges();
+                var e = db .PhotoTags.Add(photoTag);
+                result = db .SaveChanges();
+                return e.Entity.Id;
             }
             catch
             {
@@ -32,6 +35,7 @@ namespace P4.DAL
             {
                 throw new Exception("Can't Add");
             }
+            return Guid.Empty;
         }
 
         public List<Photo_m2m_Tag> GetAll()

@@ -17,7 +17,7 @@ namespace P4.DAL
             db = context;
         }
 
-        public void Create(User user)
+        public Guid Create(User user)
         {
             int result = 1;
             try
@@ -26,8 +26,9 @@ namespace P4.DAL
                     user.UserId = Guid.NewGuid();
                 if (user.Login == null)
                     user.Login = "";
-                db.Users.Add(user);
+                var e = db.Users.Add(user);
                 result = db.SaveChanges();
+                return e.Entity.UserId;
             }
             catch
             {
@@ -37,6 +38,7 @@ namespace P4.DAL
             {
                 throw new Exception("Can't Add");
             }
+            return Guid.Empty;
         }
 
         public List<User> GetAll()
@@ -74,6 +76,8 @@ namespace P4.DAL
             try
             {
                 User usr = db.Users.FirstOrDefault(p => p.UserId == id);
+                var tags = db.UserMessages.Where(pt => pt.ToUserId == usr.UserId);
+                db.UserMessages.RemoveRange(tags);
                 db.Users.Remove(usr);
                 result = db.SaveChanges();
             }

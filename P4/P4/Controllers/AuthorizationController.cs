@@ -2,6 +2,7 @@
 using P4.BLL;
 using P4.Models;
 using P4.Utility;
+using System;
 
 namespace P4.Controllers
 {
@@ -10,27 +11,27 @@ namespace P4.Controllers
     public class AuthorizationController : ControllerBase
     {
         private UserBLL _userBll;
-        private PhotoBLL _photoBll;
-        private PhotoCommentBLL _photoCommentBll;
-        private PhotoReviewBLL _photoReviewBll;
         private AuthUtility _authUtility;
         public AuthorizationController(UserBLL userDB, PhotoBLL photoDB, PhotoCommentBLL photoCommentDB, PhotoReviewBLL photoReviewDB, AuthUtility authUtility)
         {
             _userBll = userDB;
-            _photoBll = photoDB;
-            _photoCommentBll = photoCommentDB;
-            _photoReviewBll = photoReviewDB;
             _authUtility = authUtility;
         }
         // POST: AuthController/asd
         [HttpPost("{email}")]
         public ActionResult Get(string email, [FromBody] int password)
         {
-            var token = _authUtility.GetJWT(email, password.ToString());
-            if (token != null)
-                return Ok(token);
-            else
-                return BadRequest();
+            try {
+                var token = _authUtility.GetJWT(email, password.ToString());
+                if (token != null)
+                    return Ok(token);
+                else
+                    return BadRequest();
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, "Unhandled error while authorization");
+            }
         }
 
         // POST: AuthController/Create
@@ -48,7 +49,7 @@ namespace P4.Controllers
             }
             catch
             {
-                return BadRequest();
+                return StatusCode(500, "Unhandled error while authorization");
             }            
         }
     }

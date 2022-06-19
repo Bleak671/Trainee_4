@@ -30,7 +30,7 @@ export function AuthorAccount(props) {
   useEffect(() => { loadData(token, host +  `AuthorAccount/${id}`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded && loading.value.data !== undefined) {
     return <div>Loading...</div>;
   } else {
     return(

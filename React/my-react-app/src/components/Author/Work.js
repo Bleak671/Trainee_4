@@ -4,7 +4,7 @@ import {
   useHistory
 } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { setState } from '../../redux/NoPageBind/Reducer';
+import { setState } from '../../redux/Author/AuthorPhotoReducer';
 import { setState as setStateGlobal } from '../../redux/Global/GlobalVarReducer';
 import { shiftChar } from '../../Utils/singleFunctions/shiftChar';
 import { loadData } from '../../Utils/singleFunctions/loadData';
@@ -16,7 +16,7 @@ export function AuthorWork(props) {
   //const 
   const dispatch = useDispatch();
   const history = useHistory();
-  const loading = useSelector((state) => state.Photo);
+  const loading = useSelector((state) => state.AuthorPhoto);
   const globals = useSelector((state) => state.GlobalVar).value;
   if (globals.accessToken != null)
     var token = globals.accessToken.split("").map(shiftChar(-17)).join('');
@@ -30,10 +30,10 @@ export function AuthorWork(props) {
   useEffect(() => { loadData(token, `https://localhost:44340/api/Home/${id}`, dispatch, setState) }, []);
      
   //render, depending on state of loading
-  if (!loading.value.isLoaded) {
+  if (!loading.value.isLoaded && loading.value.data !== undefined) {
     return <div>Loading...</div>;
   } else {
-    var date = new Date(loading.value.data.photo.uploadDate);
+    var date = new Date(loading.value.data.photo !== undefined ? loading.value.data.photo.uploadDate : new Date());
     return(
       <div className="d-flex flex-column bg-white bg-opacity-25 rounded-3 p-3" margin-bottom="1000">
         <Link className="w-25 mb-3 p-2 nav-link text-dark" to="/authorWorks">Back</Link>
@@ -54,11 +54,11 @@ export function AuthorWork(props) {
           <button className="ms-3 rounded-3" onClick={changeTrash.bind(null, token, loading, host +  `Trash`, host +  `Home/${id}`, dispatch, setState)}>Change</button>
         </div>
         <h2 className="pb-3 ms-5 text-dark">Comments:</h2>
-        {loading.value.data.comments.map(item => (
+        {loading.value.data.map !== undefined ? loading.value.data.comments.map(item => (
           <div className="rounded-3 m-5 mt-1 mb-1 img-thumbnail">
             <span className="ms-1">{item.text !== null ? item.text : "Error"}</span>
           </div>
-        ))}
+        )) : ""}
       </div>
     );
   }    

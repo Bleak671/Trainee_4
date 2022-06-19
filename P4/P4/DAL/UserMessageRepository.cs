@@ -1,7 +1,9 @@
-﻿using P4.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace P4.DAL
 {
@@ -13,15 +15,17 @@ namespace P4.DAL
             db = context;
         }
 
-        public void Create(UserMessage userMessage)
+        public Guid Create(UserMessage userMessage)
         {
             int result = 1;
             try
             {
                 if (userMessage.UserMessageId.ToString() == Guid.Empty.ToString())
                     userMessage.UserMessageId = Guid.NewGuid();
-                db.UserMessages.Add(userMessage);
+                userMessage.UploadDate = DateTime.Now;
+                var e = db .UserMessages.Add(userMessage);
                 result = db.SaveChanges();
+                return e.Entity.UserMessageId;
             }
             catch
             {
@@ -31,6 +35,7 @@ namespace P4.DAL
             {
                 throw new Exception("Can't Add");
             }
+            return Guid.Empty;
         }
 
         public List<UserMessage> GetAll()

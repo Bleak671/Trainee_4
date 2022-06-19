@@ -1,7 +1,9 @@
-﻿using P4.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using P4.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace P4.DAL
 {
@@ -13,7 +15,7 @@ namespace P4.DAL
             db = context;
         }
 
-        public void Create(PhotoReview photoRev)
+        public Guid Create(PhotoReview photoRev)
         {
             if (db.PhotoReviews.Any(pr => pr.UserId == photoRev.UserId &&
                                           pr.PhotoId == photoRev.PhotoId))
@@ -21,7 +23,7 @@ namespace P4.DAL
                 if (db.PhotoReviews.Any(pr => pr.UserId == photoRev.UserId &&
                                               pr.PhotoId == photoRev.PhotoId &&
                                               pr.isPositive == photoRev.isPositive))
-                    return;
+                    return Guid.Empty;
                 else
                     Delete(db.PhotoReviews.First(pr => pr.UserId == photoRev.UserId &&
                                           pr.PhotoId == photoRev.PhotoId).PhotoReviewId);
@@ -32,8 +34,9 @@ namespace P4.DAL
             {
                 if (photoRev.PhotoReviewId.ToString() == Guid.Empty.ToString())
                     photoRev.PhotoReviewId = Guid.NewGuid();
-                db.PhotoReviews.Add(photoRev);
+                var e = db.PhotoReviews.Add(photoRev);
                 result = db.SaveChanges();
+                return e.Entity.PhotoReviewId;
             }
             catch(Exception e)
             {
@@ -43,6 +46,7 @@ namespace P4.DAL
             {
                 throw new Exception("Can't Add");
             }
+            return Guid.Empty;
         }
 
         public List<PhotoReview> GetAll()
@@ -52,7 +56,7 @@ namespace P4.DAL
 
         public PhotoReview GetOne(Guid id)
         {
-            return db.PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
+            return db .PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
         }
 
         public void Update(Guid id, PhotoReview photoRev)
@@ -79,9 +83,9 @@ namespace P4.DAL
             int result = 1;
             try
             {
-                PhotoReview pht = db.PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
+                PhotoReview pht = db .PhotoReviews.FirstOrDefault(p => p.PhotoReviewId == id);
                 db.PhotoReviews.Remove(pht);
-                result = db.SaveChanges();
+                result = db .SaveChanges();
             }
             catch
             {

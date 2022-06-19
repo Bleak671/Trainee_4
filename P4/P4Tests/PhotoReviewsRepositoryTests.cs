@@ -32,17 +32,6 @@ namespace P4Tests
         }
 
         [TestCase("31231234-1234-1242-1242-123412341234", "11111111-1111-1111-1111-111111111111", "11111111-1111-1111-1111-111111111111")]
-        public void PhotoReviewsRepository_Create_ShouldThrow(string id, string pId, string uId)
-        {
-            using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
-            {
-                PhotoReview photo = new PhotoReview { PhotoReviewId = Guid.Parse(id), PhotoId = Guid.Parse(pId), UserId = Guid.Parse(uId) };
-                db.Create(photo);
-                Assert.Throws(typeof(Exception), () => db.Create(photo));
-            }
-        }
-
-        [TestCase("31231234-1234-1242-1242-123412341234", "11111111-1111-1111-1111-111111111111", "11111111-1111-1111-1111-111111111111")]
         public void PhotoReviewsRepository_Update_ShouldNotThrow(string id, string pId, string uId)
         {
             using (PhotoReviewRepository db = new PhotoReviewRepository(_context))
