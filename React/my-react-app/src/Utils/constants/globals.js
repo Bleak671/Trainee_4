@@ -8,4 +8,4 @@ export const timeOptions = {
   second: 'numeric'
 };
 
-export const host = "https://localhost:44340/api/";
+export const host = "https://localhost:5001/api/";
