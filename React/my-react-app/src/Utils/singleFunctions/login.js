@@ -1,6 +1,7 @@
 import { getHash } from "./getHash";
 import { shiftChar } from "./shiftChar";
 import { host } from "../constants/globals";
+import {Buffer} from 'buffer';
 
 export function login(email, password, dispatch, setState) {
   return new Promise((resolve, reject) => {

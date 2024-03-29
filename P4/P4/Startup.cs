@@ -30,7 +30,8 @@ namespace P4
         {
             string connection = Configuration.GetConnectionString("LocalDatabase");
             services.AddDbContext<AppDBContext>(options =>
-                options.UseSqlServer(connection, sqlServerOptions => sqlServerOptions.CommandTimeout(180)), ServiceLifetime.Transient);
+                options.UseInMemoryDatabase("InMemory"), ServiceLifetime.Transient, ServiceLifetime.Transient);
+                //options.UseSqlServer(connection, sqlServerOptions => sqlServerOptions.CommandTimeout(180)), ServiceLifetime.Transient);
 
             services.AddTransient<AuthUtility>();
 
